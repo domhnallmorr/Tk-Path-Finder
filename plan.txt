@@ -1,0 +1,28 @@
+V0.01.0
+	tidy frames
+	come up with name
+	titlebar
+	add about menu
+V0.01.1
+	handle permission error
+
+V0.02
+	quick access
+		add/delete top level node
+		add/delete links
+		scrollbar
+V0.03
+	scrollbar for tree
+	auto hide
+V0.04
+	get size and date modified data
+V0.05
+	Collapse all button for quick access
+V0.06
+	Expand file types and icons
+V0.07
+	back/forward navigation
+V0.08
+	rename files
+V0.09
+	handle hidden files

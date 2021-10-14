@@ -1,0 +1,95 @@
+import os
+import subprocess
+import tkinter as tk
+from tkinter import *
+from tkinter import ttk
+from tkinter.ttk import *
+
+import address_bar
+import explorer_backend
+import treeview_functions
+
+class BranchTab(ttk.Frame):
+	def __init__(self, root_tab, mainapp, id, text, width):
+		super(BranchTab, self).__init__(mainapp.notebook) #check if this convention is right
+		self.mainapp = mainapp
+		self.id = id
+		self.root_tab = root_tab
+		self.text = text
+		self.width = width
+		
+		# GRID
+		self.tree_colspan = 16
+		self.grid_columnconfigure(self.tree_colspan-1, weight=1)
+		self.grid_rowconfigure(1, weight=1)
+		
+		self.explorer = explorer_backend.FileExplorerBackend(self.mainapp)
+		self.setup_adress_bar()
+		self.setup_buttons()
+		self.setup_treeview()
+		self.address_bar_entry.update_bar()
+		self.update_treeview()
+	
+	def update_tab(self):
+		self.address_bar_entry.update_bar()
+		self.update_treeview()
+		self.root_tab.notebook.tab(self, text=os.path.basename(self.explorer.current_directory))
+		
+	def setup_buttons(self):
+		#Up a level
+		ttk.Button(self, text=u'\u2191', command=self.up_one_level, style='primary.TButton').grid(row=0, column=0)
+		
+	def setup_adress_bar(self):
+		self.address_bar_entry = address_bar.AddressBarEntry(self.mainapp, self)
+		#self.address_bar_entry.pack(expand=True, fill=X)
+		self.address_bar_entry.grid(row=0, column=1, columnspan=self.tree_colspan-1, sticky='NSEW', pady=self.mainapp.default_pady)
+		
+	def setup_treeview(self):
+		column_names = ['Filename', 'Date Modified', 'Type', 'Size']
+		column_widths = [400, 100, 300, 100]
+		height = 20
+
+		self.treeview = treeview_functions.create_treeview(self, column_names, column_widths, height)
+		#self.treeview.pack(expand=True, fill=BOTH)
+		self.treeview.grid(row=1, column=0, columnspan=16, sticky='NSEW', pady=self.mainapp.default_pady)
+		self.treeview.bind("<Double-1>", self.OnDoubleClick)
+		self.treeview.bind("<Button-3>", self.OnRightClick)
+		
+	def update_treeview(self):
+		directory_data = self.explorer.list_directory()
+		treeview_functions.write_data_to_treeview(self.mainapp, self.treeview, 'replace', directory_data)
+		
+	def OnDoubleClick(self, event):
+		current_selection = treeview_functions.get_current_selection(self.treeview)
+		if current_selection[1][2] == 'Folder':
+			directory = current_selection[1][0]
+			self.explorer.double_clicked_on_directory(directory)
+			self.update_tab()
+		else:
+			self.explorer.double_clicked_on_file(current_selection[1][0])
+			
+			
+	def OnRightClick(self, event):
+		iid = self.treeview.identify_row(event.y)
+		if iid:
+			self.treeview.selection_set(iid)
+			popup_menu = tk.Menu(event.widget, tearoff=0)
+			popup_menu.add_command(label="Open in Text Editor", command=self.open_in_text_editor)
+		#popup_menu.add_command(label="Delete Root Tab", command=lambda tab=clicked_tab: event.widget.mainapp.delete_root_tab(tab))
+
+		try:
+			popup_menu.tk_popup(event.x_root, event.y_root, 0)
+		finally:
+			popup_menu.grab_release()
+		
+			
+	def up_one_level(self):
+		self.explorer.up_one_level()
+		self.update_tab()
+		
+	def open_in_text_editor(self):
+		current_selection = treeview_functions.get_current_selection(self.treeview)
+		if current_selection[1][2] != 'Folder':
+			subprocess.call([r"C:\Program Files (x86)\Notepad++\notepad++.exe", fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
+
+		
