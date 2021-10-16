@@ -1,3 +1,4 @@
+import collections
 import os
 import subprocess
 import time
@@ -5,13 +6,15 @@ import datetime
 
 class FileExplorerBackend:
 	def __init__(self, mainapp):
+		self.mainapp = mainapp
 		self.current_directory = self.get_default_directory()
-		#self.previous_directories = []
+		self.previous_directories = collections.deque(maxlen=10)
+		self.forward_directories = collections.deque(maxlen=10)
 		
 	def get_default_directory(self):
 		return os.getcwd()
 		
-	def list_directory(self, directory=None):	
+	def list_directory(self, directory=None, mode=None):	
 		if directory == None:
 			directory = self.current_directory
 		try:
@@ -20,7 +23,7 @@ class FileExplorerBackend:
 			files_dirs = os.listdir(directory)
 			directories = [o for o in files_dirs if os.path.isdir(os.path.join(directory,o))]
 			for d in directories:
-				directory_data.append([d, '-', 'Folder', ''])
+				directory_data.append([d, '-', 'Folder', '-'])
 
 			# Handle Files
 			file_data = []
@@ -33,10 +36,21 @@ class FileExplorerBackend:
 				modified = os.path.getmtime(full_path)
 				modified = datetime.datetime.fromtimestamp(modified)
 				
-				file_data.append([f, modified.strftime("%d/%m/%Y, %H:%M:%S"), 'File', f'{int(size):,} KB'])
+				file_data.append([f, modified.strftime("%d/%m/%Y, %H:%M:%S"), self.get_file_type(f), f'{int(size):,} KB'])
 				#file_data.append([f, '-', 'File', '-'])
+			if mode == None:
+				if self.current_directory != directory:
+					self.previous_directories.append(self.current_directory)
+					self.forward_directories.clear()
+			elif mode == 'back': # when user clicks back arrow button
+				self.previous_directories.pop()
+				self.forward_directories.appendleft(self.current_directory)
+			elif mode == 'fwd':
+				self.forward_directories.popleft()
+				self.previous_directories.append(self.current_directory)
 				
 			self.current_directory = directory
+			
 		except PermissionError:
 			directory_data = 'Permission Denied'
 			file_data = ''
@@ -53,15 +67,15 @@ class FileExplorerBackend:
 	def get_file_type(self, filename):
 		filename, file_extension = os.path.splitext(filename)
 		file_type = 'file'
+		icon = self.mainapp.new_icon2
 		
+		if file_extension in self.mainapp.known_file_types.keys():
+			file_type = self.mainapp.known_file_types[file_extension][0]
 		return file_type
 		
-	def setup_file_type_dict(self):
-		self.known_file_types = {'.exe': 'application'}
-		
-	def double_clicked_on_directory(self, directory):
-		#self.previous_directories.append(self.current_directory)
-		self.current_directory = os.path.join(self.current_directory, directory)
+	# def double_clicked_on_directory(self, directory):
+		# self.previous_directories.append(self.current_directory)
+		# self.current_directory = os.path.join(self.current_directory, directory)
 		
 	def double_clicked_on_file(self, file):
 		os.startfile(os.path.join(self.current_directory, file))

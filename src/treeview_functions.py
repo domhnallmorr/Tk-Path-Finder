@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
@@ -49,7 +50,7 @@ def get_all_treeview_items(treeview):
 			treeview_data[-1].append(x)
 	return treeview_data	
 	
-def write_data_to_treeview(mainapp, treeview, mode, data):
+def write_data_to_treeview(mainapp, treeview, mode, data, image=None):
 
 	if mode == 'replace':
 		treeview.delete(*treeview.get_children())
@@ -58,6 +59,10 @@ def write_data_to_treeview(mainapp, treeview, mode, data):
 		image = mainapp.new_icon2
 		if d[2] == 'Folder':
 			image = mainapp.folder_icon2
+		else:
+			filename, file_extension = os.path.splitext(d[0])
+			if file_extension in mainapp.known_file_types.keys():
+				image = mainapp.known_file_types[file_extension][1]
 		if len(d) > 1:
 			treeview.insert('', 'end', text=d[0], values=tuple(d[1:]), image=image)
 		else:

@@ -33,23 +33,38 @@ class BranchTab(ttk.Frame):
 		self.address_bar_entry.update_bar()
 		self.update_treeview()
 	
-	def update_tab(self, directory):
-		directory_data = self.explorer.list_directory(directory)
+	def update_tab(self, directory, mode=None):
+		directory_data = self.explorer.list_directory(directory, mode)
 		if isinstance(directory_data, str):
 			messagebox.showerror('Error', message=directory_data)
 		else:
 			self.address_bar_entry.update_bar()
 			self.update_treeview()
 			self.root_tab.notebook.tab(self, text=os.path.basename(self.explorer.current_directory))
-		
+			
+			# Enable/Disable Buttons as required
+			if len(self.explorer.previous_directories) > 0:
+				self.back_button.config(state='enabled')
+			else:
+				self.back_button.config(state='disabled')
+
+			if len(self.explorer.forward_directories) > 0:
+				self.forward_button.config(state='enabled')
+			else:
+				self.forward_button.config(state='disabled')
+				
 	def setup_buttons(self):
 		#Up a level
-		ttk.Button(self, text=u'\u2191', command=self.up_one_level, style='primary.TButton').grid(row=0, column=0)
+		self.back_button = ttk.Button(self, text=u'\u2190', command=self.back_one_level, state='disabled', style='primary.TButton')
+		self.back_button.grid(row=0, column=0)
+		self.forward_button = ttk.Button(self, text=u'\u2192', command=self.forward_one_level, state='disabled', style='primary.TButton')
+		self.forward_button.grid(row=0, column=1)
+		ttk.Button(self, text=u'\u2191', command=self.up_one_level, style='primary.TButton').grid(row=0, column=2)
 		
 	def setup_adress_bar(self):
 		self.address_bar_entry = address_bar.AddressBarEntry(self.mainapp, self)
 		#self.address_bar_entry.pack(expand=True, fill=X)
-		self.address_bar_entry.grid(row=0, column=1, columnspan=self.tree_colspan-1, sticky='NSEW', pady=self.mainapp.default_pady)
+		self.address_bar_entry.grid(row=0, column=3, columnspan=self.tree_colspan-1, padx=6, sticky='NSEW', pady=self.mainapp.default_pady)
 		
 	def setup_treeview(self):
 		column_names = ['Filename', 'Date Modified', 'Type', 'Size']
@@ -94,11 +109,16 @@ class BranchTab(ttk.Frame):
 			popup_menu.tk_popup(event.x_root, event.y_root, 0)
 		finally:
 			popup_menu.grab_release()
-		
 			
 	def up_one_level(self):
 		directory = self.explorer.up_one_level()
 		self.update_tab(directory)
+
+	def back_one_level(self):
+		self.update_tab(self.explorer.previous_directories[-1], mode='back')
+
+	def forward_one_level(self):
+		self.update_tab(self.explorer.forward_directories[0], mode='fwd')
 		
 	def open_in_text_editor(self):
 		current_selection = treeview_functions.get_current_selection(self.treeview)

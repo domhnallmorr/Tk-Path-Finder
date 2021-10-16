@@ -19,12 +19,12 @@ class MainApplication(ttk.Frame):
 		self.parent = parent
 		self.root_tabs = {}
 		self.id = 0
+		tkexplorer_icons.setup_icons(self)
 		self.setup_variables()
 		
 		# Styles
 		self.style = Style('darkly')
 		self.default_pady = 10
-		tkexplorer_icons.setup_icons(self)
 
 		self.setup_menu()
 		
@@ -34,9 +34,29 @@ class MainApplication(ttk.Frame):
 		self.setup_tabs()
 
 	def setup_variables(self):
-		self.version = '0.04.0'
+		self.version = '0.06.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
+
+		self.known_file_types = {
+			'.csv': ['CSV File', self.excel_icon2],
+			'.doc': ['Word 97-2003 Document', self.word_icon2],
+			'.docx': ['Word Document', self.word_icon2],
+			'.exe': ['application', self.new_icon2],
+			'.ipynb': ['Jupyter Notebook', self.notebook_icon2],
+			'.jpeg': ['JPEG Image', self.image_icon2],
+			'.jpg': ['JPG Image', self.image_icon2],
+			'.mkv': ['MKV Video', self.video_icon2],
+			'.mp3': ['MP4 Audio', self.audio_icon2],
+			'.mp4': ['MP4 Video', self.video_icon2],
+			'.pdf': ['PDF', self.pdf_icon2],
+			'.png': ['PNG Image', self.image_icon2],
+			'.py': ['Python File', self.python_icon2],
+			'.rar': ['RAR File', self.rar_icon2],
+			'.txt': ['Text File', self.text_icon2],
+			'.xlsx': ['Excel Worksheet', self.excel_icon2],
+			'.zip': ['ZIP File', self.zip_icon2],
+		}
 
 	def setup_menu(self):
 		menu = tk.Menu(self.master)
