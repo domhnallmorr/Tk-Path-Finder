@@ -9,6 +9,7 @@ import branch_tab
 def right_click(event):
 	clicked_tab = event.widget.mainapp.notebook.tk.call(event.widget.mainapp.notebook._w, "identify", "tab", event.x, event.y)
 	#tab_object = event.widget.nametowidget(event.widget.select(clicked_tab))
+	event.widget.select(clicked_tab)
 	tab_object = event.widget.nametowidget(event.widget.select())
 	popup_menu = tk.Menu(event.widget, tearoff=0)
 	popup_menu.add_command(label="Add Root Tab", command=event.widget.mainapp.create_root_tab)
@@ -70,3 +71,4 @@ class RootTab(ttk.Frame):
 		new_name = simpledialog.askstring(title = "Rename Tab", prompt = "New Name:".ljust(100), initialvalue=self.text)
 		if new_name != None:
 			self.mainapp.notebook.tab(self, text=f'{str(new_name).ljust(20)}')
+			self.text = new_name

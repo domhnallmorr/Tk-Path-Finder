@@ -4,8 +4,11 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
+from tkinter import messagebox
+
 
 import address_bar
+import autoscrollbar
 import explorer_backend
 import treeview_functions
 
@@ -30,10 +33,14 @@ class BranchTab(ttk.Frame):
 		self.address_bar_entry.update_bar()
 		self.update_treeview()
 	
-	def update_tab(self):
-		self.address_bar_entry.update_bar()
-		self.update_treeview()
-		self.root_tab.notebook.tab(self, text=os.path.basename(self.explorer.current_directory))
+	def update_tab(self, directory):
+		directory_data = self.explorer.list_directory(directory)
+		if isinstance(directory_data, str):
+			messagebox.showerror('Error', message=directory_data)
+		else:
+			self.address_bar_entry.update_bar()
+			self.update_treeview()
+			self.root_tab.notebook.tab(self, text=os.path.basename(self.explorer.current_directory))
 		
 	def setup_buttons(self):
 		#Up a level
@@ -55,6 +62,12 @@ class BranchTab(ttk.Frame):
 		self.treeview.bind("<Double-1>", self.OnDoubleClick)
 		self.treeview.bind("<Button-3>", self.OnRightClick)
 		
+		#vsb = ttk.Scrollbar(self, orient="vertical", command=self.treeview.yview)
+		vsb = autoscrollbar.AutoScrollbar(self, orient="vertical", command=self.treeview.yview)
+		vsb.grid(row=1, column=16, sticky='NSEW')
+		self.treeview.configure(yscrollcommand=vsb.set)
+
+
 	def update_treeview(self):
 		directory_data = self.explorer.list_directory()
 		treeview_functions.write_data_to_treeview(self.mainapp, self.treeview, 'replace', directory_data)
@@ -62,9 +75,9 @@ class BranchTab(ttk.Frame):
 	def OnDoubleClick(self, event):
 		current_selection = treeview_functions.get_current_selection(self.treeview)
 		if current_selection[1][2] == 'Folder':
-			directory = current_selection[1][0]
-			self.explorer.double_clicked_on_directory(directory)
-			self.update_tab()
+			directory = os.path.join(self.explorer.current_directory, current_selection[1][0])
+			#self.explorer.double_clicked_on_directory(directory)
+			self.update_tab(directory)
 		else:
 			self.explorer.double_clicked_on_file(current_selection[1][0])
 			
@@ -84,12 +97,12 @@ class BranchTab(ttk.Frame):
 		
 			
 	def up_one_level(self):
-		self.explorer.up_one_level()
-		self.update_tab()
+		directory = self.explorer.up_one_level()
+		self.update_tab(directory)
 		
 	def open_in_text_editor(self):
 		current_selection = treeview_functions.get_current_selection(self.treeview)
 		if current_selection[1][2] != 'Folder':
 			subprocess.call([r"C:\Program Files (x86)\Notepad++\notepad++.exe", fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
 
-		
+			

@@ -2,11 +2,15 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
+import os
 
 from ttkbootstrap import Style
 
 import about_screen
+import autoscrollbar
+import config_file_manager
 import root_tab
+import sidebar_tree
 import tkexplorer_icons
 
 class MainApplication(ttk.Frame):
@@ -26,18 +30,20 @@ class MainApplication(ttk.Frame):
 		
 		self.setup_main_frames()
 		self.setup_notebook()
+		self.setup_quick_access()
 		self.setup_tabs()
 
 	def setup_variables(self):
-		self.version = '0.01.0'
+		self.version = '0.03.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
+		self.config_data = config_file_manager.load_config_file(self)
 
 	def setup_menu(self):
 		menu = tk.Menu(self.master)
 		self.master.config(menu=menu)
 
 		# ________ ABOUT ________
-		about_menu = tk.Menu(menu, tearoff = 0)
+		about_menu = tk.Menu(menu, tearoff=0)
 		menu.add_cascade(label='About',menu=about_menu)
 		about_menu.add_command(label = 'About Tk Path Finder', command = lambda self=self: about_screen.about(self))
 		
@@ -46,7 +52,15 @@ class MainApplication(ttk.Frame):
 		self.notebook.pack(expand=True, fill=BOTH, side=LEFT)
 		self.notebook.bind('<Button-3>', root_tab.right_click)
 		self.notebook.mainapp = self
+
+	def setup_quick_access(self):
+		self.quick_access_tree = sidebar_tree.QuickAccessTreeview(self)
+		self.quick_access_tree.grid(row=2, column=0, columnspan=8, sticky='NSEW')
 		
+		vsb = autoscrollbar.AutoScrollbar(self.sidebar_frame, orient="vertical", command=self.quick_access_tree.yview)
+		vsb.grid(row=2, column=8, sticky='NSEW')
+		self.quick_access_tree.configure(yscrollcommand=vsb.set)
+
 	def setup_tabs(self):
 		if self.root_tabs == {}:
 			tab = self.create_root_tab()
@@ -77,8 +91,8 @@ class MainApplication(ttk.Frame):
 		#self.rootpane.grid(row=1,column=0, columnspan=4,sticky="nsew")		
 
 		self.sidebar_frame = ttk.Frame()
-		self.sidebar_frame.grid_rowconfigure(1, weight=1)
-		self.sidebar_frame.grid_columnconfigure(19, weight=1)
+		self.sidebar_frame.grid_rowconfigure(2, weight=1)
+		self.sidebar_frame.grid_columnconfigure(7, weight=1)
 		self.rootpane.add(self.sidebar_frame)
 
 		self.container = tk.Frame(self.rootpane, bg='pink')
@@ -87,8 +101,11 @@ class MainApplication(ttk.Frame):
 		
 		self.rootpane.add(self.container,)#stretch="always")	
 		
-		ttk.Label(self.sidebar_frame, text='Quick Access').pack()
+		ttk.Label(self.sidebar_frame, text='Quick Access').grid(row=0, column=0, columnspan=8, sticky='NSEW')
 		#ttk.Button(self.container, text='Add Root', command=self.create_root_tab).pack()
+		
+
+		
 if __name__ == "__main__":
 	root = tk.Tk()
 	root.resizable(width=tk.TRUE, height=tk.TRUE)
