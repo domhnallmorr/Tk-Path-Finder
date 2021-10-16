@@ -99,10 +99,17 @@ class BranchTab(ttk.Frame):
 			
 	def OnRightClick(self, event):
 		iid = self.treeview.identify_row(event.y)
+		
+		self.treeview.selection_set(iid)
+		popup_menu = tk.Menu(event.widget, tearoff=0)
 		if iid:
-			self.treeview.selection_set(iid)
-			popup_menu = tk.Menu(event.widget, tearoff=0)
 			popup_menu.add_command(label="Open in Text Editor", command=self.open_in_text_editor)
+			popup_menu.add_separator()
+		
+		new_menu = tk.Menu(popup_menu, tearoff = 0)
+		popup_menu.add_cascade(label = 'New',menu=new_menu)
+		new_menu.add_command(label="New Folder(s)", command=self.new_folders, image=self.mainapp.folder_icon2, compound='left',)
+		
 		#popup_menu.add_command(label="Delete Root Tab", command=lambda tab=clicked_tab: event.widget.mainapp.delete_root_tab(tab))
 
 		try:
@@ -125,4 +132,61 @@ class BranchTab(ttk.Frame):
 		if current_selection[1][2] != 'Folder':
 			subprocess.call([r"C:\Program Files (x86)\Notepad++\notepad++.exe", fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
 
+	def new_folders(self):
+		self.w=AddFoldersWindow(self.mainapp, self.master, self)
+		self.master.wait_window(self.w.top)
+		
+		if self.w.button == 'ok':
+			self.explorer.new_folders(self.w.folders)
+			self.update_tab(self.explorer.current_directory)
+		
+class AddFoldersWindow(ttk.Frame):
+	def __init__(self, mainapp, master, branch_tab):
+		super(AddFoldersWindow, self).__init__()
+		top=self.top=Toplevel(master)
+		top.grab_set()
+		self.mainapp = mainapp
+		self.branch_tab = branch_tab
+		
+		self.top.title(f"New Folder(s)")
+		self.button = 'cancel'
+
+		self.folder_text = tk.Text(self.top, width=110, height=10)
+		self.folder_text.grid(row=1, column=0, columnspan = 8, sticky='NE',padx=5, pady=5, ipadx=2, ipady=5)
+		
+		# Buttons
+		self.ok_btn = ttk.Button(self.top, text='OK', width=10, style='success.TButton', command=lambda button='ok': self.cleanup(button))
+		self.ok_btn.grid(row=2, column=0, padx=5, pady=5, sticky='ne')
+		self.cancel_btn = ttk.Button(self.top, text='Cancel', width=10, style='danger.TButton', command=lambda button='cancel': self.cleanup(button))
+		self.cancel_btn.grid(row=2, column=1, padx=5, pady=5, sticky='nw')
+		
+	def cleanup(self, button):
+		if button == 'ok':
+			self.folders = list(filter(None, [n.strip() for n in self.folder_text.get("1.0","end").split('\n')])) #avoid empty lines
+
+			msg = None
+			# Check for duplicates
+			if len(self.folders) != len(set(self.folders)):
+				msg = 'There are duplicate folder names present!'
 			
+			# Check if any of the folders already exist
+			if not msg:
+				for folder in self.folders:
+					if os.path.isdir(os.path.join(self.branch_tab.explorer.current_directory, folder)):
+						msg = f'Folder "{folder}" already exists!'
+				
+			# Check if there are any special characters
+			if not msg:
+				for folder in self.folders:
+					for character in self.branch_tab.explorer.special_characters:
+						if character in folder:
+							msg = f'Character {character} is not allowed in a folder name!'
+							break
+							
+			if not msg:
+				self.button = 'ok'
+				self.top.destroy()
+			else:
+				messagebox.showerror('Error', message=msg)
+		else:
+			self.top.destroy()

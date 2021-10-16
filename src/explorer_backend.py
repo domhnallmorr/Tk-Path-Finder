@@ -10,6 +10,7 @@ class FileExplorerBackend:
 		self.current_directory = self.get_default_directory()
 		self.previous_directories = collections.deque(maxlen=10)
 		self.forward_directories = collections.deque(maxlen=10)
+		self.special_characters = ['\\', '/', ':', '*', '?', '"', '<', '>', '|']
 		
 	def get_default_directory(self):
 		return os.getcwd()
@@ -91,3 +92,9 @@ class FileExplorerBackend:
 		
 	def update_explorer(self):
 		pass
+		
+	def new_folders(self, folders):
+		print(folders)
+		
+		for folder in folders:
+			os.makedirs(os.path.join(self.current_directory, folder))

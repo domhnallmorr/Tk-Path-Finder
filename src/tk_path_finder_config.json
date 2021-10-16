@@ -1,6 +1,8 @@
 {
     "links": {
-        "I001": {},
+        "I001": {
+            "Desktop": "C:\\Users\\domhn\\Desktop"
+        },
         "Some node": {
             "Link1": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src",
             "Link2": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
