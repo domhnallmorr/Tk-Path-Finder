@@ -98,3 +98,12 @@ class FileExplorerBackend:
 		
 		for folder in folders:
 			os.makedirs(os.path.join(self.current_directory, folder))
+			
+	def check_special_characters(self, string_to_check):
+		msg = None
+		for character in self.special_characters:
+			if character in string_to_check:
+				msg = f'Character {character} is not allowed!'
+				break
+		return msg
+				

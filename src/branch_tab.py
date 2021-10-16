@@ -5,7 +5,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
 from tkinter import messagebox
-
+from tkinter import simpledialog
 
 import address_bar
 import autoscrollbar
@@ -103,12 +103,16 @@ class BranchTab(ttk.Frame):
 		self.treeview.selection_set(iid)
 		popup_menu = tk.Menu(event.widget, tearoff=0)
 		if iid:
+			file_name = self.treeview.item(iid, 'text')
 			popup_menu.add_command(label="Open in Text Editor", command=self.open_in_text_editor)
+			popup_menu.add_command(label="Rename", command=lambda mode='edit', initialvalue=file_name: self.new_file(mode, initialvalue))
 			popup_menu.add_separator()
 		
 		new_menu = tk.Menu(popup_menu, tearoff = 0)
 		popup_menu.add_cascade(label = 'New',menu=new_menu)
 		new_menu.add_command(label="New Folder(s)", command=self.new_folders, image=self.mainapp.folder_icon2, compound='left',)
+		popup_menu.add_separator()
+		new_menu.add_command(label="File", command=lambda mode='new': self.new_file(mode), image=self.mainapp.new_icon2, compound='left',)
 		
 		#popup_menu.add_command(label="Delete Root Tab", command=lambda tab=clicked_tab: event.widget.mainapp.delete_root_tab(tab))
 
@@ -140,6 +144,37 @@ class BranchTab(ttk.Frame):
 			self.explorer.new_folders(self.w.folders)
 			self.update_tab(self.explorer.current_directory)
 		
+	def new_file(self, mode, initialvalue=''):
+		if mode == 'edit':
+			self.orig_file_name = initialvalue
+		new_name = simpledialog.askstring(title="New File", prompt = "File Name:".ljust(100), initialvalue=initialvalue)
+		
+		if new_name:
+			msg = None
+			
+			#check file does not exist
+			if mode == 'new':
+				if os.path.isfile(os.path.join(self.explorer.current_directory, new_name)):
+					msg = 'That File Already Exists!'
+					
+			# Check if user input is just a bunch of spaces
+			if new_name.strip() == '':
+				msg = 'Enter a File Name'
+				
+			# Check for special characters
+			msg = self.explorer.check_special_characters(new_name)
+			
+			if msg:
+				messagebox.showerror('Error', message=msg)
+				self.new_file(mode, initialvalue=new_name)
+			else:
+				if mode == 'new':
+					with open(os.path.join(self.explorer.current_directory, new_name), 'w') as f:
+						f.write('')
+				else:
+					os.rename(os.path.join(self.explorer.current_directory, self.orig_file_name), os.path.join(self.explorer.current_directory, new_name))
+				self.update_tab(self.explorer.current_directory)
+				
 class AddFoldersWindow(ttk.Frame):
 	def __init__(self, mainapp, master, branch_tab):
 		super(AddFoldersWindow, self).__init__()
@@ -180,7 +215,7 @@ class AddFoldersWindow(ttk.Frame):
 				for folder in self.folders:
 					for character in self.branch_tab.explorer.special_characters:
 						if character in folder:
-							msg = f'Character {character} is not allowed in a folder name!'
+							msg = f'Character {character} is not allowed!'
 							break
 							
 			if not msg:
