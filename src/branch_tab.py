@@ -53,7 +53,7 @@ class BranchTab(ttk.Frame):
 		
 	def setup_treeview(self):
 		column_names = ['Filename', 'Date Modified', 'Type', 'Size']
-		column_widths = [400, 100, 300, 100]
+		column_widths = [400, 200, 300, 100]
 		height = 20
 
 		self.treeview = treeview_functions.create_treeview(self, column_names, column_widths, height)

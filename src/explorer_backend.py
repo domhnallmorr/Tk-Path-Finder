@@ -1,5 +1,7 @@
 import os
 import subprocess
+import time
+import datetime
 
 class FileExplorerBackend:
 	def __init__(self, mainapp):
@@ -9,9 +11,7 @@ class FileExplorerBackend:
 	def get_default_directory(self):
 		return os.getcwd()
 		
-	def list_directory(self, directory=None):
-		file_data = ''
-		
+	def list_directory(self, directory=None):	
 		if directory == None:
 			directory = self.current_directory
 		try:
@@ -26,15 +26,27 @@ class FileExplorerBackend:
 			file_data = []
 			files = [o for o in files_dirs if not os.path.isdir(os.path.join(directory,o))]
 			for f in files:
-				file_data.append([f, '-', 'File', ''])
+				full_path = os.path.join(directory,f)
+				
+				size = os.path.getsize(full_path)*0.001 # in kb
+				
+				modified = os.path.getmtime(full_path)
+				modified = datetime.datetime.fromtimestamp(modified)
+				
+				file_data.append([f, modified.strftime("%d/%m/%Y, %H:%M:%S"), 'File', f'{int(size):,} KB'])
+				#file_data.append([f, '-', 'File', '-'])
 				
 			self.current_directory = directory
 		except PermissionError:
 			directory_data = 'Permission Denied'
+			file_data = ''
 		except Exception as e:
+			print(e)
 			directory_data = 'An Error Ocurred'
+			file_data = ''
 			if not os.path.isdir(directory):
 				directory_data = 'Location Does Not Exist'
+				file_data = ''
 			
 		return directory_data + file_data
 		
