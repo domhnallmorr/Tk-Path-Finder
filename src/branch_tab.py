@@ -12,6 +12,7 @@ from tkinter import simpledialog
 import address_bar
 import autoscrollbar
 import explorer_backend
+import file_comparison
 import search_window
 import treeview_functions
 
@@ -123,6 +124,9 @@ class BranchTab(ttk.Frame):
 			file_name = self.treeview.item(iid, 'text')
 			popup_menu.add_command(label="Open in Text Editor", command=self.open_in_text_editor)
 			popup_menu.add_command(label="Rename", command=lambda mode='edit', initialvalue=file_name: self.new_file(mode, initialvalue))
+			popup_menu.add_command(label="Left Compare", command=self.left_compare)
+			if self.mainapp.file_compare_left:
+				popup_menu.add_command(label="Right Compare", command=self.right_compare)
 			popup_menu.add_separator()
 		
 		new_menu = tk.Menu(popup_menu, tearoff = 0)
@@ -239,7 +243,17 @@ class BranchTab(ttk.Frame):
 	def search(self):
 		self.w=search_window.SearchWindow(self.mainapp, self.master, self)
 		self.master.wait_window(self.w.top)		
+
+	def left_compare(self):
+		current_selection = treeview_functions.get_current_selection(self.treeview)
+		self.mainapp.file_compare_left = os.path.join(self.explorer.current_directory, current_selection[1][0])
 		
+	def right_compare(self):
+		current_selection = treeview_functions.get_current_selection(self.treeview)
+		self.mainapp.file_compare_right = os.path.join(self.explorer.current_directory, current_selection[1][0])	
+	
+		self.w=file_comparison.ComparisonWindow(self.mainapp, self.master, self)
+		self.master.wait_window(self.w.top)	
 class AddFoldersWindow(ttk.Frame):
 	def __init__(self, mainapp, master, branch_tab):
 		super(AddFoldersWindow, self).__init__()
