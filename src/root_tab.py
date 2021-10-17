@@ -27,13 +27,16 @@ def right_click_branch(event):
 
 	popup_menu = tk.Menu(event.widget, tearoff=0)
 	popup_menu.add_command(label="Add Branch Tab", command=event.widget.create_branch_tab)
+	popup_menu.add_command(label="Rename Branch Tab", command=lambda tab=tab_object: event.widget.root_tab.rename_branch_tab(tab))
 	popup_menu.add_command(label="Delete Branch Tab", command=lambda tab=tab_object: event.widget.mainapp.delete_branch_tab(tab))
 
 	try:
 		popup_menu.tk_popup(event.x_root, event.y_root, 0)
 	finally:
 		popup_menu.grab_release()
-		
+
+
+	
 class RootTab(ttk.Frame):
 	def __init__(self, mainapp, id, text, width):
 		super(RootTab, self).__init__(mainapp.notebook) #check if this convention is right
@@ -52,6 +55,7 @@ class RootTab(ttk.Frame):
 		self.notebook = ttk.Notebook(self)
 		self.notebook.pack(expand=True, fill=BOTH, side=LEFT)
 		self.notebook.mainapp = self.mainapp
+		self.notebook.root_tab = self
 		self.setup_tabs()
 		self.notebook.create_branch_tab = self.create_branch_tab
 		
@@ -73,3 +77,12 @@ class RootTab(ttk.Frame):
 		if new_name != None:
 			self.mainapp.notebook.tab(self, text=f'{str(new_name).ljust(20)}')
 			self.text = new_name
+			
+	def rename_branch_tab(self, tab):
+		self.w=branch_tab.RenameWindow(self.mainapp, self.master, tab)
+		self.master.wait_window(self.w.top)
+		
+		if self.w.button == 'ok':
+			tab.lock_name = self.w.lock
+			tab.text = self.w.name
+			self.notebook.tab(tab, text=self.w.name)

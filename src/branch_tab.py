@@ -24,6 +24,7 @@ class BranchTab(ttk.Frame):
 		self.root_tab = root_tab
 		self.text = text
 		self.width = width
+		self.lock_name = False
 		
 		# GRID
 		self.tree_colspan = 16
@@ -43,7 +44,9 @@ class BranchTab(ttk.Frame):
 		else:
 			self.address_bar_entry.update_bar()
 			self.update_treeview(directory_data)
-			self.root_tab.notebook.tab(self, text=os.path.basename(self.explorer.current_directory))
+			if not self.lock_name:
+				self.text = os.path.basename(self.explorer.current_directory)
+				self.root_tab.notebook.tab(self, text=self.text)
 			
 			# Enable/Disable Buttons as required
 			if len(self.explorer.previous_directories) > 0:
@@ -305,6 +308,46 @@ class AddFoldersWindow(ttk.Frame):
 		else:
 			self.top.destroy()
 			
+class RenameWindow(ttk.Frame):
+	def __init__(self, mainapp, master, branch_tab):
+		super(RenameWindow, self).__init__()
+		top=self.top=Toplevel(master)
+		top.grab_set()
+		self.mainapp = mainapp
+		self.branch_tab = branch_tab
+		self.button = 'cancel'
 		
+		ttk.Label(self.top, text='Name').grid(row=0, column=0)
+		self.name_entry = ttk.Entry(self.top, width=60)
+		self.name_entry.grid(row=0, column=1, padx=5)
+		self.name_entry.insert(0, branch_tab.text)
+		
+		if branch_tab.lock_name:
+			self.lock = IntVar(value=1)
+		else:
+			self.lock = IntVar(value=0)
+		ttk.Checkbutton(self.top, text="Lock Name", variable=self.lock).grid(row=0, column=2, sticky='w', padx=5, pady=5)
+		
+		# Buttons
+		self.ok_btn = ttk.Button(self.top, text='OK', width=10, style='success.TButton', command=lambda button='ok': self.cleanup(button))
+		self.ok_btn.grid(row=2, column=0, padx=5, pady=5, sticky='ne')
+		self.cancel_btn = ttk.Button(self.top, text='Cancel', width=10, style='danger.TButton', command=lambda button='cancel': self.cleanup(button))
+		self.cancel_btn.grid(row=2, column=1, padx=5, pady=5, sticky='nw')		
+		
+	def cleanup(self, button):
+		
+		if button == 'ok':
+			if self.name_entry.get() == '':
+				messagebox.showerror('Error', message='Enter a Name')
+			else:
+				self.name = self.name_entry.get()
+				if self.lock.get() == 1:
+					self.lock = True
+				else:
+					self.lock = False
+				self.button = 'ok'
+				self.top.destroy()
+		else:
+			self.top.destroy()
 		
 		
