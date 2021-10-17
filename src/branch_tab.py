@@ -1,4 +1,6 @@
+from distutils.dir_util import copy_tree
 import os
+from shutil import copyfile
 import subprocess
 import tkinter as tk
 from tkinter import *
@@ -113,7 +115,12 @@ class BranchTab(ttk.Frame):
 		new_menu.add_command(label="New Folder(s)", command=self.new_folders, image=self.mainapp.folder_icon2, compound='left',)
 		popup_menu.add_separator()
 		new_menu.add_command(label="File", command=lambda mode='new': self.new_file(mode), image=self.mainapp.new_icon2, compound='left',)
-		
+
+		popup_menu.add_separator()
+		if iid:
+			popup_menu.add_command(label="Copy", command=lambda file=file_name: self.copy_file(file))
+		if self.mainapp.file_to_copy != None:
+			popup_menu.add_command(label="Paste", command=self.paste_file)		
 		#popup_menu.add_command(label="Delete Root Tab", command=lambda tab=clicked_tab: event.widget.mainapp.delete_root_tab(tab))
 
 		try:
@@ -174,7 +181,46 @@ class BranchTab(ttk.Frame):
 				else:
 					os.rename(os.path.join(self.explorer.current_directory, self.orig_file_name), os.path.join(self.explorer.current_directory, new_name))
 				self.update_tab(self.explorer.current_directory)
-				
+
+	def copy_file(self, file):
+		self.mainapp.file_to_copy = [{'Name': file, 'Path': self.explorer.current_directory}]
+		
+	def paste_file(self):
+		action_if_duplicate = 'ask'
+		
+		for file in self.mainapp.file_to_copy:
+			destination = os.path.join(self.explorer.current_directory, file['Name'])
+			
+			# Copy File
+			if os.path.isfile(os.path.join(file['Path'], file['Name'])):
+				# handle for file already existing in destination
+				if os.path.isfile(os.path.join(self.explorer.current_directory, file['Name'])):
+
+					#if os.path.isfile(os.path.join(self.explorer.current_directory, file['Name']))
+						#if action_if_duplicate == 'ask':
+					counter = 1
+					while True: # Check if File Exists
+						filename, file_extension = os.path.splitext(file['Name'])
+						if not os.path.isfile(os.path.join(self.explorer.current_directory, f"{filename}({counter}){file_extension}")):
+							destination = os.path.join(self.explorer.current_directory, f"{filename}({counter}){file_extension}")
+							break
+						counter += 1
+				copyfile(os.path.join(file['Path'], file['Name']), destination)
+			
+			# Copy Directory
+			elif os.path.isdir(os.path.join(file['Path'], file['Name'])):
+				# handle for folder already existing in destination
+				if os.path.isdir(os.path.join(self.explorer.current_directory, file['Name'])):
+					counter = 1
+					while True: # Check if File Exists
+						if not os.path.isdir(os.path.join(self.explorer.current_directory, f"{file['Name']}({counter})")):
+							destination = os.path.join(self.explorer.current_directory, f"{file['Name']}({counter})")
+							break
+						counter += 1					
+				copy_tree(os.path.join(file['Path'], file['Name']), destination)
+
+		self.update_tab(self.explorer.current_directory)
+		
 class AddFoldersWindow(ttk.Frame):
 	def __init__(self, mainapp, master, branch_tab):
 		super(AddFoldersWindow, self).__init__()
@@ -225,3 +271,7 @@ class AddFoldersWindow(ttk.Frame):
 				messagebox.showerror('Error', message=msg)
 		else:
 			self.top.destroy()
+			
+		
+		
+		

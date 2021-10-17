@@ -34,7 +34,7 @@ class MainApplication(ttk.Frame):
 		self.setup_tabs()
 
 	def setup_variables(self):
-		self.version = '0.08.0'
+		self.version = '0.09.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 
@@ -57,6 +57,8 @@ class MainApplication(ttk.Frame):
 			'.xlsx': ['Excel Worksheet', self.excel_icon2],
 			'.zip': ['ZIP File', self.zip_icon2],
 		}
+		
+		self.file_to_copy = None
 
 	def setup_menu(self):
 		menu = tk.Menu(self.master)
@@ -124,8 +126,23 @@ class MainApplication(ttk.Frame):
 		ttk.Label(self.sidebar_frame, text='Quick Access').grid(row=0, column=0, columnspan=8, sticky='NSEW')
 		#ttk.Button(self.container, text='Add Root', command=self.create_root_tab).pack()
 		
+	def copy(self, event):
+		current_root_tab = self.notebook.nametowidget(self.notebook.select())
+		current_branch_tab = current_root_tab.notebook.nametowidget(current_root_tab.notebook.select())
+		if current_branch_tab.treeview.selection() != ():
+			item = current_branch_tab.treeview.selection()[0]
+			current_branch_tab.copy_file(current_branch_tab.treeview.item(item,"text"))
+	
+	def paste(self, event):
+		if self.file_to_copy != None:
+			current_root_tab, current_branch_tab = self.get_current_tabs()
+			current_branch_tab.paste_file()
 
+	def get_current_tabs(self):
+		current_root_tab = self.notebook.nametowidget(self.notebook.select())
+		current_branch_tab = current_root_tab.notebook.nametowidget(current_root_tab.notebook.select())
 		
+		return current_root_tab, current_branch_tab
 if __name__ == "__main__":
 	root = tk.Tk()
 	root.resizable(width=tk.TRUE, height=tk.TRUE)
@@ -137,7 +154,8 @@ if __name__ == "__main__":
 	# root.bind('<Control-Shift-KeyPress-S>', lambda event, MA=MA: fm.save_as(event, MA))
 	# root.bind('<Control-z>', MA.states.undo)
 	# root.bind('<Control-y>', MA.states.redo)
-	
-	#root.geometry('{}x{}'.format(MA.screen_width, MA.screen_height))    
+	root.bind('<Control-c>', MA.copy)
+	root.bind('<Control-v>', MA.paste)
+	    
 	root.state('zoomed') #mamimise window
 	root.mainloop()
