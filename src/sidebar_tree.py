@@ -187,18 +187,32 @@ class AddLinkWindow(ttk.Frame):
 		if mode == 'edit':
 			self.name_entry.insert(0, name)
 			self.path_entry.insert(0, path)
+			self.original_name = name
 				
 	def cleanup(self, button):
 		if button == 'ok':
 			self.name = self.name_entry.get().strip()
 			self.path = self.path_entry.get()
+			data_ok = True
+			
 			if self.name == '':
 				messagebox.showerror('Error', message='Enter A Name')
+				data_ok = False
+				
 			elif self.name in self.mainapp.quick_access_tree.links[self.node].keys():
-				messagebox.showerror('Error', message='Name Entered Already Exists Under Selected Node, Choose Another Name')
+				name_msg = 'Name Entered Already Exists Under Selected Node, Choose Another Name'
+				if self.mode == 'edit' and self.name != self.original_name:
+					messagebox.showerror('Error', message=name_msg)
+					data_ok = False
+				elif self.mode == 'new':
+					messagebox.showerror('Error', message=name_msg)
+					data_ok = False
+					
 			elif not os.path.isdir(self.path):
 				messagebox.showerror('Error', message='The Path Entered Does Not Exist')
-			else:	
+				data_ok = False
+				
+			if data_ok:	
 				self.button = button
 				self.top.destroy()
 		else:
