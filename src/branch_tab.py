@@ -12,6 +12,7 @@ from tkinter import simpledialog
 import address_bar
 import autoscrollbar
 import explorer_backend
+import search_window
 import treeview_functions
 
 class BranchTab(ttk.Frame):
@@ -61,11 +62,12 @@ class BranchTab(ttk.Frame):
 		self.forward_button = ttk.Button(self, text=u'\u2192', command=self.forward_one_level, state='disabled', style='primary.TButton')
 		self.forward_button.grid(row=0, column=1)
 		ttk.Button(self, text=u'\u2191', command=self.up_one_level, style='primary.TButton').grid(row=0, column=2)
+		ttk.Button(self, command=self.search, image=self.mainapp.search_icon2, style='primary.Outline.TButton').grid(row=0, column=3, padx=6)
 		
 	def setup_adress_bar(self):
 		self.address_bar_entry = address_bar.AddressBarEntry(self.mainapp, self)
 		#self.address_bar_entry.pack(expand=True, fill=X)
-		self.address_bar_entry.grid(row=0, column=3, columnspan=self.tree_colspan-1, padx=6, sticky='NSEW', pady=self.mainapp.default_pady)
+		self.address_bar_entry.grid(row=0, column=4, columnspan=self.tree_colspan-1, padx=6, sticky='NSEW', pady=self.mainapp.default_pady)
 		
 	def setup_treeview(self):
 		column_names = ['Filename', 'Date Modified', 'Type', 'Size']
@@ -233,6 +235,10 @@ class BranchTab(ttk.Frame):
 				copy_tree(os.path.join(file['Path'], file['Name']), destination)
 
 		self.update_tab(self.explorer.current_directory)
+	
+	def search(self):
+		self.w=search_window.SearchWindow(self.mainapp, self.master, self)
+		self.master.wait_window(self.w.top)		
 		
 class AddFoldersWindow(ttk.Frame):
 	def __init__(self, mainapp, master, branch_tab):
