@@ -1,4 +1,5 @@
 import collections
+import copy
 import os
 import subprocess
 import time
@@ -15,7 +16,7 @@ class FileExplorerBackend:
 	def get_default_directory(self):
 		return os.getcwd()
 		
-	def list_directory(self, directory=None, mode=None):	
+	def list_directory(self, directory=None, mode=None, sort=None):	
 		if directory == None:
 			directory = self.current_directory
 		try:
@@ -37,7 +38,10 @@ class FileExplorerBackend:
 				modified = os.path.getmtime(full_path)
 				modified = datetime.datetime.fromtimestamp(modified)
 				
-				file_data.append([f, modified.strftime("%d/%m/%Y, %H:%M:%S"), self.get_file_type(f), f'{int(size):,} KB'])
+				if sort != 'size':
+					file_data.append([f, modified.strftime("%d/%m/%Y, %H:%M:%S"), self.get_file_type(f), f'{int(size):,} KB'])
+				else:
+					file_data.append([f, modified.strftime("%d/%m/%Y, %H:%M:%S"), self.get_file_type(f), int(size)])
 				#file_data.append([f, '-', 'File', '-'])
 			if mode == None:
 				if self.current_directory != directory:
@@ -49,6 +53,18 @@ class FileExplorerBackend:
 			elif mode == 'fwd':
 				self.forward_directories.popleft()
 				self.previous_directories.append(self.current_directory)
+			
+			if sort == 'date':
+				directory_data = list(reversed(sorted(directory_data, key=lambda x: x[1])))
+				file_data = list(reversed(sorted(file_data, key=lambda x: x[1])))
+			elif sort == 'file_type':
+				directory_data = list(reversed(sorted(directory_data, key=lambda x: x[2])))
+				file_data = list(reversed(sorted(file_data, key=lambda x: x[2])))
+			elif sort == 'size':
+				directory_data = list(reversed(sorted(directory_data, key=lambda x: x[3])))
+				file_data = list(reversed(sorted(file_data, key=lambda x: x[3])))
+				for f in file_data:
+					f[-1] = f'{int(f[-1]):,} KB'
 				
 			self.current_directory = directory
 			
@@ -62,6 +78,9 @@ class FileExplorerBackend:
 			if not os.path.isdir(directory):
 				directory_data = 'Location Does Not Exist'
 				file_data = ''
+
+		#for i in file_data:
+		#	directory_data.append(i)
 			
 		return directory_data + file_data
 		

@@ -33,15 +33,14 @@ class BranchTab(ttk.Frame):
 		self.setup_buttons()
 		self.setup_treeview()
 		self.address_bar_entry.update_bar()
-		self.update_treeview()
 	
-	def update_tab(self, directory, mode=None):
-		directory_data = self.explorer.list_directory(directory, mode)
+	def update_tab(self, directory, mode=None, sort=None):
+		directory_data = self.explorer.list_directory(directory, mode=mode, sort=sort)
 		if isinstance(directory_data, str):
 			messagebox.showerror('Error', message=directory_data)
 		else:
 			self.address_bar_entry.update_bar()
-			self.update_treeview()
+			self.update_treeview(directory_data)
 			self.root_tab.notebook.tab(self, text=os.path.basename(self.explorer.current_directory))
 			
 			# Enable/Disable Buttons as required
@@ -77,6 +76,7 @@ class BranchTab(ttk.Frame):
 		#self.treeview.pack(expand=True, fill=BOTH)
 		self.treeview.grid(row=1, column=0, columnspan=16, sticky='NSEW', pady=self.mainapp.default_pady)
 		self.treeview.bind("<Double-1>", self.OnDoubleClick)
+		self.treeview.bind("<Button-1>", self.OnLeftClick)
 		self.treeview.bind("<Button-3>", self.OnRightClick)
 		
 		#vsb = ttk.Scrollbar(self, orient="vertical", command=self.treeview.yview)
@@ -85,9 +85,22 @@ class BranchTab(ttk.Frame):
 		self.treeview.configure(yscrollcommand=vsb.set)
 
 
-	def update_treeview(self):
-		directory_data = self.explorer.list_directory()
+	def update_treeview(self, directory_data):
 		treeview_functions.write_data_to_treeview(self.mainapp, self.treeview, 'replace', directory_data)
+
+	def OnLeftClick(self, event):
+		region = self.treeview.identify("region", event.x, event.y)
+		if region == 'heading':
+			col = self.treeview.identify_column(event.x)
+			if col == '#1':
+				self.update_tab(self.explorer.current_directory, sort='date')
+			elif col == '#2':
+				self.update_tab(self.explorer.current_directory, sort='file_type')
+			elif col == '#3':
+				self.update_tab(self.explorer.current_directory, sort='size')
+			else:
+				self.update_tab(self.explorer.current_directory)
+			
 		
 	def OnDoubleClick(self, event):
 		current_selection = treeview_functions.get_current_selection(self.treeview)
