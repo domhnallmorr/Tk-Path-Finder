@@ -34,7 +34,7 @@ class MainApplication(ttk.Frame):
 		self.setup_tabs()
 
 	def setup_variables(self):
-		self.version = '0.12.0'
+		self.version = '0.14.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 
@@ -136,7 +136,7 @@ class MainApplication(ttk.Frame):
 			current_branch_tab.copy_file(current_branch_tab.treeview.item(item,"text"))
 	
 	def paste(self, event):
-		if self.file_to_copy != None:
+		if self.file_to_copy != None and 'addressbar' not in str(self.focus_get()).split('.')[-1]:
 			current_root_tab, current_branch_tab = self.get_current_tabs()
 			current_branch_tab.paste_file()
 

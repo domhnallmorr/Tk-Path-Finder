@@ -1,32 +1,30 @@
 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
 
-V0.01.0
-	tidy frames
-	come up with name
-	titlebar
-	add about menu
-V0.01.1
-	handle permission error
 
-V0.02
-	quick access
-		add/delete top level node
-		edit top level node
-		add/delete links
-		edit links
-		scrollbar
-V0.03
-	scrollbar for tree
-	auto hide
-V0.04
-	get size and date modified data
-V0.05
+v0.10
+	
+V0.11
+	save tabs to config
+	clear all tabs
 	Collapse all button for quick access
-V0.06
-	Expand file types and icons
-V0.07
-	back/forward navigation
-V0.08
-	rename files
-V0.09
-	handle hidden files
+
+list all files in subdirectories (option to process to python raw string)
+handle hidden files
+delete files
+undo rename/delete/paste
+pdf viewer
+copy files with directory structure
+cut files
+icons for quick access
+load session
+image preview (pop up window)
+plugin system
+advanced search for files
+use subprocess on big directories
+allow custom icons
+switch theme option
+minimum tab width
+paste option (overwrite or new file)
+add run file commands
+filter file types
+open with program options
