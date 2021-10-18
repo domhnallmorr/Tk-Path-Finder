@@ -1,6 +1,6 @@
 from distutils.dir_util import copy_tree
 import os
-from shutil import copyfile
+from shutil import copyfile, move
 import subprocess
 import tkinter as tk
 from tkinter import *
@@ -140,8 +140,9 @@ class BranchTab(ttk.Frame):
 
 		popup_menu.add_separator()
 		if iid:
+			popup_menu.add_command(label="Cut", command=lambda file=file_name: self.cut_file(file))
 			popup_menu.add_command(label="Copy", command=lambda file=file_name: self.copy_file(file))
-		if self.mainapp.file_to_copy != None:
+		if self.mainapp.file_to_copy != None or self.mainapp.file_to_cut != None:
 			popup_menu.add_command(label="Paste", command=self.paste_file)		
 		#popup_menu.add_command(label="Delete Root Tab", command=lambda tab=clicked_tab: event.widget.mainapp.delete_root_tab(tab))
 
@@ -204,13 +205,24 @@ class BranchTab(ttk.Frame):
 					os.rename(os.path.join(self.explorer.current_directory, self.orig_file_name), os.path.join(self.explorer.current_directory, new_name))
 				self.update_tab(self.explorer.current_directory)
 
+	def cut_file(self, file):
+		self.mainapp.file_to_cut = [{'Name': file, 'Path': self.explorer.current_directory}]
+		self.mainapp.file_to_copy = None
+		
 	def copy_file(self, file):
 		self.mainapp.file_to_copy = [{'Name': file, 'Path': self.explorer.current_directory}]
+		self.mainapp.file_to_cut = None
 		
 	def paste_file(self):
 		action_if_duplicate = 'ask'
+		if self.mainapp.file_to_copy == None:
+			files_to_process = self.mainapp.file_to_cut
+			task = 'cut'
+		else:
+			files_to_process = self.mainapp.file_to_copy
+			task = 'copy'
 		
-		for file in self.mainapp.file_to_copy:
+		for file in files_to_process:
 			destination = os.path.join(self.explorer.current_directory, file['Name'])
 			
 			# Copy File
@@ -227,7 +239,10 @@ class BranchTab(ttk.Frame):
 							destination = os.path.join(self.explorer.current_directory, f"{filename}({counter}){file_extension}")
 							break
 						counter += 1
-				copyfile(os.path.join(file['Path'], file['Name']), destination)
+				if task == 'copy':
+					copyfile(os.path.join(file['Path'], file['Name']), destination)
+				elif task == 'cut':
+					os.rename(os.path.join(file['Path'], file['Name']), destination)
 			
 			# Copy Directory
 			elif os.path.isdir(os.path.join(file['Path'], file['Name'])):
@@ -238,8 +253,11 @@ class BranchTab(ttk.Frame):
 						if not os.path.isdir(os.path.join(self.explorer.current_directory, f"{file['Name']}({counter})")):
 							destination = os.path.join(self.explorer.current_directory, f"{file['Name']}({counter})")
 							break
-						counter += 1					
-				copy_tree(os.path.join(file['Path'], file['Name']), destination)
+						counter += 1	
+				if task == 'copy':
+					copy_tree(os.path.join(file['Path'], file['Name']), destination)
+				elif task == 'cut':
+					move(os.path.join(file['Path'], file['Name']), destination)
 
 		self.update_tab(self.explorer.current_directory)
 	

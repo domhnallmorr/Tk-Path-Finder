@@ -34,7 +34,7 @@ class MainApplication(ttk.Frame):
 		self.setup_tabs()
 
 	def setup_variables(self):
-		self.version = '0.13.2'
+		self.version = '0.14.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 
@@ -58,6 +58,7 @@ class MainApplication(ttk.Frame):
 			'.zip': ['ZIP File', self.zip_icon2],
 		}
 		
+		self.file_to_cut = None
 		self.file_to_copy = None
 		self.file_compare_left = None
 		self.file_compare_right = None
