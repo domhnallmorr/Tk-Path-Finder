@@ -60,18 +60,19 @@ class QuickAccessTreeview(ttk.Treeview):
 	def edit_node(self, event):
 		self.add_new_node(mode='edit', event=event)
 		
-	def singleclick(self, event):
-		item_iid = event.widget.selection()[0]
-		parent_iid = event.widget.parent(item_iid)
-		
-		if parent_iid: #if it is a link and not a node
-			node = event.widget.item(parent_iid, 'text')
-			link = event.widget.item(item_iid, 'text')
-			path = self.links[self.nodes[node]][link]
+	def singleclick(self, event, click='single'):
+		if click == 'single':
+			item_iid = event.widget.selection()[0]
+			parent_iid = event.widget.parent(item_iid)
 			
-			current_root_tab = self.mainapp.notebook.nametowidget(self.mainapp.notebook.select())
-			current_branch_tab = current_root_tab.notebook.nametowidget(current_root_tab.notebook.select())
-			current_branch_tab.update_tab(path)
+			if parent_iid: #if it is a link and not a node
+				node = event.widget.item(parent_iid, 'text')
+				link = event.widget.item(item_iid, 'text')
+				path = self.links[self.nodes[node]][link]
+				
+				current_root_tab = self.mainapp.notebook.nametowidget(self.mainapp.notebook.select())
+				current_branch_tab = current_root_tab.notebook.nametowidget(current_root_tab.notebook.select())
+				current_branch_tab.update_tab(path)
 
 	def onrightclick(self, event):
 		self.unbind("<Button 1>")
@@ -80,12 +81,11 @@ class QuickAccessTreeview(ttk.Treeview):
 		if iid:
 			# mouse pointer over item
 			self.selection_set(iid)
-			self.bind('<<TreeviewSelect>>',lambda event, : self.singleclick(event))
+			self.bind('<<TreeviewSelect>>',lambda event, click='right': self.singleclick(event, click))
 			
 		popup_menu = tk.Menu(event.widget, tearoff=0)
 		popup_menu.add_command(label="Add New Node", command=event.widget.add_new_node)
 
-		
 		item_iid = event.widget.selection()[0]
 		parent_iid = event.widget.parent(item_iid)
 		
@@ -101,7 +101,8 @@ class QuickAccessTreeview(ttk.Treeview):
 			popup_menu.tk_popup(event.x_root, event.y_root, 0)
 		finally:
 			popup_menu.grab_release()
-			
+		
+		self.bind('<<TreeviewSelect>>',lambda event, click='single': self.singleclick(event, click))
 	def add_link(self, event, mode):
 		#Get the Node
 		item_iid = event.widget.selection()[0]
