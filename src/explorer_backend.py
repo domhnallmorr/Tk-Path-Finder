@@ -23,25 +23,45 @@ class FileExplorerBackend:
 			# Handle Directories
 			directory_data = []
 			files_dirs = os.listdir(directory)
-			directories = [o for o in files_dirs if os.path.isdir(os.path.join(directory,o))]
-			for d in directories:
-				directory_data.append([d, '-', 'Folder', '-'])
+			
+			if len(files_dirs) > 200:
+				directories = [o for o in files_dirs if os.path.isdir(os.path.join(directory,o))]
+				for d in directories:
+					directory_data.append([d, '-', 'Folder', '-'])
 
-			# Handle Files
-			file_data = []
-			files = [o for o in files_dirs if not os.path.isdir(os.path.join(directory,o))]
-			for f in files:
-				full_path = os.path.join(directory,f)
-				
-				size = os.path.getsize(full_path)*0.001 # in kb
-				
-				modified = os.path.getmtime(full_path)
-				modified = datetime.datetime.fromtimestamp(modified)
-				
-				if sort != 'size':
-					file_data.append([f, modified.strftime("%d/%m/%Y, %H:%M:%S"), self.get_file_type(f), f'{int(size):,} KB'])
-				else:
-					file_data.append([f, modified.strftime("%d/%m/%Y, %H:%M:%S"), self.get_file_type(f), int(size)])
+				# Handle Files
+				file_data = []
+				files = [o for o in files_dirs if not os.path.isdir(os.path.join(directory,o))]
+				for f in files:
+					full_path = os.path.join(directory,f)
+					
+					size = os.path.getsize(full_path)*0.001 # in kb
+					
+					modified = os.path.getmtime(full_path)
+					modified = datetime.datetime.fromtimestamp(modified)
+					
+					if sort != 'size':
+						file_data.append([f, modified.strftime("%d/%m/%Y, %H:%M:%S"), self.get_file_type(f), f'{int(size):,} KB'])
+					else:
+						file_data.append([f, modified.strftime("%d/%m/%Y, %H:%M:%S"), self.get_file_type(f), int(size)])
+						
+			else:
+				# Large Folders
+				data = subprocess.run(f'dir "{directory}"', shell=True, stdout=subprocess.PIPE).stdout.splitlines()
+				data = data[5:-2]
+				directory_data = []
+				file_data = []
+				for d in data:
+					d= d.decode("utf-8") 
+					
+					if '<DIR>' in d:
+						d = d.split('<DIR>')
+						if d[-1].strip() != '.' and d[-1].strip() != '..':
+							directory_data.append([d[-1].strip(), '-', 'Folder', '-'])
+					else:
+						d = d.split()
+						file_data.append([' '.join(d[3:]), '-', 'File', '-'])
+		
 				#file_data.append([f, '-', 'File', '-'])
 			if mode == None:
 				if self.current_directory != directory:
