@@ -9,6 +9,9 @@ from tkinter.ttk import *
 from tkinter import messagebox
 from tkinter import simpledialog
 
+from docx import Document
+from openpyxl import Workbook
+
 import address_bar
 import autoscrollbar
 import explorer_backend
@@ -137,6 +140,8 @@ class BranchTab(ttk.Frame):
 		new_menu.add_command(label="New Folder(s)", command=self.new_folders, image=self.mainapp.folder_icon2, compound='left',)
 		popup_menu.add_separator()
 		new_menu.add_command(label="File", command=lambda mode='new': self.new_file(mode), image=self.mainapp.new_icon2, compound='left',)
+		new_menu.add_command(label="Excel Worksheet", command=lambda mode='new excel': self.new_file(mode), image=self.mainapp.excel_icon2, compound='left',)
+		new_menu.add_command(label="Word Document", command=lambda mode='new word': self.new_file(mode), image=self.mainapp.word_icon2, compound='left',)
 
 		popup_menu.add_separator()
 		if iid:
@@ -177,13 +182,18 @@ class BranchTab(ttk.Frame):
 	def new_file(self, mode, initialvalue=''):
 		if mode == 'edit':
 			self.orig_file_name = initialvalue
+		elif mode == 'new excel':
+			initialvalue = '.xlsx'
+		elif mode == 'new word':
+			initialvalue = '.docx'
+			
 		new_name = simpledialog.askstring(title="New File", prompt = "File Name:".ljust(100), initialvalue=initialvalue)
 		
 		if new_name:
 			msg = None
 			
 			#check file does not exist
-			if mode == 'new':
+			if mode == 'new' or mode == 'new excel':
 				if os.path.isfile(os.path.join(self.explorer.current_directory, new_name)):
 					msg = 'That File Already Exists!'
 					
@@ -201,10 +211,22 @@ class BranchTab(ttk.Frame):
 				if mode == 'new':
 					with open(os.path.join(self.explorer.current_directory, new_name), 'w') as f:
 						f.write('')
+						
+				# New Excel File
+				elif mode == 'new excel':
+					wb = Workbook()
+					wb.save(os.path.join(self.explorer.current_directory, new_name))
+
+				# New Excel File
+				elif mode == 'new word':
+					document = Document()
+					document.save(os.path.join(self.explorer.current_directory, new_name))
+					
 				else:
 					os.rename(os.path.join(self.explorer.current_directory, self.orig_file_name), os.path.join(self.explorer.current_directory, new_name))
 				self.update_tab(self.explorer.current_directory)
 
+					
 	def cut_file(self, file):
 		self.mainapp.file_to_cut = [{'Name': file, 'Path': self.explorer.current_directory}]
 		self.mainapp.file_to_copy = None

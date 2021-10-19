@@ -128,7 +128,7 @@ class FileExplorerBackend:
 						if sort == 'size':
 							file_data.append([filename, f'{d[0]} {d[1]}', self.get_file_type(filename), size])
 						else:
-							file_data.append([filename, f'{d[0]} {d[1]}', self.get_file_type(filename), f'{size} KB'])
+							file_data.append([filename, f'{d[0]} {d[1]}', self.get_file_type(filename), f'{size:,} KB'])
 
 				if mode == None:
 					if self.current_directory != directory:
