@@ -4,27 +4,32 @@ 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
 v0.10
 	
 V0.11
-	save tabs to config
+	
 	clear all tabs
 	Collapse all button for quick access
 
-list all files in subdirectories (option to process to python raw string)
-handle hidden files
+save tabs to config
 delete files
+use subprocess on big directories
+filter file types
+minimum tab width
+option to define default text editor
 undo rename/delete/paste
+
+list all files in subdirectories (option to process to python raw string), don't look in subdirectories option
+handle hidden files
 pdf viewer
 copy files with directory structure
-cut files
 icons for quick access
 load session
 image preview (pop up window)
 plugin system
 advanced search for files
-use subprocess on big directories
 allow custom icons
 switch theme option
-minimum tab width
+
 paste option (overwrite or new file)
 add run file commands
-filter file types
 open with program options
+root tab colour
+multiple files copy/paste
