@@ -140,17 +140,20 @@ class BranchTab(ttk.Frame):
 			self.on_right_click_heading(event)
 		else:
 			iid = self.treeview.identify_row(event.y)
-			
-			self.treeview.selection_set(iid)
+			print(self.treeview.selection())
+			if len(self.treeview.selection()) == 1:
+				self.treeview.selection_set(iid)
+				
 			popup_menu = tk.Menu(event.widget, tearoff=0)
 			if iid:
 				file_name = self.treeview.item(iid, 'text')
 				popup_menu.add_command(label="Open in Text Editor", command=self.open_in_text_editor)
-				popup_menu.add_command(label="Rename", command=lambda mode='edit', initialvalue=file_name: self.new_file(mode, initialvalue))
-				popup_menu.add_command(label="Left Compare", command=self.left_compare)
-				if self.mainapp.file_compare_left:
-					popup_menu.add_command(label="Right Compare", command=self.right_compare)
-				popup_menu.add_separator()
+				if len(self.treeview.selection()) == 1:
+					popup_menu.add_command(label="Rename", command=lambda mode='edit', initialvalue=file_name: self.new_file(mode, initialvalue))
+					popup_menu.add_command(label="Left Compare", command=self.left_compare)
+					if self.mainapp.file_compare_left:
+						popup_menu.add_command(label="Right Compare", command=self.right_compare)
+					popup_menu.add_separator()
 			
 			new_menu = tk.Menu(popup_menu, tearoff = 0)
 			popup_menu.add_cascade(label = 'New',menu=new_menu)
@@ -265,11 +268,15 @@ class BranchTab(ttk.Frame):
 
 					
 	def cut_file(self, file):
-		self.mainapp.file_to_cut = [{'Name': file, 'Path': self.explorer.current_directory}]
+		self.mainapp.file_to_cut = []
+		for iid in self.treeview.selection():
+				self.mainapp.file_to_cut.append({'Name': self.treeview.item(iid, 'text'), 'Path': self.explorer.current_directory})
 		self.mainapp.file_to_copy = None
 		
 	def copy_file(self, file):
-		self.mainapp.file_to_copy = [{'Name': file, 'Path': self.explorer.current_directory}]
+		self.mainapp.file_to_copy = []
+		for iid in self.treeview.selection():
+			self.mainapp.file_to_copy.append({'Name': self.treeview.item(iid, 'text'), 'Path': self.explorer.current_directory})
 		self.mainapp.file_to_cut = None
 		
 	def paste_file(self):
