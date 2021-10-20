@@ -27,6 +27,7 @@ class BranchTab(ttk.Frame):
 		self.root_tab = root_tab
 		self.text = text
 		self.width = width
+		self.filter = []
 		self.lock_name = False
 		
 		# GRID
@@ -42,6 +43,8 @@ class BranchTab(ttk.Frame):
 	
 	def update_tab(self, directory, mode=None, sort=None):
 		directory_data = self.explorer.list_directory(directory, mode=mode, sort=sort)
+		self.directory_data = directory_data
+		
 		if isinstance(directory_data, str):
 			messagebox.showerror('Error', message=directory_data)
 		else:
@@ -95,7 +98,7 @@ class BranchTab(ttk.Frame):
 
 
 	def update_treeview(self, directory_data):
-		treeview_functions.write_data_to_treeview(self.mainapp, self.treeview, 'replace', directory_data)
+		treeview_functions.write_data_to_treeview(self, self.mainapp, self.treeview, 'replace', directory_data)
 
 	def OnLeftClick(self, event):
 		region = self.treeview.identify("region", event.x, event.y)
@@ -122,40 +125,63 @@ class BranchTab(ttk.Frame):
 			
 			
 	def OnRightClick(self, event):
-		iid = self.treeview.identify_row(event.y)
-		
-		self.treeview.selection_set(iid)
-		popup_menu = tk.Menu(event.widget, tearoff=0)
-		if iid:
-			file_name = self.treeview.item(iid, 'text')
-			popup_menu.add_command(label="Open in Text Editor", command=self.open_in_text_editor)
-			popup_menu.add_command(label="Rename", command=lambda mode='edit', initialvalue=file_name: self.new_file(mode, initialvalue))
-			popup_menu.add_command(label="Left Compare", command=self.left_compare)
-			if self.mainapp.file_compare_left:
-				popup_menu.add_command(label="Right Compare", command=self.right_compare)
-			popup_menu.add_separator()
-		
-		new_menu = tk.Menu(popup_menu, tearoff = 0)
-		popup_menu.add_cascade(label = 'New',menu=new_menu)
-		new_menu.add_command(label="New Folder(s)", command=self.new_folders, image=self.mainapp.folder_icon2, compound='left',)
-		popup_menu.add_separator()
-		new_menu.add_command(label="File", command=lambda mode='new': self.new_file(mode), image=self.mainapp.new_icon2, compound='left',)
-		new_menu.add_command(label="Excel Worksheet", command=lambda mode='new excel': self.new_file(mode), image=self.mainapp.excel_icon2, compound='left',)
-		new_menu.add_command(label="Word Document", command=lambda mode='new word': self.new_file(mode), image=self.mainapp.word_icon2, compound='left',)
-
-		popup_menu.add_separator()
-		if iid:
-			popup_menu.add_command(label="Cut", command=lambda file=file_name: self.cut_file(file))
-			popup_menu.add_command(label="Copy", command=lambda file=file_name: self.copy_file(file))
-		if self.mainapp.file_to_copy != None or self.mainapp.file_to_cut != None:
-			popup_menu.add_command(label="Paste", command=self.paste_file)		
-		#popup_menu.add_command(label="Delete Root Tab", command=lambda tab=clicked_tab: event.widget.mainapp.delete_root_tab(tab))
-
-		try:
-			popup_menu.tk_popup(event.x_root, event.y_root, 0)
-		finally:
-			popup_menu.grab_release()
+		region = self.treeview.identify("region", event.x, event.y)
+		if region == 'heading':
+			self.on_right_click_heading(event)
+		else:
+			iid = self.treeview.identify_row(event.y)
 			
+			self.treeview.selection_set(iid)
+			popup_menu = tk.Menu(event.widget, tearoff=0)
+			if iid:
+				file_name = self.treeview.item(iid, 'text')
+				popup_menu.add_command(label="Open in Text Editor", command=self.open_in_text_editor)
+				popup_menu.add_command(label="Rename", command=lambda mode='edit', initialvalue=file_name: self.new_file(mode, initialvalue))
+				popup_menu.add_command(label="Left Compare", command=self.left_compare)
+				if self.mainapp.file_compare_left:
+					popup_menu.add_command(label="Right Compare", command=self.right_compare)
+				popup_menu.add_separator()
+			
+			new_menu = tk.Menu(popup_menu, tearoff = 0)
+			popup_menu.add_cascade(label = 'New',menu=new_menu)
+			new_menu.add_command(label="New Folder(s)", command=self.new_folders, image=self.mainapp.folder_icon2, compound='left',)
+			popup_menu.add_separator()
+			new_menu.add_command(label="File", command=lambda mode='new': self.new_file(mode), image=self.mainapp.new_icon2, compound='left',)
+			new_menu.add_command(label="Excel Worksheet", command=lambda mode='new excel': self.new_file(mode), image=self.mainapp.excel_icon2, compound='left',)
+			new_menu.add_command(label="Word Document", command=lambda mode='new word': self.new_file(mode), image=self.mainapp.word_icon2, compound='left',)
+
+			popup_menu.add_separator()
+			if iid:
+				popup_menu.add_command(label="Cut", command=lambda file=file_name: self.cut_file(file))
+				popup_menu.add_command(label="Copy", command=lambda file=file_name: self.copy_file(file))
+			if self.mainapp.file_to_copy != None or self.mainapp.file_to_cut != None:
+				popup_menu.add_command(label="Paste", command=self.paste_file)		
+			#popup_menu.add_command(label="Delete Root Tab", command=lambda tab=clicked_tab: event.widget.mainapp.delete_root_tab(tab))
+
+			try:
+				popup_menu.tk_popup(event.x_root, event.y_root, 0)
+			finally:
+				popup_menu.grab_release()
+
+	def on_right_click_heading(self, event):
+		col = self.treeview.identify_column(event.x)
+		if col == '#2':		
+			popup_menu = tk.Menu(event.widget, tearoff=0)
+			popup_menu.add_command(label="Filter File Type", command=self.filter_files)
+
+			try:
+				popup_menu.tk_popup(event.x_root, event.y_root, 0)
+			finally:
+				popup_menu.grab_release()
+				
+	def filter_files(self):
+		self.w = FilterWindow(self.mainapp, self.master, self)
+		self.master.wait_window(self.w.top)	
+		
+		if self.w.button == 'ok':
+			self.filter = self.w.filter
+			self.update_tab(self.explorer.current_directory)
+		
 	def up_one_level(self):
 		directory = self.explorer.up_one_level()
 		self.update_tab(directory)
@@ -390,4 +416,64 @@ class RenameWindow(ttk.Frame):
 		else:
 			self.top.destroy()
 		
+class FilterWindow(ttk.Frame):
+	def __init__(self, mainapp, master, branch_tab):
+		super(FilterWindow, self).__init__()
+		top=self.top=Toplevel(master)
+		top.grab_set()
+		self.mainapp = mainapp
+		self.branch_tab = branch_tab
+		self.button = 'cancel'
 		
+		print(branch_tab.directory_data)
+		
+		self.file_types = {}
+		
+		for file in branch_tab.directory_data:
+			if branch_tab.directory_data[2] != 'Folder':
+				filename, file_extension = os.path.splitext(file[0])
+				if file_extension not in self.file_types.keys():
+					if file_extension in mainapp.known_file_types.keys():
+						description = mainapp.known_file_types[file_extension][0]
+					else:
+						description = f'{file_extension} file'
+					
+					if file_extension in branch_tab.filter:
+						initialvalue = 0
+					else:
+						initialvalue = 1
+						
+					self.file_types[file_extension] = {'description': description, 'var': IntVar(value=initialvalue)}
+		
+		self.all_files = IntVar(value=1)
+		ttk.Checkbutton(self.top, text=f"File Types in Current Directory:)", variable=self.all_files, command=self.select_all_file).grid(row=0, column=0, sticky='w', padx=5, pady=5)		
+		
+		row = 1
+		for file_extension in self.file_types.keys():
+			var = self.file_types[file_extension]['var']
+			description = self.file_types[file_extension]['description']
+			ttk.Checkbutton(self.top, text=f"{description} ({file_extension})", variable=var).grid(row=row, column=1, sticky='w', padx=5, pady=5)
+			row +=  1
+					
+		# Buttons
+		self.ok_btn = ttk.Button(self.top, text='OK', width=10, style='success.TButton', command=lambda button='ok': self.cleanup(button))
+		self.ok_btn.grid(row=row, column=0, padx=5, pady=5, sticky='ne')
+		self.cancel_btn = ttk.Button(self.top, text='Cancel', width=10, style='danger.TButton', command=lambda button='cancel': self.cleanup(button))
+		self.cancel_btn.grid(row=row, column=1, padx=5, pady=5, sticky='nw')		
+	
+	def select_all_file(self):
+		for file_extension in self.file_types.keys():
+			self.file_types[file_extension]['var'].set(self.all_files.get())
+		
+	def cleanup(self, button):
+		self.button = button
+		self.filter = []		
+		for file_extension in self.file_types.keys():
+			if self.file_types[file_extension]['var'].get() == 0:
+				self.filter.append(file_extension)
+				
+				
+		self.top.destroy()
+			
+			
+					

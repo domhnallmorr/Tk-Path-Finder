@@ -34,21 +34,26 @@ class MainApplication(ttk.Frame):
 		self.setup_tabs()
 
 	def setup_variables(self):
-		self.version = '0.14.3'
+		self.version = '0.15.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 
 		self.known_file_types = {
 			'.csv': ['CSV File', self.excel_icon2],
+			'.das': ['das file', self.new_icon2],
 			'.doc': ['Word 97-2003 Document', self.word_icon2],
 			'.docx': ['Word Document', self.word_icon2],
 			'.exe': ['application', self.new_icon2],
 			'.ipynb': ['Jupyter Notebook', self.notebook_icon2],
 			'.jpeg': ['JPEG Image', self.image_icon2],
 			'.jpg': ['JPG Image', self.image_icon2],
+			'.json': ['JSON file', self.new_icon2],
+			'.keyx': ['key file', self.key_file_icon2],
 			'.mkv': ['MKV Video', self.video_icon2],
 			'.mp3': ['MP4 Audio', self.audio_icon2],
 			'.mp4': ['MP4 Video', self.video_icon2],
+			'.mplt': ['mplt file', self.video_icon2],
+			'.out': ['output file', self.new_icon2],
 			'.pdf': ['PDF', self.pdf_icon2],
 			'.png': ['PNG Image', self.image_icon2],
 			'.py': ['Python File', self.python_icon2],
