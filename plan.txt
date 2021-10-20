@@ -10,8 +10,6 @@ V0.11
 
 save tabs to config
 delete files
-use subprocess on big directories
-filter file types
 minimum tab width
 option to define default text editor
 undo rename/delete/paste
@@ -23,7 +21,7 @@ copy files with directory structure
 icons for quick access
 load session
 image preview (pop up window)
-plugin system
+
 advanced search for files
 allow custom icons
 switch theme option
@@ -33,3 +31,4 @@ add run file commands
 open with program options
 root tab colour
 multiple files copy/paste
+plugin system

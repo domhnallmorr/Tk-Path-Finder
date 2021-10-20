@@ -29,6 +29,7 @@ class BranchTab(ttk.Frame):
 		self.width = width
 		self.filter = []
 		self.lock_name = False
+		self.lock_filter = False
 		
 		# GRID
 		self.tree_colspan = 16
@@ -42,6 +43,15 @@ class BranchTab(ttk.Frame):
 		self.address_bar_entry.update_bar()
 	
 	def update_tab(self, directory, mode=None, sort=None):
+		if directory != self.explorer.current_directory:
+			if not self.lock_filter:
+				self.filter = [] #reset filter if we change directories
+
+		if self.filter != []:
+			self.treeview.heading('#2', text='Type*')
+		else:
+			self.treeview.heading('#2', text='Type')
+			
 		directory_data = self.explorer.list_directory(directory, mode=mode, sort=sort)
 		self.directory_data = directory_data
 		
@@ -181,6 +191,7 @@ class BranchTab(ttk.Frame):
 		if self.w.button == 'ok':
 			self.filter = self.w.filter
 			self.update_tab(self.explorer.current_directory)
+			self.lock_filter = self.w.lock_filter
 		
 	def up_one_level(self):
 		directory = self.explorer.up_one_level()
@@ -425,8 +436,6 @@ class FilterWindow(ttk.Frame):
 		self.branch_tab = branch_tab
 		self.button = 'cancel'
 		
-		print(branch_tab.directory_data)
-		
 		self.file_types = {}
 		
 		for file in branch_tab.directory_data:
@@ -446,7 +455,7 @@ class FilterWindow(ttk.Frame):
 					self.file_types[file_extension] = {'description': description, 'var': IntVar(value=initialvalue)}
 		
 		self.all_files = IntVar(value=1)
-		ttk.Checkbutton(self.top, text=f"File Types in Current Directory:)", variable=self.all_files, command=self.select_all_file).grid(row=0, column=0, sticky='w', padx=5, pady=5)		
+		ttk.Checkbutton(self.top, text=f"File Types in Current Directory:", variable=self.all_files, command=self.select_all_file).grid(row=0, column=0, sticky='w', padx=5, pady=5)		
 		
 		row = 1
 		for file_extension in self.file_types.keys():
@@ -460,18 +469,29 @@ class FilterWindow(ttk.Frame):
 		self.ok_btn.grid(row=row, column=0, padx=5, pady=5, sticky='ne')
 		self.cancel_btn = ttk.Button(self.top, text='Cancel', width=10, style='danger.TButton', command=lambda button='cancel': self.cleanup(button))
 		self.cancel_btn.grid(row=row, column=1, padx=5, pady=5, sticky='nw')		
-	
+
+		# Lock filter
+		initialvalue = 0
+		if branch_tab.lock_filter:
+			initialvalue = 1
+		self.lock_filter = IntVar(value=initialvalue)
+		ttk.Checkbutton(self.top, text=f"Lock in this filter:", variable=self.lock_filter).grid(row=row, column=2, sticky='w', padx=5, pady=5)	
 	def select_all_file(self):
 		for file_extension in self.file_types.keys():
 			self.file_types[file_extension]['var'].set(self.all_files.get())
 		
 	def cleanup(self, button):
-		self.button = button
-		self.filter = []		
-		for file_extension in self.file_types.keys():
-			if self.file_types[file_extension]['var'].get() == 0:
-				self.filter.append(file_extension)
-				
+		if button == 'ok':
+			self.filter = []		
+			for file_extension in self.file_types.keys():
+				if self.file_types[file_extension]['var'].get() == 0:
+					self.filter.append(file_extension)
+			
+			if self.lock_filter.get() == 1:
+				self.lock_filter = True
+			else:
+				self.lock_filter = False
+			self.button = button
 				
 		self.top.destroy()
 			
