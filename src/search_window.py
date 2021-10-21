@@ -60,7 +60,6 @@ class SearchWindow(ttk.Frame):
 		self.search_text.configure(yscrollcommand=vsb.set)
 		
 	def on_search(self):
-		print('searching')
 		#results = []
 		self.search_text.delete('1.0', END)
 

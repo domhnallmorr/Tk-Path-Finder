@@ -162,8 +162,19 @@ class BranchTab(ttk.Frame):
 					if self.mainapp.file_compare_left:
 						popup_menu.add_command(label="Right Compare", command=self.right_compare)
 					popup_menu.add_separator()
-			
-			new_menu = tk.Menu(popup_menu, tearoff = 0)
+					
+					# Filtering
+					filter_menu = tk.Menu(popup_menu, tearoff=0)
+					popup_menu.add_cascade(label = 'Filter',menu=filter_menu)
+					filter_menu.add_command(label="Hide This File Type",
+								command=lambda mode='all but', item=iid: self.filter_right_click(mode, item), compound='left',)
+					filter_menu.add_command(label="Show Just This File Type",
+								command=lambda mode='just this', item=iid: self.filter_right_click(mode, item), compound='left',)
+					filter_menu.add_command(label="Remove Filter",
+								command=lambda mode='remove', item=iid: self.filter_right_click(mode, item), compound='left',)
+					popup_menu.add_separator()
+					
+			new_menu = tk.Menu(popup_menu, tearoff=0)
 			popup_menu.add_cascade(label = 'New',menu=new_menu)
 			new_menu.add_command(label="New Folder(s)", command=self.new_folders, image=self.mainapp.folder_icon2, compound='left',)
 			popup_menu.add_separator()
@@ -203,6 +214,20 @@ class BranchTab(ttk.Frame):
 			self.filter = self.w.filter
 			self.update_tab(self.explorer.current_directory)
 			self.lock_filter = self.w.lock_filter
+
+	def filter_right_click(self, mode, item):
+		filter = []
+		item_filename, item_file_extension = os.path.splitext(self.treeview.item(item, 'text'))
+		if mode == 'just this':
+			for row in self.directory_data:
+				if row[2] != 'Folder':
+					filename, file_extension = os.path.splitext(row[0])
+					if file_extension != item_file_extension:
+						filter.append(file_extension)
+		elif mode == 'all but':
+			filter.append(item_file_extension)
+		self.filter = filter
+		self.update_tab(self.explorer.current_directory)
 		
 	def up_one_level(self):
 		directory = self.explorer.up_one_level()

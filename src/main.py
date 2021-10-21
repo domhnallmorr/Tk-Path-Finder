@@ -34,7 +34,7 @@ class MainApplication(ttk.Frame):
 		self.setup_tabs()
 
 	def setup_variables(self):
-		self.version = '0.16.1'
+		self.version = '0.16.2'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 
@@ -59,6 +59,7 @@ class MainApplication(ttk.Frame):
 			'.py': ['Python File', self.python_icon2],
 			'.rar': ['RAR File', self.rar_icon2],
 			'.txt': ['Text File', self.text_icon2],
+			'.xlsm': ['Marco Enabled Excel Worksheet', self.excel_icon2],
 			'.xlsx': ['Excel Worksheet', self.excel_icon2],
 			'.zip': ['ZIP File', self.zip_icon2],
 		}
