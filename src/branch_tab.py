@@ -125,14 +125,22 @@ class BranchTab(ttk.Frame):
 			
 		
 	def OnDoubleClick(self, event):
+		msg = None
 		current_selection = treeview_functions.get_current_selection(self.treeview)
 		if current_selection[1][2] == 'Folder':
 			directory = os.path.join(self.explorer.current_directory, current_selection[1][0])
-			#self.explorer.double_clicked_on_directory(directory)
-			self.update_tab(directory)
+			if os.path.isdir(directory):
+				self.update_tab(directory)
+			else:
+				msg = 'This directory does not exist, it may have been moved or deleted'
+
 		else:
-			self.explorer.double_clicked_on_file(current_selection[1][0])
-			
+			if os.path.isfile(os.path.join(self.explorer.current_directory, current_selection[1][0])):
+				self.explorer.double_clicked_on_file(current_selection[1][0])
+			else:
+				msg = 'This file does not exist, it may have been moved or deleted'
+		if msg:
+			messagebox.showerror('Error', message=msg)
 			
 	def OnRightClick(self, event):
 		region = self.treeview.identify("region", event.x, event.y)
@@ -140,7 +148,7 @@ class BranchTab(ttk.Frame):
 			self.on_right_click_heading(event)
 		else:
 			iid = self.treeview.identify_row(event.y)
-			print(self.treeview.selection())
+
 			if len(self.treeview.selection()) == 1:
 				self.treeview.selection_set(iid)
 				

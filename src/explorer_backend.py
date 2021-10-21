@@ -188,9 +188,7 @@ class FileExplorerBackend:
 	def update_explorer(self):
 		pass
 		
-	def new_folders(self, folders):
-		print(folders)
-		
+	def new_folders(self, folders):		
 		for folder in folders:
 			os.makedirs(os.path.join(self.current_directory, folder))
 			
