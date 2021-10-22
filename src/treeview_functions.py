@@ -108,12 +108,14 @@ def del_selected_items(treeview, msg=False):
 	#return MsgBox
 
 def get_current_selection(treeview):
+	if len(treeview.selection()) > 0:
+		item = treeview.selection()[0]
+		index = treeview.index(item)
+		
+		data = list(treeview.item(item,"values"))
+		data.insert(0, treeview.item(item,"text"))
 
-	item = treeview.selection()[0]
-	index = treeview.index(item)
-	
-	data = list(treeview.item(item,"values"))
-	data.insert(0, treeview.item(item,"text"))
-
-
+	else:
+		index = None
+		data = []
 	return index, data

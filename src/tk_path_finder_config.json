@@ -1,7 +1,9 @@
 {
     "links": {
         "I001": {
-            "Desktop": "C:\\Users\\domhn\\Desktop"
+            "Desktop": "C:\\Users\\domhn\\Desktop",
+            "Torrents": "C:\\Users\\domhn\\Downloads\\Torrents",
+            "Squid Game": "C:\\Users\\domhn\\Downloads\\Torrents\\Squid.Game.S01.KOREAN.WEBRip.x265-ION265"
         },
         "Some node": {
             "Link1": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src",
