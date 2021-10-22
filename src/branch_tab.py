@@ -325,40 +325,46 @@ class BranchTab(ttk.Frame):
 		for file in files_to_process:
 			destination = os.path.join(self.explorer.current_directory, file['Name'])
 			
-			# Copy File
-			if os.path.isfile(os.path.join(file['Path'], file['Name'])):
-				# handle for file already existing in destination
-				if os.path.isfile(os.path.join(self.explorer.current_directory, file['Name'])):
+			try:
+				# Copy File
+				if os.path.isfile(os.path.join(file['Path'], file['Name'])):
+					# handle for file already existing in destination
+					if os.path.isfile(os.path.join(self.explorer.current_directory, file['Name'])):
 
-					#if os.path.isfile(os.path.join(self.explorer.current_directory, file['Name']))
-						#if action_if_duplicate == 'ask':
-					counter = 1
-					while True: # Check if File Exists
-						filename, file_extension = os.path.splitext(file['Name'])
-						if not os.path.isfile(os.path.join(self.explorer.current_directory, f"{filename}({counter}){file_extension}")):
-							destination = os.path.join(self.explorer.current_directory, f"{filename}({counter}){file_extension}")
-							break
-						counter += 1
-				if task == 'copy':
-					copyfile(os.path.join(file['Path'], file['Name']), destination)
-				elif task == 'cut':
-					os.rename(os.path.join(file['Path'], file['Name']), destination)
-			
-			# Copy Directory
-			elif os.path.isdir(os.path.join(file['Path'], file['Name'])):
-				# handle for folder already existing in destination
-				if os.path.isdir(os.path.join(self.explorer.current_directory, file['Name'])):
-					counter = 1
-					while True: # Check if File Exists
-						if not os.path.isdir(os.path.join(self.explorer.current_directory, f"{file['Name']}({counter})")):
-							destination = os.path.join(self.explorer.current_directory, f"{file['Name']}({counter})")
-							break
-						counter += 1	
-				if task == 'copy':
-					copy_tree(os.path.join(file['Path'], file['Name']), destination)
-				elif task == 'cut':
-					move(os.path.join(file['Path'], file['Name']), destination)
-
+						#if os.path.isfile(os.path.join(self.explorer.current_directory, file['Name']))
+							#if action_if_duplicate == 'ask':
+						counter = 1
+						while True: # Check if File Exists
+							filename, file_extension = os.path.splitext(file['Name'])
+							if not os.path.isfile(os.path.join(self.explorer.current_directory, f"{filename}({counter}){file_extension}")):
+								destination = os.path.join(self.explorer.current_directory, f"{filename}({counter}){file_extension}")
+								break
+							counter += 1
+					if task == 'copy':
+						copyfile(os.path.join(file['Path'], file['Name']), destination)
+					elif task == 'cut':
+						os.rename(os.path.join(file['Path'], file['Name']), destination)
+				
+				# Copy Directory
+				elif os.path.isdir(os.path.join(file['Path'], file['Name'])):
+					# handle for folder already existing in destination
+					if os.path.isdir(os.path.join(self.explorer.current_directory, file['Name'])):
+						counter = 1
+						while True: # Check if File Exists
+							if not os.path.isdir(os.path.join(self.explorer.current_directory, f"{file['Name']}({counter})")):
+								destination = os.path.join(self.explorer.current_directory, f"{file['Name']}({counter})")
+								break
+							counter += 1	
+					if task == 'copy':
+						copy_tree(os.path.join(file['Path'], file['Name']), destination)
+					elif task == 'cut':
+						move(os.path.join(file['Path'], file['Name']), destination)
+			except PermissionError:
+				messagebox.showerror('Error', message=f'Permission Denied to Paste {file["Name"]}')
+			except Exception as e:
+				messagebox.showerror('Error', message=f'An error occured pasting {file["Name"]}')
+				print(e)
+				
 		self.update_tab(self.explorer.current_directory)
 	
 	def search(self):
