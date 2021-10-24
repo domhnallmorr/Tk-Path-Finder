@@ -17,6 +17,7 @@ import autoscrollbar
 import explorer_backend
 import file_comparison
 import search_window
+import settings_screen
 import treeview_functions
 
 class BranchTab(ttk.Frame):
@@ -101,7 +102,6 @@ class BranchTab(ttk.Frame):
 		self.treeview.bind("<Button-1>", self.OnLeftClick)
 		self.treeview.bind("<Button-3>", self.OnRightClick)
 		
-		#vsb = ttk.Scrollbar(self, orient="vertical", command=self.treeview.yview)
 		vsb = autoscrollbar.AutoScrollbar(self, orient="vertical", command=self.treeview.yview)
 		vsb.grid(row=1, column=16, sticky='NSEW')
 		self.treeview.configure(yscrollcommand=vsb.set)
@@ -155,25 +155,39 @@ class BranchTab(ttk.Frame):
 				
 			popup_menu = tk.Menu(event.widget, tearoff=0)
 			if iid:
+				#file_name = self.treeview.item(iid, 'text')
+				file_name, file_extension = os.path.splitext(self.treeview.item(iid, 'text'))
 				file_name = self.treeview.item(iid, 'text')
-				popup_menu.add_command(label="Open in Text Editor", command=self.open_in_text_editor)
-				if len(self.treeview.selection()) == 1:
-					popup_menu.add_command(label="Rename", command=lambda mode='edit', initialvalue=file_name: self.new_file(mode, initialvalue))
-					popup_menu.add_command(label="Left Compare", command=self.left_compare)
-					if self.mainapp.file_compare_left:
-						popup_menu.add_command(label="Right Compare", command=self.right_compare)
-					popup_menu.add_separator()
+				
+				if os.path.isfile(os.path.join(self.explorer.current_directory, file_name)):
+					popup_menu.add_command(label="Open in Text Editor", command=self.open_in_text_editor)
 					
-					# Filtering
-					filter_menu = tk.Menu(popup_menu, tearoff=0)
-					popup_menu.add_cascade(label = 'Filter',menu=filter_menu)
-					filter_menu.add_command(label="Hide This File Type",
-								command=lambda mode='all but', item=iid: self.filter_right_click(mode, item), compound='left',)
-					filter_menu.add_command(label="Show Just This File Type",
-								command=lambda mode='just this', item=iid: self.filter_right_click(mode, item), compound='left',)
-					filter_menu.add_command(label="Remove Filter",
-								command=lambda mode='remove', item=iid: self.filter_right_click(mode, item), compound='left',)
-					popup_menu.add_separator()
+					# Open With
+					if file_extension in self.mainapp.open_with_apps.keys():
+						open_with_menu = tk.Menu(popup_menu, tearoff=0)
+						popup_menu.add_cascade(label = 'Open With',menu=open_with_menu)
+						for app in self.mainapp.open_with_apps[file_extension]:
+							app_name = settings_screen.get_file_description(app)
+							open_with_menu.add_command(label=app_name,
+									command=lambda app=app: self.open_in_text_editor(app), compound='left',)
+					
+					if len(self.treeview.selection()) == 1:
+						popup_menu.add_command(label="Rename", command=lambda mode='edit', initialvalue=file_name: self.new_file(mode, initialvalue))
+						popup_menu.add_command(label="Left Compare", command=self.left_compare)
+						if self.mainapp.file_compare_left:
+							popup_menu.add_command(label="Right Compare", command=self.right_compare)
+						popup_menu.add_separator()
+					
+						# Filtering
+						filter_menu = tk.Menu(popup_menu, tearoff=0)
+						popup_menu.add_cascade(label = 'Filter',menu=filter_menu)
+						filter_menu.add_command(label="Hide This File Type",
+									command=lambda mode='all but', item=iid: self.filter_right_click(mode, item), compound='left',)
+						filter_menu.add_command(label="Show Just This File Type",
+									command=lambda mode='just this', item=iid: self.filter_right_click(mode, item), compound='left',)
+						filter_menu.add_command(label="Remove Filter",
+									command=lambda mode='remove', item=iid: self.filter_right_click(mode, item), compound='left',)
+						popup_menu.add_separator()
 					
 			new_menu = tk.Menu(popup_menu, tearoff=0)
 			popup_menu.add_cascade(label = 'New',menu=new_menu)
@@ -240,10 +254,13 @@ class BranchTab(ttk.Frame):
 	def forward_one_level(self):
 		self.update_tab(self.explorer.forward_directories[0], mode='fwd')
 		
-	def open_in_text_editor(self):
+	def open_in_text_editor(self, app=None):
 		current_selection = treeview_functions.get_current_selection(self.treeview)
-		if current_selection[1][2] != 'Folder':
-			subprocess.call([r"C:\Program Files (x86)\Notepad++\notepad++.exe", fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
+		if app:
+			subprocess.call([app, fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
+		else:
+			if current_selection[1][2] != 'Folder':
+				subprocess.call([r"C:\Program Files (x86)\Notepad++\notepad++.exe", fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
 
 	def new_folders(self):
 		self.w=AddFoldersWindow(self.mainapp, self.master, self)

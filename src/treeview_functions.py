@@ -74,6 +74,16 @@ def write_data_to_treeview(branch_tab, mainapp, treeview, mode, data, image=None
 			else:
 				treeview.insert('', 'end', text=d[0])
 
+def write_data_to_treeview_general(treeview, mode, data):
+	if mode == 'replace':
+		treeview.delete(*treeview.get_children())
+		
+	for d in data:
+		if len(d) > 1:
+			treeview.insert('', 'end', text=d[0], values=tuple(d[1:]))
+		else:
+			treeview.insert('', 'end', text=d[0])	
+
 def get_treeview_headers(treeview):
 	
 	columns = list(treeview['columns'])

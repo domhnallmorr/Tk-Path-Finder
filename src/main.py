@@ -1,3 +1,4 @@
+import copy
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
@@ -10,6 +11,7 @@ import about_screen
 import autoscrollbar
 import config_file_manager
 import root_tab
+import settings_screen
 import sidebar_tree
 import tkexplorer_icons
 
@@ -32,9 +34,9 @@ class MainApplication(ttk.Frame):
 		self.setup_notebook()
 		self.setup_quick_access()
 		self.setup_tabs()
-
+		#config_file_manager.write_config_file(self)
 	def setup_variables(self):
-		self.version = '0.16.4'
+		self.version = '0.17.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 
@@ -68,11 +70,24 @@ class MainApplication(ttk.Frame):
 		self.file_to_copy = None
 		self.file_compare_left = None
 		self.file_compare_right = None
+		
+		self.open_with_apps = self.config_data['open_with_apps']
 
 	def setup_menu(self):
 		menu = tk.Menu(self.master)
 		self.master.config(menu=menu)
 
+		# ________ SETTINGS ________
+		settings_menu = tk.Menu(menu, tearoff=0)
+		menu.add_cascade(label='Settings',menu=settings_menu)
+		settings_menu.add_command(label = 'Edit Settings', command=self.edit_settings)
+
+		style_menu = tk.Menu(menu, tearoff = 0)
+		settings_menu.add_cascade(label = 'Style', menu=style_menu)
+		
+		for s in ['cosmo', 'flatly', 'journal', 'litera', 'lumen', 'minty', 'pulse', 'sandstone', 'united', 'yeti', 'cyborg', 'darkly', 'solar', 'superhero'] :
+			style_menu.add_command(label=s, command = lambda style=s: self.switch_style(style))
+			
 		# ________ ABOUT ________
 		about_menu = tk.Menu(menu, tearoff=0)
 		menu.add_cascade(label='About',menu=about_menu)
@@ -152,6 +167,18 @@ class MainApplication(ttk.Frame):
 		current_branch_tab = current_root_tab.notebook.nametowidget(current_root_tab.notebook.select())
 		
 		return current_root_tab, current_branch_tab
+		
+	def switch_style(self, style):
+		self.style = Style(style)
+
+	def edit_settings(self):
+		self.w=settings_screen.SettingsWindow(self, self.master)
+		self.master.wait_window(self.w.top)	
+		
+		if self.w.button == 'ok':
+			self.open_with_apps = copy.deepcopy(self.w.open_with_apps)
+			config_file_manager.write_config_file(self)
+			
 if __name__ == "__main__":
 	root = tk.Tk()
 	root.resizable(width=tk.TRUE, height=tk.TRUE)

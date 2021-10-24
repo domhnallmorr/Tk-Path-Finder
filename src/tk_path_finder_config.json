@@ -17,5 +17,10 @@
     "nodes": {
         "Default": "I001",
         "Some node": "Some node"
+    },
+    "open_with_apps": {
+        ".py": [
+            "C:\\Program Files\\Sublime Text 3\\sublime_text.exe"
+        ]
     }
 }
