@@ -26,6 +26,25 @@ class QuickAccessTreeview(ttk.Treeview):
 		self.bind('<<TreeviewSelect>>',lambda event, : self.singleclick(event))
 		self.bind("<Button-3>",lambda event,: self.onrightclick(event))
 
+		self.close_btn = tk.Button(mainapp.sidebar_frame, image=self.mainapp.close_icon2, background='white', relief=FLAT,
+				command= lambda action=False: self.open_close_all_nodes(action))
+		self.close_btn.grid(row=1, column=0, sticky='w', padx = 0)
+		self.up_btn = tk.Button(mainapp.sidebar_frame, image=self.mainapp.up_icon2, background='white', relief=FLAT,
+				command=self.move_up)
+		self.up_btn.grid(row=1, column=1, sticky='w', padx = 0)
+		self.down_btn = tk.Button(self.mainapp.sidebar_frame, image=self.mainapp.down_icon2, background='white', relief=FLAT,
+				command=self.move_down)
+		self.down_btn.grid(row=1, column=2, sticky='w', padx = 0)
+		
+		self.update_btn_bg()
+		
+	def update_btn_bg(self):
+		s = ttk.Style()
+		bg = s.lookup('TFrame', 'background')
+		
+		self.close_btn.config(bg=bg)
+		self.up_btn.config(bg=bg)
+		self.down_btn.config(bg=bg)
 		
 	def setup_nodes(self):
 		self.node_iids = {}
@@ -49,7 +68,7 @@ class QuickAccessTreeview(ttk.Treeview):
 		node = simpledialog.askstring(title="New Node", prompt="Node Name:".ljust(100), initialvalue=initialvalue)
 		if node:
 			if mode == 'new': #add a new node
-				iid = self.insert("",'end', node, text=node, image=self.mainapp.folder_icon2)
+				iid = self.insert("",'end', text=node, image=self.mainapp.folder_icon2)
 				self.nodes[node] = iid
 				self.node_iids[iid] = node
 				self.links[iid] = {}
@@ -158,7 +177,34 @@ class QuickAccessTreeview(ttk.Treeview):
 			name = self.item(item_iid, 'text')
 			del self.links[parent_iid][name]
 			config_file_manager.write_config_file(self.mainapp)
-			
+
+	def open_close_all_nodes(self, action):
+		for node in self.get_children():
+			self.item(node, open=action)
+
+	def move_up(self):
+		leaves = self.selection()
+		for i in leaves:
+			self.move(i, self.parent(i), self.index(i)-1)
+		
+		self.update_links_data()
+
+	def move_down(self):
+		leaves = self.selection()
+		for i in leaves:
+			self.move(i, self.parent(i), self.index(i)+1)
+
+		self.update_links_data()
+		
+	def update_links_data(self):
+		nodes = {}
+		for node in self.get_children():
+			nodes[self.item(node, 'text')] = node
+		
+		self.nodes = copy.deepcopy(nodes)
+		del nodes
+		config_file_manager.write_config_file(self.mainapp)
+		
 class AddLinkWindow(ttk.Frame):
 	def __init__(self, mainapp, master, mode, node, name='', path='',):
 		super(AddLinkWindow, self).__init__()

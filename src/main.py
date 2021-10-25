@@ -36,7 +36,7 @@ class MainApplication(ttk.Frame):
 		self.setup_tabs()
 		#config_file_manager.write_config_file(self)
 	def setup_variables(self):
-		self.version = '0.17.0'
+		self.version = '0.18.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 
@@ -170,7 +170,8 @@ class MainApplication(ttk.Frame):
 		
 	def switch_style(self, style):
 		self.style = Style(style)
-
+		self.quick_access_tree.update_btn_bg()
+		
 	def edit_settings(self):
 		self.w=settings_screen.SettingsWindow(self, self.master)
 		self.master.wait_window(self.w.top)	
