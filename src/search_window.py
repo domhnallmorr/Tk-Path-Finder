@@ -73,13 +73,14 @@ class SearchWindow(ttk.Frame):
 							process_file = False
 							
 					if process_file:
-						if self.python_raw_string.get() == 1:
-							self.search_text.insert(END, 'r"')
-							
-						self.search_text.insert(END, os.path.join(root, file))
-						 
-						if self.python_raw_string.get() == 1:
-							self.search_text.insert(END, '",')	
+						if not filename.startswith('~$'): # avoid temporary files
+							if self.python_raw_string.get() == 1:
+								self.search_text.insert(END, 'r"')
+								
+							self.search_text.insert(END, os.path.join(root, file))
+							 
+							if self.python_raw_string.get() == 1:
+								self.search_text.insert(END, '",')	
 
-						self.search_text.insert(END, '\n')
+							self.search_text.insert(END, '\n')
 		
