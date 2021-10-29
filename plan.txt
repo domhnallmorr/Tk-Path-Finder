@@ -6,7 +6,6 @@ v0.10
 V0.11
 	
 	clear all tabs
-	Collapse all button for quick access
 
 save tabs to config
 delete files
@@ -24,11 +23,9 @@ image preview (pop up window)
 
 advanced search for files
 allow custom icons
-switch theme option
 
 paste option (overwrite or new file)
 add run file commands
-open with program options
+
 root tab colour
-multiple files copy/paste
 plugin system

@@ -36,7 +36,7 @@ class MainApplication(ttk.Frame):
 		self.setup_tabs()
 		#config_file_manager.write_config_file(self)
 	def setup_variables(self):
-		self.version = '0.18.0'
+		self.version = '0.18.1'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 
@@ -71,8 +71,11 @@ class MainApplication(ttk.Frame):
 		self.file_compare_left = None
 		self.file_compare_right = None
 		
-		self.open_with_apps = self.config_data['open_with_apps']
-
+		if 'open_with_apps' in self.config_data.keys():
+			self.open_with_apps = self.config_data['open_with_apps']
+		else:
+			self.open_with_apps = {}
+			
 	def setup_menu(self):
 		menu = tk.Menu(self.master)
 		self.master.config(menu=menu)
