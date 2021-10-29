@@ -1,12 +1,10 @@
 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
 
 
-v0.10
+22s
 	
-V0.11
-	
-	clear all tabs
-
+clear all tabs
+copy progress
 save tabs to config
 delete files
 minimum tab width

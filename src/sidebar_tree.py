@@ -122,6 +122,7 @@ class QuickAccessTreeview(ttk.Treeview):
 			popup_menu.grab_release()
 		
 		self.bind('<<TreeviewSelect>>',lambda event, click='single': self.singleclick(event, click))
+
 	def add_link(self, event, mode):
 		#Get the Node
 		item_iid = event.widget.selection()[0]
@@ -260,6 +261,9 @@ class AddLinkWindow(ttk.Frame):
 				data_ok = False
 				
 			if data_ok:	
+				# For mapped drive, handle for inclusion of trailing \ e.g C:\
+				if len(self.path) == 2 and self.path[-1] == ':':
+					self.path = self.path + '\\'
 				self.button = button
 				self.top.destroy()
 		else:

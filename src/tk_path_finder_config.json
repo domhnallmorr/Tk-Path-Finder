@@ -5,7 +5,10 @@
             "Torrents": "C:\\Users\\domhn\\Downloads\\Torrents",
             "Squid Game": "C:\\Users\\domhn\\Downloads\\Torrents\\Squid.Game.S01.KOREAN.WEBRip.x265-ION265"
         },
-        "new node": {},
+        "new node": {
+            "test link": "C:\\",
+            "dfsdf": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
+        },
         "Some node": {
             "Link1": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src",
             "Link2": "C:\\Users\\domhn\\Downloads\\Tk-Path-Finder-0.10.0\\Tk-Path-Finder-0.10.0\\src"
@@ -13,8 +16,8 @@
     },
     "node_iids": {
         "I001": "Default",
-        "new node": "new node",
-        "Some node": "Some node"
+        "Some node": "Some node",
+        "new node": "new node"
     },
     "nodes": {
         "Default": "I001",
