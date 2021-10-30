@@ -18,6 +18,7 @@ import tkexplorer_icons
 class MainApplication(ttk.Frame):
 	def __init__(self, parent, *args, **kwargs):
 		ttk.Frame.__init__(self, parent, *args, **kwargs)
+		self.root = root
 		self.parent = parent
 		self.root_tabs = {}
 		self.id = 0
@@ -36,7 +37,7 @@ class MainApplication(ttk.Frame):
 		self.setup_tabs()
 		#config_file_manager.write_config_file(self)
 	def setup_variables(self):
-		self.version = '0.18.3'
+		self.version = '0.19.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 

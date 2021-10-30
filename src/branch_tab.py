@@ -1,4 +1,5 @@
 from distutils.dir_util import copy_tree
+from multiprocessing import Process
 import os
 from shutil import copyfile, move
 import subprocess
@@ -16,6 +17,7 @@ import address_bar
 import autoscrollbar
 import explorer_backend
 import file_comparison
+import paste_windows
 import search_window
 import settings_screen
 import treeview_functions
@@ -373,7 +375,8 @@ class BranchTab(ttk.Frame):
 								break
 							counter += 1	
 					if task == 'copy':
-						copy_tree(os.path.join(file['Path'], file['Name']), destination)
+						#copy_tree(os.path.join(file['Path'], file['Name']), destination)
+						paste_windows.paste_folder(self.mainapp, self, os.path.join(file['Path'], file['Name']), destination)
 					elif task == 'cut':
 						move(os.path.join(file['Path'], file['Name']), destination)
 			except PermissionError:
@@ -385,7 +388,7 @@ class BranchTab(ttk.Frame):
 		self.update_tab(self.explorer.current_directory)
 	
 	def search(self):
-		self.w=search_window.SearchWindow(self.mainapp, self.master, self)
+		self.w = search_window.SearchWindow(self.mainapp, self.master, self)
 		self.master.wait_window(self.w.top)		
 
 	def left_compare(self):

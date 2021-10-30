@@ -3,7 +3,8 @@
         "I001": {
             "Desktop": "C:\\Users\\domhn\\Desktop",
             "Torrents": "C:\\Users\\domhn\\Downloads\\Torrents",
-            "Squid Game": "C:\\Users\\domhn\\Downloads\\Torrents\\Squid.Game.S01.KOREAN.WEBRip.x265-ION265"
+            "Squid Game": "C:\\Users\\domhn\\Downloads\\Torrents\\Squid.Game.S01.KOREAN.WEBRip.x265-ION265",
+            "Downloads": "C:\\Users\\domhn\\Downloads"
         },
         "new node": {
             "test link": "C:\\",
