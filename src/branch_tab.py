@@ -271,7 +271,16 @@ class BranchTab(ttk.Frame):
 		if self.w.button == 'ok':
 			self.explorer.new_folders(self.w.folders)
 			self.update_tab(self.explorer.current_directory)
-		
+
+			# Add to Undo Stack
+			#if mode == 'edit':
+				#data = {'action': 'rename_file', 'orig_name': os.path.join(self.explorer.current_directory, self.orig_file_name), 'new_name': os.path.join(self.explorer.current_directory, new_name), 'branch_tab': self, 'root_tab':self.root_tab}
+			#else:
+			data = {'action': 'new_folders', 'base_folder': self.explorer.current_directory, 'branch_tab': self, 'root_tab': self.root_tab, 'folder_names': self.w.folders}
+			self.mainapp.undo_redo_states.add_action_to_undo_stack(data)
+
+			self.mainapp.undo_redo_states.reset_redo()		
+			
 	def new_file(self, mode, initialvalue=''):
 		if mode == 'edit':
 			self.orig_file_name = initialvalue
@@ -319,7 +328,15 @@ class BranchTab(ttk.Frame):
 					os.rename(os.path.join(self.explorer.current_directory, self.orig_file_name), os.path.join(self.explorer.current_directory, new_name))
 				self.update_tab(self.explorer.current_directory)
 
-					
+			# Add to Undo Stack
+			if mode == 'edit':
+				data = {'action': 'rename_file', 'orig_name': os.path.join(self.explorer.current_directory, self.orig_file_name), 'new_name': os.path.join(self.explorer.current_directory, new_name), 'branch_tab': self, 'root_tab':self.root_tab}
+			else:
+				data = {'action': 'new_file', 'file_name': os.path.join(self.explorer.current_directory, new_name), 'branch_tab': self, 'root_tab':self.root_tab}
+			self.mainapp.undo_redo_states.add_action_to_undo_stack(data)
+
+			self.mainapp.undo_redo_states.reset_redo()
+			
 	def cut_file(self, file):
 		self.mainapp.file_to_cut = []
 		for iid in self.treeview.selection():

@@ -13,15 +13,21 @@
         "Some node": {
             "Link1": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src",
             "Link2": "C:\\Users\\domhn\\Downloads\\Tk-Path-Finder-0.10.0\\Tk-Path-Finder-0.10.0\\src"
+        },
+        "I00A": {
+            "Testing": "C:\\Users\\domhn\\Documents\\Python\\Testing",
+            "3.9": "C:\\Python39"
         }
     },
     "node_iids": {
         "I001": "Default",
         "Some node": "Some node",
-        "new node": "new node"
+        "new node": "new node",
+        "I00A": "Python"
     },
     "nodes": {
         "Default": "I001",
+        "Python": "I00A",
         "Some node": "Some node",
         "new node": "new node"
     },

@@ -14,6 +14,7 @@ import root_tab
 import settings_screen
 import sidebar_tree
 import tkexplorer_icons
+import undo_redo
 
 class MainApplication(ttk.Frame):
 	def __init__(self, parent, *args, **kwargs):
@@ -37,7 +38,7 @@ class MainApplication(ttk.Frame):
 		self.setup_tabs()
 		#config_file_manager.write_config_file(self)
 	def setup_variables(self):
-		self.version = '0.19.0'
+		self.version = '0.20.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 
@@ -61,6 +62,7 @@ class MainApplication(ttk.Frame):
 			'.png': ['PNG Image', self.image_icon2],
 			'.py': ['Python File', self.python_icon2],
 			'.rar': ['RAR File', self.rar_icon2],
+			'.torrent': ['Torrent File', self.new_icon2],
 			'.txt': ['Text File', self.text_icon2],
 			'.xlsm': ['Marco Enabled Excel Worksheet', self.excel_icon2],
 			'.xlsx': ['Excel Worksheet', self.excel_icon2],
@@ -71,6 +73,8 @@ class MainApplication(ttk.Frame):
 		self.file_to_copy = None
 		self.file_compare_left = None
 		self.file_compare_right = None
+		
+		self.undo_redo_states = undo_redo.UndoRedo(self)
 		
 		if 'open_with_apps' in self.config_data.keys():
 			self.open_with_apps = self.config_data['open_with_apps']
@@ -197,6 +201,8 @@ if __name__ == "__main__":
 	# root.bind('<Control-y>', MA.states.redo)
 	root.bind('<Control-c>', MA.copy)
 	root.bind('<Control-v>', MA.paste)
+	root.bind('<Control-z>', MA.undo_redo_states.undo)
+	root.bind('<Control-y>', MA.undo_redo_states.redo)
 	    
 	root.state('zoomed') #mamimise window
 	root.mainloop()
