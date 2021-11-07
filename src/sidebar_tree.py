@@ -73,7 +73,13 @@ class QuickAccessTreeview(ttk.Treeview):
 				self.node_iids[iid] = node
 				self.links[iid] = {}
 			else:
+				current_text = self.item(item_iid, 'text')
 				self.item(item_iid, text=node)
+				
+				self.node_iids[item_iid] = node
+				self.nodes[node] = item_iid
+				self.nodes.pop(current_text)
+				
 			config_file_manager.write_config_file(self.mainapp)
 
 	def edit_node(self, event):

@@ -4,12 +4,10 @@ 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
 22s
 	
 clear all tabs
-copy progress
 save tabs to config
 delete files
 minimum tab width
 option to define default text editor
-undo rename/delete/paste
 
 list all files in subdirectories (option to process to python raw string), don't look in subdirectories option
 handle hidden files

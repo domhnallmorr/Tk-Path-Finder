@@ -21,15 +21,15 @@
     },
     "node_iids": {
         "I001": "Default",
+        "I00A": "Python",
         "Some node": "Some node",
-        "new node": "new node",
-        "I00A": "Python"
+        "new node": "new node 1"
     },
     "nodes": {
         "Default": "I001",
         "Python": "I00A",
         "Some node": "Some node",
-        "new node": "new node"
+        "new node 1": "new node"
     },
     "open_with_apps": {
         ".py": [
