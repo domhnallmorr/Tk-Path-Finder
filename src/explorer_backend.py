@@ -159,6 +159,9 @@ class FileExplorerBackend:
 		else:
 			directory_data = 'Location Does Not Exist'
 				
+		self.directory_data = directory_data
+		self.file_data = file_data
+		
 		return directory_data + file_data
 						
 	def get_file_type(self, filename):
