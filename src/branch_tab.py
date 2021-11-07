@@ -3,6 +3,7 @@ from multiprocessing import Process
 import os
 from shutil import copyfile, move
 import subprocess
+import threading
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
@@ -259,11 +260,15 @@ class BranchTab(ttk.Frame):
 	def open_in_text_editor(self, app=None):
 		current_selection = treeview_functions.get_current_selection(self.treeview)
 		if app:
-			subprocess.call([app, fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
+			#subprocess.call([app, fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
+			threading.Thread(target=lambda app=app, file=fr"{self.explorer.current_directory}\\{current_selection[1][0]}":self.open_with_app(app, file)).start()
 		else:
 			if current_selection[1][2] != 'Folder':
 				subprocess.call([r"C:\Program Files (x86)\Notepad++\notepad++.exe", fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
 
+	def open_with_app(self, app, file):
+		subprocess.call([app, file])
+	
 	def new_folders(self):
 		self.w=AddFoldersWindow(self.mainapp, self.master, self)
 		self.master.wait_window(self.w.top)
