@@ -2,6 +2,7 @@ import collections
 import copy
 import os
 import subprocess
+from subprocess import DEVNULL
 import time
 import datetime
 
@@ -199,4 +200,7 @@ class FileExplorerBackend:
 				msg = f'Character {character} is not allowed!'
 				break
 		return msg
+		
+	def open_in_cmd(self):
+		subprocess.Popen("start /wait cmd.exe", cwd=self.current_directory, shell=True, stdout=DEVNULL)
 				

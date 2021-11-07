@@ -207,7 +207,9 @@ class BranchTab(ttk.Frame):
 			if self.mainapp.file_to_copy != None or self.mainapp.file_to_cut != None:
 				popup_menu.add_command(label="Paste", command=self.paste_file)		
 			#popup_menu.add_command(label="Delete Root Tab", command=lambda tab=clicked_tab: event.widget.mainapp.delete_root_tab(tab))
-
+			popup_menu.add_separator()
+			popup_menu.add_command(label="Open in cmd", command=self.explorer.open_in_cmd)
+			
 			try:
 				popup_menu.tk_popup(event.x_root, event.y_root, 0)
 			finally:

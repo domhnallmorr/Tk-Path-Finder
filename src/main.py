@@ -37,6 +37,7 @@ class MainApplication(ttk.Frame):
 		self.setup_quick_access()
 		self.setup_tabs()
 		#config_file_manager.write_config_file(self)
+
 	def setup_variables(self):
 		self.version = '0.20.3'
 		self.parent.title(f"Tk Path Finder V{self.version}")
