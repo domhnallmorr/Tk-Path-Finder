@@ -422,9 +422,13 @@ class BranchTab(ttk.Frame):
 	def right_compare(self):
 		current_selection = treeview_functions.get_current_selection(self.treeview)
 		self.mainapp.file_compare_right = os.path.join(self.explorer.current_directory, current_selection[1][0])	
-	
+		
+		threading.Thread(target=self.compare_files).start()
+		
+	def compare_files(self):
 		self.w=file_comparison.ComparisonWindow(self.mainapp, self.master, self)
 		self.master.wait_window(self.w.top)	
+		
 class AddFoldersWindow(ttk.Frame):
 	def __init__(self, mainapp, master, branch_tab):
 		super(AddFoldersWindow, self).__init__()
