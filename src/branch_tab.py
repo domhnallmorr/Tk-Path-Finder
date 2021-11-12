@@ -163,6 +163,9 @@ class BranchTab(ttk.Frame):
 				file_name = self.treeview.item(iid, 'text')
 				
 				if os.path.isfile(os.path.join(self.explorer.current_directory, file_name)):
+					full_file_name = os.path.join(self.explorer.current_directory, file_name)
+					plugins = self.check_for_plugins(file_name, True)
+					
 					popup_menu.add_command(label="Open in Text Editor", command=self.open_in_text_editor)
 					
 					# Open With
@@ -190,8 +193,17 @@ class BranchTab(ttk.Frame):
 									command=lambda mode='just this', item=iid: self.filter_right_click(mode, item), compound='left',)
 						filter_menu.add_command(label="Remove Filter",
 									command=lambda mode='remove', item=iid: self.filter_right_click(mode, item), compound='left',)
-						popup_menu.add_separator()
 					
+					# PLUGINS
+					if len(plugins) > 0:
+						plugin_menu = tk.Menu(popup_menu, tearoff=0)
+						popup_menu.add_cascade(label = 'Plugins',menu=plugin_menu)
+						for plugin in self.mainapp.plugins:
+							if plugin['name'] in plugins:
+								plugin_menu.add_command(label=plugin['name'], command=lambda plugin=plugin['name'], file = full_file_name: self.run_plugin(plugin, file))
+								
+					popup_menu.add_separator()
+						
 			new_menu = tk.Menu(popup_menu, tearoff=0)
 			popup_menu.add_cascade(label = 'New',menu=new_menu)
 			new_menu.add_command(label="New Folder(s)", command=self.new_folders, image=self.mainapp.folder_icon2, compound='left',)
@@ -215,6 +227,19 @@ class BranchTab(ttk.Frame):
 			finally:
 				popup_menu.grab_release()
 
+	def check_for_plugins(self, name, is_file):
+		plugins = []
+		file_name, file_extension = os.path.splitext(name)
+		
+		for plugin in self.mainapp.plugins:
+			if plugin['show_in_right_click_menu']:
+			
+			# FILE PLUGINS
+				if is_file and plugin['run_on_files']:
+					if len(plugin['extension_filter']) == 0 or file_extension in plugin['extension_filter']:
+						plugins.append(plugin['name'])
+		
+		return plugins
 	def on_right_click_heading(self, event):
 		col = self.treeview.identify_column(event.x)
 		if col == '#2':		
@@ -428,7 +453,12 @@ class BranchTab(ttk.Frame):
 	def compare_files(self):
 		self.w=file_comparison.ComparisonWindow(self.mainapp, self.master, self)
 		self.master.wait_window(self.w.top)	
-		
+
+	def run_plugin(self, plugin, file):
+		for p in self.mainapp.plugins:
+			if p['name'] == plugin:
+				p['info'].Plugin(self.mainapp, self.master, p['name'], file)
+				
 class AddFoldersWindow(ttk.Frame):
 	def __init__(self, mainapp, master, branch_tab):
 		super(AddFoldersWindow, self).__init__()

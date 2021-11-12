@@ -1,4 +1,5 @@
 import copy
+import importlib
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
@@ -37,11 +38,14 @@ class MainApplication(ttk.Frame):
 		self.setup_quick_access()
 		self.setup_tabs()
 		#config_file_manager.write_config_file(self)
+		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = '0.22.2'
+		self.version = '0.23.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
+		self.plugin_folder = ".\Plugins"
+		self.main_module = "__init__"
 
 		self.known_file_types = {
 			'.csv': ['CSV File', self.excel_icon2],
@@ -190,7 +194,27 @@ class MainApplication(ttk.Frame):
 		if self.w.button == 'ok':
 			self.open_with_apps = copy.deepcopy(self.w.open_with_apps)
 			config_file_manager.write_config_file(self)
+
+	def load_plugins(self):
+		loader_details = (
+			importlib.machinery.ExtensionFileLoader,
+			importlib.machinery.EXTENSION_SUFFIXES
+			)
+	
+		self.plugins = []
+		possible_plugins = os.listdir(self.plugin_folder)
+		for i in possible_plugins:
+			location = os.path.join(self.plugin_folder, i)
+			if not os.path.isdir(location) or not self.main_module + ".py" in os.listdir(location):
+				continue
+			plugin = "Plugins." + i + ".__init__"
+			plugin = importlib.import_module(plugin)
 			
+			options = plugin.initialise_plugin()
+			
+			self.plugins.append({"name": i, "info": plugin, 'show_in_right_click_menu': options['show_in_right_click_menu'],
+				'run_on_files': 'run_on_files', options['run_on_folders']: options['run_on_folders'], 'extension_filter': options['extension_filter']})
+
 if __name__ == "__main__":
 	root = tk.Tk()
 	root.resizable(width=tk.TRUE, height=tk.TRUE)
