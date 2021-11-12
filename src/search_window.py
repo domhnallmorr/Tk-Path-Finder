@@ -45,8 +45,8 @@ class SearchWindow(ttk.Frame):
 
 		ttk.Label(self.options_frame, text='Search Where:').grid(row=2, column=0, padx=5, pady=5)
 		self.search_where_combo = ttk.Combobox(self.options_frame, values=['Parent Directory', 'Parent and Sub Directories'], state='readonly')
-		self.search_where_combo.set('Parent and Sub Directories')
-		self.search_where_combo.grid(row=2, column=1, padx=5, pady=5, sticky='W')
+		self.search_where_combo.set('Parent Directory')
+		self.search_where_combo.grid(row=2, column=1, padx=5, pady=5, sticky='EW')
 		
 		ttk.Label(self.options_frame, text='Text:').grid(row=3, column=0, padx=5, pady=5)
 		self.search_bar = ttk.Entry(self.options_frame, width=50)
@@ -75,7 +75,7 @@ class SearchWindow(ttk.Frame):
 		#results = []
 		self.search_text.delete('1.0', END)
 		
-		if self.search_where_combo.get() == 'Parent Directory and Sub Directories':
+		if self.search_where_combo.get() == 'Parent and Sub Directories':
 			for root, dirs, files in os.walk(self.directory):
 				# SEARCH FOR FILES #################################
 				if self.search_for_combo.get() == 'Files':

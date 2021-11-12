@@ -39,13 +39,13 @@ class MainApplication(ttk.Frame):
 		#config_file_manager.write_config_file(self)
 
 	def setup_variables(self):
-		self.version = '0.22.1'
+		self.version = '0.22.2'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 
 		self.known_file_types = {
 			'.csv': ['CSV File', self.excel_icon2],
-			'.das': ['das file', self.new_icon2],
+			'.das': ['Das file', self.new_icon2],
 			'.doc': ['Word 97-2003 Document', self.word_icon2],
 			'.docx': ['Word Document', self.word_icon2],
 			'.exe': ['application', self.new_icon2],
@@ -58,9 +58,11 @@ class MainApplication(ttk.Frame):
 			'.mp3': ['MP4 Audio', self.audio_icon2],
 			'.mp4': ['MP4 Video', self.video_icon2],
 			'.mplt': ['mplt file', self.video_icon2],
-			'.out': ['output file', self.new_icon2],
+			'.msg': ['Email', self.msg_icon2],
+			'.out': ['Output file', self.new_icon2],
 			'.pdf': ['PDF', self.pdf_icon2],
 			'.png': ['PNG Image', self.image_icon2],
+			'.pptx': ['Powerpoint Presentation', self.pptx_icon2],
 			'.py': ['Python File', self.python_icon2],
 			'.rar': ['RAR File', self.rar_icon2],
 			'.torrent': ['Torrent File', self.new_icon2],

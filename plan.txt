@@ -9,7 +9,6 @@ delete files
 minimum tab width
 option to define default text editor
 
-list all files in subdirectories (option to process to python raw string), don't look in subdirectories option
 handle hidden files
 pdf viewer
 copy files with directory structure
@@ -17,7 +16,6 @@ icons for quick access
 load session
 image preview (pop up window)
 
-advanced search for files
 allow custom icons
 
 paste option (overwrite or new file)
