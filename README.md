@@ -15,3 +15,6 @@ A lightweight file explorer based on tabs within tabs. Written primarily to assi
 
 ## Limitations
   -
+
+## Preview
+![alt text](https://imgur.com/HNW0v4o)
