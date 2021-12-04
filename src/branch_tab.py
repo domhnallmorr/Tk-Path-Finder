@@ -285,14 +285,16 @@ class BranchTab(ttk.Frame):
 		self.update_tab(self.explorer.forward_directories[0], mode='fwd')
 		
 	def open_in_text_editor(self, app=None):
-		current_selection = treeview_functions.get_current_selection(self.treeview)
-		if app:
-			#subprocess.call([app, fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
-			threading.Thread(target=lambda app=app, file=fr"{self.explorer.current_directory}\\{current_selection[1][0]}":self.open_with_app(app, file)).start()
+		if self.mainapp.text_editor:
+			current_selection = treeview_functions.get_current_selection(self.treeview)
+			if app:
+				#subprocess.call([app, fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
+				threading.Thread(target=lambda app=app, file=fr"{self.explorer.current_directory}\\{current_selection[1][0]}":self.open_with_app(app, file)).start()
+			else:
+				if current_selection[1][2] != 'Folder':
+					subprocess.call([fr"{self.mainapp.text_editor}", fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
 		else:
-			if current_selection[1][2] != 'Folder':
-				subprocess.call([r"C:\Program Files (x86)\Notepad++\notepad++.exe", fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
-
+			messagebox.showerror('Error', message='Default Text Editor has not been Defined')
 	def open_with_app(self, app, file):
 		subprocess.call([app, file])
 	

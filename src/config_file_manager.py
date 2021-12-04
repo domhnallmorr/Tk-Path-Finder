@@ -9,6 +9,7 @@ def write_config_file(mainapp):
 	save_dict['links'] = copy.deepcopy(mainapp.quick_access_tree.links)
 	save_dict['node_iids'] = copy.deepcopy(mainapp.quick_access_tree.node_iids)
 	save_dict['nodes'] = copy.deepcopy(mainapp.quick_access_tree.nodes)
+	save_dict['text_editor'] = mainapp.text_editor
 	save_dict['open_with_apps'] = copy.deepcopy(mainapp.open_with_apps)
 	
 	with open('tk_path_finder_config.json', 'w') as outfile:

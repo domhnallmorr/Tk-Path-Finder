@@ -41,12 +41,17 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = '0.23.0'
+		self.version = '0.23.1'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
 		self.main_module = "__init__"
-
+		
+		if 'text_editor' in self.config_data.keys():
+			self.text_editor = self.config_data['text_editor']
+		else:
+			self.text_editor = None
+			
 		self.known_file_types = {
 			'.csv': ['CSV File', self.excel_icon2],
 			'.das': ['Das file', self.new_icon2],
@@ -193,6 +198,7 @@ class MainApplication(ttk.Frame):
 		
 		if self.w.button == 'ok':
 			self.open_with_apps = copy.deepcopy(self.w.open_with_apps)
+			self.text_editor = self.w.text_editor
 			config_file_manager.write_config_file(self)
 
 	def load_plugins(self):
