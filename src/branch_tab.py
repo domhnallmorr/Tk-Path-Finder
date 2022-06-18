@@ -136,7 +136,11 @@ class BranchTab(ttk.Frame):
 				if os.path.isdir(directory):
 					self.update_tab(directory)
 				else:
-					msg = 'This directory does not exist, it may have been moved or deleted'
+					try:
+						self.update_tab(directory)
+					except:
+						pass
+						msg = 'This directory does not exist, it may have been moved or deleted'
 
 			else:
 				if os.path.isfile(os.path.join(self.explorer.current_directory, current_selection[1][0])):
@@ -240,6 +244,7 @@ class BranchTab(ttk.Frame):
 						plugins.append(plugin['name'])
 		
 		return plugins
+		
 	def on_right_click_heading(self, event):
 		col = self.treeview.identify_column(event.x)
 		if col == '#2':		
@@ -295,6 +300,7 @@ class BranchTab(ttk.Frame):
 					subprocess.call([fr"{self.mainapp.text_editor}", fr"{self.explorer.current_directory}\\{current_selection[1][0]}"])
 		else:
 			messagebox.showerror('Error', message='Default Text Editor has not been Defined')
+			
 	def open_with_app(self, app, file):
 		subprocess.call([app, file])
 	
