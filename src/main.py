@@ -218,9 +218,9 @@ class MainApplication(ttk.Frame):
 			
 			options = plugin.initialise_plugin()
 			
-			self.plugins.append({"name": i, "info": plugin, 'show_in_right_click_menu': options['show_in_right_click_menu'],
-				'run_on_files': 'run_on_files', options['run_on_folders']: options['run_on_folders'], 'extension_filter': options['extension_filter']})
-
+			self.plugins.append({"name": i, "info": plugin, "show_in_right_click_menu": options["show_in_right_click_menu"],
+				"run_on_files": options["run_on_files"], "run_on_folders": options["run_on_folders"], "extension_filter": options["extension_filter"]})
+		
 if __name__ == "__main__":
 	root = tk.Tk()
 	root.resizable(width=tk.TRUE, height=tk.TRUE)

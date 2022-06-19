@@ -162,6 +162,9 @@ class BranchTab(ttk.Frame):
 				self.treeview.selection_set(iid)
 				
 			popup_menu = tk.Menu(event.widget, tearoff=0)
+			plugins = [plugin["name"] for plugin in self.mainapp.plugins if plugin["run_on_folders"]]
+			plugin_menu = tk.Menu(popup_menu, tearoff=0)
+			
 			if iid:
 				#file_name = self.treeview.item(iid, 'text')
 				file_name, file_extension = os.path.splitext(self.treeview.item(iid, 'text'))
@@ -169,11 +172,14 @@ class BranchTab(ttk.Frame):
 				
 				if os.path.isfile(os.path.join(self.explorer.current_directory, file_name)):
 					full_file_name = os.path.join(self.explorer.current_directory, file_name)
-					plugins = self.check_for_plugins(file_name, True)
+					
+					file_plugins = self.check_for_plugins(file_name, True)
+					for p in file_plugins:
+						plugins.append(p)
 					
 					popup_menu.add_command(label="Open in Text Editor", command=self.open_in_text_editor)
 					
-					# Open With
+					# --------------- Open With
 					if file_extension in self.mainapp.open_with_apps.keys():
 						open_with_menu = tk.Menu(popup_menu, tearoff=0)
 						popup_menu.add_cascade(label = 'Open With',menu=open_with_menu)
@@ -182,6 +188,7 @@ class BranchTab(ttk.Frame):
 							open_with_menu.add_command(label=app_name,
 									command=lambda app=app: self.open_in_text_editor(app), compound='left',)
 					
+					# --------------- File Options
 					if len(self.treeview.selection()) == 1:
 						popup_menu.add_command(label="Rename", command=lambda mode='edit', initialvalue=file_name: self.new_file(mode, initialvalue))
 						popup_menu.add_command(label="Left Compare", command=self.left_compare)
@@ -190,7 +197,7 @@ class BranchTab(ttk.Frame):
 						popup_menu.add_command(label="Copy Path to Clipboard", command=self.copy_to_clipboard)
 						popup_menu.add_separator()
 					
-						# Filtering
+						# --------------- Filtering
 						filter_menu = tk.Menu(popup_menu, tearoff=0)
 						popup_menu.add_cascade(label = 'Filter',menu=filter_menu)
 						filter_menu.add_command(label="Hide This File Type",
@@ -200,16 +207,23 @@ class BranchTab(ttk.Frame):
 						filter_menu.add_command(label="Remove Filter",
 									command=lambda mode='remove', item=iid: self.filter_right_click(mode, item), compound='left',)
 					
-					# PLUGINS
+					# --------------- PLUGINS
 					if len(plugins) > 0:
-						plugin_menu = tk.Menu(popup_menu, tearoff=0)
 						popup_menu.add_cascade(label = 'Plugins',menu=plugin_menu)
 						for plugin in self.mainapp.plugins:
 							if plugin['name'] in plugins:
-								plugin_menu.add_command(label=plugin['name'], command=lambda plugin=plugin['name'], file = full_file_name: self.run_plugin(plugin, file))
+								plugin_menu.add_command(label=plugin['name'], command=lambda plugin=plugin['name'], file=full_file_name: self.run_plugin(plugin, file))
 								
 					popup_menu.add_separator()
-						
+			
+			else: # if file not selected, add plugin menu if any run_on_folders plugins are present
+				if len(plugins) > 0:
+					popup_menu.add_cascade(label = 'Plugins',menu=plugin_menu)
+					for plugin in self.mainapp.plugins:
+						if plugin['name'] in plugins:
+							plugin_menu.add_command(label=plugin['name'], command=lambda plugin=plugin['name'], path=self.explorer.current_directory: self.run_plugin(plugin, path))
+				popup_menu.add_separator()
+				
 			new_menu = tk.Menu(popup_menu, tearoff=0)
 			popup_menu.add_cascade(label = 'New',menu=new_menu)
 			new_menu.add_command(label="New Folder(s)", command=self.new_folders, image=self.mainapp.folder_icon2, compound='left',)
@@ -241,8 +255,7 @@ class BranchTab(ttk.Frame):
 			# FILE PLUGINS
 				if is_file and plugin['run_on_files']:
 					if len(plugin['extension_filter']) == 0 or file_extension in plugin['extension_filter']:
-						plugins.append(plugin['name'])
-		
+						plugins.append(plugin["name"])
 		return plugins
 		
 	def on_right_click_heading(self, event):

@@ -9,7 +9,7 @@ def initialise_plugin():
 	show_in_right_click_menu = True
 	run_on_files = True
 	run_on_folders = False
-	extension_filter = ['.csv']
+	extension_filter = ['.csv'] # which files the plugin can run on
 
 	return locals()
 	
