@@ -23,15 +23,21 @@ A lightweight file explorer based on tabs within tabs written in python (Tkinter
 ## Prerequisites
 
 [openpycl](https://openpyxl.readthedocs.io/en/stable/)
+
 [pyperclip](https://pypi.org/project/pyperclip/)
+
 [python-docx](https://python-docx.readthedocs.io/en/latest/)
+
 [ttkbootstrap](https://ttkbootstrap.readthedocs.io/en/latest/)
 
 pip install openpyxl
+
 pip install pyperclip
+
 pip install python-docx
+
 pip install ttkbootstrap
 
 
 ## Preview
-![alt text](https://https://i.imgur.com/52D1vl2.jpg)
+![alt text](https://imgur.com/52D1vl2)
