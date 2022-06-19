@@ -13,6 +13,7 @@ from tkinter import simpledialog
 
 from docx import Document
 from openpyxl import Workbook
+import pyperclip
 
 import address_bar
 import autoscrollbar
@@ -186,6 +187,7 @@ class BranchTab(ttk.Frame):
 						popup_menu.add_command(label="Left Compare", command=self.left_compare)
 						if self.mainapp.file_compare_left:
 							popup_menu.add_command(label="Right Compare", command=self.right_compare)
+						popup_menu.add_command(label="Copy Path to Clipboard", command=self.copy_to_clipboard)
 						popup_menu.add_separator()
 					
 						# Filtering
@@ -211,7 +213,6 @@ class BranchTab(ttk.Frame):
 			new_menu = tk.Menu(popup_menu, tearoff=0)
 			popup_menu.add_cascade(label = 'New',menu=new_menu)
 			new_menu.add_command(label="New Folder(s)", command=self.new_folders, image=self.mainapp.folder_icon2, compound='left',)
-			popup_menu.add_separator()
 			new_menu.add_command(label="File", command=lambda mode='new': self.new_file(mode), image=self.mainapp.new_icon2, compound='left',)
 			new_menu.add_command(label="Excel Worksheet", command=lambda mode='new excel': self.new_file(mode), image=self.mainapp.excel_icon2, compound='left',)
 			new_menu.add_command(label="Word Document", command=lambda mode='new word': self.new_file(mode), image=self.mainapp.word_icon2, compound='left',)
@@ -222,8 +223,7 @@ class BranchTab(ttk.Frame):
 				popup_menu.add_command(label="Copy", command=lambda file=file_name: self.copy_file(file))
 			if self.mainapp.file_to_copy != None or self.mainapp.file_to_cut != None:
 				popup_menu.add_command(label="Paste", command=self.paste_file)		
-			#popup_menu.add_command(label="Delete Root Tab", command=lambda tab=clicked_tab: event.widget.mainapp.delete_root_tab(tab))
-			popup_menu.add_separator()
+				popup_menu.add_separator()
 			popup_menu.add_command(label="Open in cmd", command=self.explorer.open_in_cmd)
 			
 			try:
@@ -461,6 +461,10 @@ class BranchTab(ttk.Frame):
 	def compare_files(self):
 		self.w=file_comparison.ComparisonWindow(self.mainapp, self.master, self)
 		self.master.wait_window(self.w.top)	
+
+	def copy_to_clipboard(self):
+		current_selection = treeview_functions.get_current_selection(self.treeview)
+		pyperclip.copy(os.path.join(self.explorer.current_directory, current_selection[1][0]))
 
 	def run_plugin(self, plugin, file):
 		for p in self.mainapp.plugins:

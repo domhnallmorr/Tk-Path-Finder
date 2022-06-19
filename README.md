@@ -19,5 +19,10 @@ A lightweight file explorer based on tabs within tabs written in python (Tkinter
   - No delete functionality.
   - Search is very slow on sub-directories with many files.
 
+## Prerequisites
+	- [ttkbootstrap](https://ttkbootstrap.readthedocs.io/en/latest/)
+
+pip install ttkbootstrap
+
 ## Preview
 ![alt text](https://i.imgur.com/HNW0v4o.png)
