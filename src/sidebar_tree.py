@@ -110,18 +110,20 @@ class QuickAccessTreeview(ttk.Treeview):
 			self.bind('<<TreeviewSelect>>',lambda event, click='right': self.singleclick(event, click))
 			
 		popup_menu = tk.Menu(event.widget, tearoff=0)
-		popup_menu.add_command(label="Add New Node", command=event.widget.add_new_node)
+		popup_menu.add_command(label="Add New Node", command=event.widget.add_new_node, image=self.mainapp.plus_icon2, compound='left',)
 
 		item_iid = event.widget.selection()[0]
 		parent_iid = event.widget.parent(item_iid)
 		
 		if not parent_iid: #if it is a node and not a link
-			popup_menu.add_command(label="Edit Node", command=lambda event=event: event.widget.edit_node(event))
-			popup_menu.add_command(label="Delete Node", command=lambda event=event: event.widget.delete_node(event))
-			popup_menu.add_command(label="Add New Link", command=lambda event=event, mode='new': event.widget.add_link(event, mode))
+			popup_menu.add_command(label="Edit Node", command=lambda event=event: event.widget.edit_node(event), image=self.mainapp.edit_icon2, compound='left',)
+			popup_menu.add_command(label="Delete Node", command=lambda event=event: event.widget.delete_node(event), image=self.mainapp.delete_icon2, compound='left',)
+			popup_menu.add_separator()
+			popup_menu.add_command(label="Add New Link", command=lambda event=event, mode='new': event.widget.add_link(event, mode), image=self.mainapp.new_link_icon2, compound='left',)
 		else:
-			popup_menu.add_command(label="Edit Link", command=lambda event=event, mode='edit': event.widget.add_link(event, mode))
-			popup_menu.add_command(label="Delete Link", command=lambda event=event: event.widget.delete_link(event))
+			popup_menu.add_separator()
+			popup_menu.add_command(label="Edit Link", command=lambda event=event, mode='edit': event.widget.add_link(event, mode), image=self.mainapp.edit_link_icon2, compound='left',)
+			popup_menu.add_command(label="Delete Link", command=lambda event=event: event.widget.delete_link(event), image=self.mainapp.delete_link_icon2, compound='left',)
 		
 		try:
 			popup_menu.tk_popup(event.x_root, event.y_root, 0)

@@ -12,9 +12,9 @@ def right_click(event):
 	event.widget.select(clicked_tab)
 	tab_object = event.widget.nametowidget(event.widget.select())
 	popup_menu = tk.Menu(event.widget, tearoff=0)
-	popup_menu.add_command(label="Add Root Tab", command=event.widget.mainapp.create_root_tab)
-	popup_menu.add_command(label="Delete Root Tab", command=lambda tab=clicked_tab: event.widget.mainapp.delete_root_tab(tab))
-	popup_menu.add_command(label="Rename Root Tab", command=tab_object.rename_tab)
+	popup_menu.add_command(label="Add Root Tab", command=event.widget.mainapp.create_root_tab, image=event.widget.mainapp.plus_icon2, compound='left')
+	popup_menu.add_command(label="Rename Root Tab", command=tab_object.rename_tab, image=event.widget.mainapp.edit_icon2, compound='left')
+	popup_menu.add_command(label="Delete Root Tab", command=lambda tab=clicked_tab: event.widget.mainapp.delete_root_tab(tab), image=event.widget.mainapp.delete_icon2, compound='left')
 
 	try:
 		popup_menu.tk_popup(event.x_root, event.y_root, 0)
@@ -26,9 +26,9 @@ def right_click_branch(event):
 	#clicked_tab = event.widget.mainapp.notebook.tk.call(event.widget.mainapp.notebook._w, "identify", "tab", event.x, event.y)
 
 	popup_menu = tk.Menu(event.widget, tearoff=0)
-	popup_menu.add_command(label="Add Branch Tab", command=event.widget.create_branch_tab)
-	popup_menu.add_command(label="Rename Branch Tab", command=lambda tab=tab_object: event.widget.root_tab.rename_branch_tab(tab))
-	popup_menu.add_command(label="Delete Branch Tab", command=lambda tab=tab_object: event.widget.mainapp.delete_branch_tab(tab))
+	popup_menu.add_command(label="Add Branch Tab", command=event.widget.create_branch_tab, image=event.widget.mainapp.plus_icon2, compound='left')
+	popup_menu.add_command(label="Rename Branch Tab", command=lambda tab=tab_object: event.widget.root_tab.rename_branch_tab(tab), image=event.widget.mainapp.edit_icon2, compound='left')
+	popup_menu.add_command(label="Delete Branch Tab", command=lambda tab=tab_object: event.widget.mainapp.delete_branch_tab(tab), image=event.widget.mainapp.delete_icon2, compound='left')
 
 	try:
 		popup_menu.tk_popup(event.x_root, event.y_root, 0)
