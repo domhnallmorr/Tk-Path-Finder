@@ -8,9 +8,9 @@ from tkinter.ttk import *
 from tkinter import messagebox
 from tkinter import simpledialog
 import time
+import traceback
 
 import autoscrollbar
-
 
 def paste_folder(mainapp, branch_tab, source, destination):
 	launch_window(mainapp, branch_tab, source, destination)
@@ -35,10 +35,10 @@ class PasteWindow(ttk.Frame):
 		self.source = source
 		self.destination = destination
 	
-		processes = []
-		processes.append(Process(target=start_paste_folder, args=[source, destination]))	
+		self.processes = []
+		self.processes.append(Process(target=start_paste_folder, args=[source, destination]))	
 		
-		for p in processes:
+		for p in self.processes:
 			p.start()
 		
 		#for p in processes:
@@ -53,6 +53,9 @@ class PasteWindow(ttk.Frame):
 		
 		self.pb1 = Progressbar(self.top, orient=HORIZONTAL, length=100, mode='determinate')
 		self.pb1.grid(row=4, column=0, pady=5, sticky='NSEW')
+		
+		self.cancel_btn = ttk.Button(self.top, text="Cancel", style='danger.TButton', command=self.cancel_copy)
+		self.cancel_btn.grid(row=5, column=0, sticky="NW")
 		#self.check_progress()
 		
 	def get_size(self, folder):
@@ -71,18 +74,25 @@ class PasteWindow(ttk.Frame):
 
 		while True:
 			attempts += 1
-			time.sleep(1)
+			time.sleep(2)
 			current_size = self.get_size(self.destination)
 			progress = round(current_size/self.total_size, 2)
-
-			# if attempts > 30:
-				# break
 				
 			if progress == 1.0:
 				break
 			else:
-				self.l.config(text=f'Progress: {str(int(progress*100))}%')
-				self.pb1['value'] = progress*100
-				self.mainapp.root.update()
+				try:
+					self.l.config(text=f'Progress: {str(int(progress*100))}%')
+					self.pb1['value'] = progress*100
+					self.mainapp.root.update()
+				except:
+					pass
 				
+		self.top.destroy()
+		
+	def cancel_copy(self):		
+		for p in self.processes:
+			p.terminate()
+			p.join()
+			
 		self.top.destroy()
