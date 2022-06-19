@@ -19,21 +19,21 @@
             "Testing": "C:\\Users\\domhn\\Documents\\Python\\Testing",
             "3.9": "C:\\Python39"
         },
-        "I00E": {}
+        "I00F": {}
     },
     "node_iids": {
         "I001": "Default",
         "I00A": "Python",
         "Some node": "Some node",
         "new node": "new node 1",
-        "I00E": "sdsfdf"
+        "I00F": "asdasd"
     },
     "nodes": {
+        "asdasd": "I00F",
         "Default": "I001",
         "Python": "I00A",
         "Some node": "Some node",
-        "new node 1": "new node",
-        "sdsfdf": "I00E"
+        "new node 1": "new node"
     },
     "text_editor": "C:\\Program Files (x86)\\Notepad++\\notepad++.exe",
     "open_with_apps": {

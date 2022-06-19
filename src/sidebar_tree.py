@@ -72,6 +72,7 @@ class QuickAccessTreeview(ttk.Treeview):
 				self.nodes[node] = iid
 				self.node_iids[iid] = node
 				self.links[iid] = {}
+				self.update_links_data()
 			else:
 				current_text = self.item(item_iid, 'text')
 				self.item(item_iid, text=node)
@@ -164,7 +165,6 @@ class QuickAccessTreeview(ttk.Treeview):
 	def delete_node(self, event):
 		msg = messagebox.askyesno(title='Delete Link', message='Are you sure you want to delete this link? All links will be lost! This cannot be undone!')
 		if msg:
-			print(event.widget.focus())
 			item_iid = self.focus()	
 			self.detach(item_iid)
 			del self.links[item_iid]
@@ -172,6 +172,7 @@ class QuickAccessTreeview(ttk.Treeview):
 			for n in self.nodes:
 				if self.nodes[n] == item_iid:
 					del self.nodes[n]
+					break
 			config_file_manager.write_config_file(self.mainapp)
 			
 	def delete_link(self, event):
