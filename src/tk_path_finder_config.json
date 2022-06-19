@@ -18,19 +18,22 @@
         "I00A": {
             "Testing": "C:\\Users\\domhn\\Documents\\Python\\Testing",
             "3.9": "C:\\Python39"
-        }
+        },
+        "I00E": {}
     },
     "node_iids": {
         "I001": "Default",
         "I00A": "Python",
         "Some node": "Some node",
-        "new node": "new node 1"
+        "new node": "new node 1",
+        "I00E": "sdsfdf"
     },
     "nodes": {
         "Default": "I001",
         "Python": "I00A",
         "Some node": "Some node",
-        "new node 1": "new node"
+        "new node 1": "new node",
+        "sdsfdf": "I00E"
     },
     "text_editor": "C:\\Program Files (x86)\\Notepad++\\notepad++.exe",
     "open_with_apps": {

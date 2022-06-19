@@ -68,7 +68,7 @@ class QuickAccessTreeview(ttk.Treeview):
 		node = simpledialog.askstring(title="New Node", prompt="Node Name:".ljust(100), initialvalue=initialvalue)
 		if node:
 			if mode == 'new': #add a new node
-				iid = self.insert("",'end', text=node, image=self.mainapp.folder_icon2)
+				iid = self.insert("",0, text=node, image=self.mainapp.folder_icon2)
 				self.nodes[node] = iid
 				self.node_iids[iid] = node
 				self.links[iid] = {}
