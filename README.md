@@ -40,4 +40,4 @@ pip install ttkbootstrap
 
 
 ## Preview
-![alt text](https://imgur.com/52D1vl2)
+![alt text](https://i.imgur.com/52D1vl2.jpg)
