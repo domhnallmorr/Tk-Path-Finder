@@ -95,9 +95,18 @@ class FileExplorerBackend:
 		# self.current_directory = os.path.join(self.current_directory, directory)
 		
 	def double_clicked_on_file(self, file):
-		os.startfile(os.path.join(self.current_directory, file))
-		#subprocess.run(['open', os.path.join(self.current_directory, file)], check=True)
-
+		msg = None
+		try:
+			os.startfile(os.path.join(self.current_directory, file))
+		except Exception as e:
+			msg = "An Error Occured"
+			if "No application is associated" in str(e):
+				msg = "There is no default application associated with this file type"
+				
+			if msg == "An Error Occured":
+				print(e)
+		
+		return msg
 		
 	def address_bar_updateed(self, directory):
 		if os.path.isdir(directory):

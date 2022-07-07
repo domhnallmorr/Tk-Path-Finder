@@ -54,7 +54,7 @@ class MainApplication(ttk.Frame):
 			
 		self.known_file_types = {
 			'.csv': ['CSV File', self.excel_icon2],
-			'.das': ['Das file', self.new_icon2],
+			'.das': ['Das file', self.deepriser_icon2],
 			'.doc': ['Word 97-2003 Document', self.word_icon2],
 			'.docx': ['Word Document', self.word_icon2],
 			'.exe': ['application', self.new_icon2],

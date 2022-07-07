@@ -145,7 +145,7 @@ class BranchTab(ttk.Frame):
 
 			else:
 				if os.path.isfile(os.path.join(self.explorer.current_directory, current_selection[1][0])):
-					self.explorer.double_clicked_on_file(current_selection[1][0])
+					msg = self.explorer.double_clicked_on_file(current_selection[1][0])
 				else:
 					msg = 'This file does not exist, it may have been moved or deleted'
 			if msg:
