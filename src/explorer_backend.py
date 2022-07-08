@@ -20,14 +20,20 @@ class FileExplorerBackend:
 
 	def list_directory(self, directory=None, mode=None, sort=None):
 		file_data = ''
+		msg = None
+		directory_data = []
+		file_data = []
 		
-		#if os.path.isdir(directory):
 		data = subprocess.run(f'dir "{directory}"', shell=True, stdout=subprocess.PIPE).stdout.splitlines()
 
-		if type(data) is list:
+		if data == [] or len(data) == 5: #empty list means something has gone wrong
+			try:
+				msg = subprocess.check_output(['dir', 'E:\\'], stderr=subprocess.STDOUT)
+			except Exception as e:
+				msg = str(e)
+			
+		elif type(data) is list:
 			data = data[5:-2]
-			directory_data = []
-			file_data = []
 			for d in data:
 				d= d.decode("utf-8") 
 				
@@ -71,15 +77,14 @@ class FileExplorerBackend:
 			file_data = list(reversed(sorted(file_data, key=lambda x: x[3])))
 			for f in file_data:
 				f[-1] = f'{int(f[-1]):,} KB'
+		
+		if msg is None:
+			self.current_directory = directory
 				
-		self.current_directory = directory
-		#else:
-		#	directory_data = 'Location Does Not Exist'
-				
-		self.directory_data = directory_data
-		self.file_data = file_data
+			self.directory_data = directory_data
+			self.file_data = file_data
 
-		return directory_data + file_data
+		return directory_data + file_data, msg
 						
 	def get_file_type(self, filename):
 		filename, file_extension = os.path.splitext(filename)

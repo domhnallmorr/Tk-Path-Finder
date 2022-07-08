@@ -57,11 +57,13 @@ class BranchTab(ttk.Frame):
 		else:
 			self.treeview.heading('#2', text='Type')
 			
-		directory_data = self.explorer.list_directory(directory, mode=mode, sort=sort)
+		directory_data, msg = self.explorer.list_directory(directory, mode=mode, sort=sort)
 		self.directory_data = directory_data
 		
 		if isinstance(directory_data, str):
 			messagebox.showerror('Error', message=directory_data)
+		elif msg is not None:
+			messagebox.showerror('Error', message=msg)
 		else:
 			self.address_bar_entry.update_bar()
 			self.update_treeview(directory_data)
