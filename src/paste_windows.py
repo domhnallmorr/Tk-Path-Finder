@@ -44,6 +44,7 @@ class PasteWindow(ttk.Frame):
 		#for p in processes:
 		#	p.join()
 		self.total_size = self.get_size(source)
+			
 		ttk.Label(self.top, text=f'Source: {source}').grid(row=0, column=0, pady=5, sticky='NW')
 		ttk.Label(self.top, text=f'Destination: {destination}').grid(row=1, column=0, pady=5, sticky='NW')
 		size = int(self.total_size*0.001)
@@ -74,9 +75,14 @@ class PasteWindow(ttk.Frame):
 
 		while True:
 			attempts += 1
-			time.sleep(2)
+			if attempts > 1:
+				time.sleep(1)
 			current_size = self.get_size(self.destination)
-			progress = round(current_size/self.total_size, 2)
+			
+			if self.total_size != 0.0: #avoid divide by zero error
+				progress = round(current_size/self.total_size, 2)
+			else:
+				progress = 1.0
 				
 			if progress == 1.0:
 				break
