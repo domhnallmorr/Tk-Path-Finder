@@ -11,6 +11,10 @@ def write_config_file(mainapp):
 	save_dict['nodes'] = copy.deepcopy(mainapp.quick_access_tree.nodes)
 	save_dict['text_editor'] = mainapp.text_editor
 	save_dict['open_with_apps'] = copy.deepcopy(mainapp.open_with_apps)
+	save_dict['default_file_width'] = mainapp.default_file_width
+	save_dict['default_date_width'] = mainapp.default_date_width
+	save_dict['default_type_width'] = mainapp.default_type_width
+	save_dict['default_size_width'] = mainapp.default_size_width
 	
 	with open('tk_path_finder_config.json', 'w') as outfile:
 		json.dump(save_dict, outfile, indent=4)

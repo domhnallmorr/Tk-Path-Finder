@@ -41,7 +41,7 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = '0.25.3'
+		self.version = '0.26.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -88,10 +88,31 @@ class MainApplication(ttk.Frame):
 		
 		self.undo_redo_states = undo_redo.UndoRedo(self)
 		
-		if 'open_with_apps' in self.config_data.keys():
-			self.open_with_apps = self.config_data['open_with_apps']
+		if "open_with_apps" in self.config_data.keys():
+			self.open_with_apps = self.config_data["open_with_apps"]
 		else:
 			self.open_with_apps = {}
+			
+		# --------------- DISPLAY SETTINGS ---------------
+		if "default_file_width" in self.config_data.keys():
+			self.default_file_width = int(self.config_data["default_file_width"])
+		else:
+			self.default_file_width = 400
+
+		if "default_date_width" in self.config_data.keys():
+			self.default_date_width = int(self.config_data["default_date_width"])
+		else:
+			self.default_date_width = 200
+
+		if "default_type_width" in self.config_data.keys():
+			self.default_type_width = int(self.config_data["default_type_width"])
+		else:
+			self.default_type_width = 300
+
+		if "default_size_width" in self.config_data.keys():
+			self.default_size_width = int(self.config_data["default_size_width"])
+		else:
+			self.default_size_width = 100
 			
 	def setup_menu(self):
 		menu = tk.Menu(self.master)
@@ -159,13 +180,13 @@ class MainApplication(ttk.Frame):
 		self.sidebar_frame = ttk.Frame()
 		self.sidebar_frame.grid_rowconfigure(2, weight=1)
 		self.sidebar_frame.grid_columnconfigure(7, weight=1)
-		self.rootpane.add(self.sidebar_frame)
+		self.rootpane.add(self.sidebar_frame, weight=1)
 
 		self.container = tk.Frame(self.rootpane, bg='pink')
 		self.container.pack(expand=True, fill=BOTH, side=LEFT)
 		#self.container.grid_columnconfigure(0, weight=1)
 		
-		self.rootpane.add(self.container,)#stretch="always")	
+		self.rootpane.add(self.container)#stretch="always")	
 		
 		ttk.Label(self.sidebar_frame, text='Quick Access').grid(row=0, column=0, columnspan=8, sticky='NSEW')
 		#ttk.Button(self.container, text='Add Root', command=self.create_root_tab).pack()
@@ -199,6 +220,10 @@ class MainApplication(ttk.Frame):
 		if self.w.button == 'ok':
 			self.open_with_apps = copy.deepcopy(self.w.open_with_apps)
 			self.text_editor = self.w.text_editor
+			self.default_file_width = self.w.default_file_width
+			self.default_date_width = self.w.default_date_width
+			self.default_type_width = self.w.default_type_width
+			self.default_size_width = self.w.default_size_width
 			config_file_manager.write_config_file(self)
 
 	def load_plugins(self):

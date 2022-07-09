@@ -32,18 +32,53 @@ class SettingsWindow(ttk.Frame):
 		
 		self.open_with_apps = copy.deepcopy(mainapp.open_with_apps)
 		treeview_data = self.convert_open_with_apps_to_list()
+		self.setup_notebook()
 		self.setup_label_frames()
 		self.setup_text_editor()
 		self.setup_open_with()
+		self.setup_display()
 		treeview_functions.write_data_to_treeview_general(self.treeview, 'replace', treeview_data)
 
+	def setup_notebook(self):
+		self.notebook = ttk.Notebook(self.top)
+		#self.notebook.pack(expand=True, fill=BOTH, side=LEFT)
+		self.notebook.grid(row=4, column=0, columnspan=8, padx=5, pady=5, sticky='nsew')
+		self.app_tab = ttk.Frame(self.notebook)
+		self.display_tab = ttk.Frame(self.notebook)
+		self.notebook.add(self.app_tab, text="Apps")
+		self.notebook.add(self.display_tab, text="Display")
+	
 	def setup_label_frames(self):
-		self.text_editor_frame = LabelFrame(self.top,text="Text Editor:")
+		self.text_editor_frame = LabelFrame(self.app_tab, text="Text Editor:")
 		self.text_editor_frame.grid(row=0, column=0, columnspan = 8, rowspan = 2,sticky='NSEW',padx=5, pady=5, ipadx=2, ipady=5)
 
-		self.open_with_frame = LabelFrame(self.top,text="Open With:")
+		self.open_with_frame = LabelFrame(self.app_tab, text="Open With:")
 		self.open_with_frame.grid(row=2, column=0, columnspan = 8, rowspan = 2,sticky='NSEW',padx=5, pady=5, ipadx=2, ipady=5)
-	
+
+		self.display_frame = LabelFrame(self.display_tab, text="Display Settings:")
+		self.display_frame.grid(row=2, column=0, columnspan = 8, rowspan = 2,sticky='NSEW',padx=5, pady=5, ipadx=2, ipady=5)
+
+	def setup_display(self):		
+		ttk.Label(self.display_frame, text='Filename Column Width:').grid(row=1, column=0, columnspan=1, sticky='NSEW', pady=self.mainapp.default_pady)
+		self.file_width_entry = ttk.Entry(self.display_frame)
+		self.file_width_entry.insert(0, self.mainapp.default_file_width)
+		self.file_width_entry.grid(row=1, column=1, sticky='NSEW', pady=self.mainapp.default_pady)
+		
+		ttk.Label(self.display_frame, text='Date Column Width:').grid(row=2, column=0, columnspan=1, sticky='NSEW', pady=self.mainapp.default_pady)
+		self.date_width_entry = ttk.Entry(self.display_frame)
+		self.date_width_entry.insert(0, self.mainapp.default_date_width)
+		self.date_width_entry.grid(row=2, column=1, sticky='NSEW', pady=self.mainapp.default_pady)
+
+		ttk.Label(self.display_frame, text='Type Column Width:').grid(row=3, column=0, columnspan=1, sticky='NSEW', pady=self.mainapp.default_pady)
+		self.type_width_entry = ttk.Entry(self.display_frame)
+		self.type_width_entry.insert(0, self.mainapp.default_type_width)
+		self.type_width_entry.grid(row=3, column=1, sticky='NSEW', pady=self.mainapp.default_pady)
+
+		ttk.Label(self.display_frame, text='Size Column Width:').grid(row=4, column=0, columnspan=1, sticky='NSEW', pady=self.mainapp.default_pady)
+		self.size_width_entry = ttk.Entry(self.display_frame)
+		self.size_width_entry.insert(0, self.mainapp.default_size_width)
+		self.size_width_entry.grid(row=4, column=1, sticky='NSEW', pady=self.mainapp.default_pady)
+		
 	def setup_text_editor(self):
 		ttk.Label(self.text_editor_frame, text='Text Editor:').grid(row=0, column=0, columnspan=1, sticky='NSEW', pady=self.mainapp.default_pady)
 		self.text_editor_entry = ttk.Entry(self.text_editor_frame, width=100)
@@ -88,9 +123,9 @@ class SettingsWindow(ttk.Frame):
 		self.treeview.configure(yscrollcommand=vsb.set)
 		
 		# Buttons
-		self.ok_btn = ttk.Button(self.open_with_frame, text='OK', width=10, style='success.TButton', command=lambda button='ok': self.cleanup(button))
+		self.ok_btn = ttk.Button(self.top, text='OK', width=10, style='success.TButton', command=lambda button='ok': self.cleanup(button))
 		self.ok_btn.grid(row=5, column=0, padx=5, pady=5, sticky='ne')
-		self.cancel_btn = ttk.Button(self.open_with_frame, text='Cancel', width=10, style='danger.TButton', command=lambda button='cancel': self.cleanup(button))
+		self.cancel_btn = ttk.Button(self.top, text='Cancel', width=10, style='danger.TButton', command=lambda button='cancel': self.cleanup(button))
 		self.cancel_btn.grid(row=5, column=1, padx=5, pady=5, sticky='nw')
 		
 	def add(self):
@@ -165,6 +200,35 @@ class SettingsWindow(ttk.Frame):
 		self.app_entry.insert(0, self.treeview.item(self.treeview.selection(), 'values')[0])		
 		
 	def cleanup(self, button):
-		self.button = button
-		self.text_editor = self.text_editor_entry.get()
-		self.top.destroy()
+		# ---------- CHECK INPUTS -----------
+		msg = None
+		try:
+			int(self.file_width_entry.get())
+		except:
+			msg = "Filename Column Width must be an interger"
+
+		try:
+			int(self.date_width_entry.get())
+		except:
+			msg = "Date Column Width must be an interger"
+			
+		try:
+			int(self.type_width_entry.get())
+		except:
+			msg = "Type Column Width must be an interger"
+
+		try:
+			int(self.size_width_entry.get())
+		except:
+			msg = "Size Column Width must be an interger"
+			
+		if msg is None:
+			self.button = button
+			self.text_editor = self.text_editor_entry.get()
+			self.default_file_width = self.file_width_entry.get()
+			self.default_date_width = self.date_width_entry.get()
+			self.default_type_width = self.type_width_entry.get()
+			self.default_size_width = self.size_width_entry.get()
+			self.top.destroy()
+		else:
+			messagebox.showerror(title="Input Error", message=msg)
