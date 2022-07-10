@@ -1,6 +1,7 @@
 from distutils.dir_util import copy_tree
 from multiprocessing import Process
 import os
+import pathlib
 from shutil import copyfile, move
 import subprocess
 import threading
@@ -234,6 +235,7 @@ class BranchTab(ttk.Frame):
 			new_menu.add_command(label="Word Document", command=lambda mode='new word': self.new_file(mode), image=self.mainapp.word_icon2, compound='left',)
 
 			popup_menu.add_separator()
+			# --------------- COPY/PASTE
 			if iid:
 				popup_menu.add_command(label="Cut", command=lambda file=file_name: self.cut_file(file))
 				popup_menu.add_command(label="Copy", command=lambda file=file_name: self.copy_file(file))
@@ -414,6 +416,7 @@ class BranchTab(ttk.Frame):
 			task = 'copy'
 		
 		for file in files_to_process:
+			source = os.path.join(file['Path'], file['Name'])
 			destination = os.path.join(self.explorer.current_directory, file['Name'])
 			
 			try:
@@ -422,8 +425,6 @@ class BranchTab(ttk.Frame):
 					# handle for file already existing in destination
 					if os.path.isfile(os.path.join(self.explorer.current_directory, file['Name'])):
 
-						#if os.path.isfile(os.path.join(self.explorer.current_directory, file['Name']))
-							#if action_if_duplicate == 'ask':
 						counter = 1
 						while True: # Check if File Exists
 							filename, file_extension = os.path.splitext(file['Name'])
@@ -434,7 +435,14 @@ class BranchTab(ttk.Frame):
 					if task == 'copy':
 						copyfile(os.path.join(file['Path'], file['Name']), destination)
 					elif task == 'cut':
-						os.rename(os.path.join(file['Path'], file['Name']), destination)
+						# check if we are moving file to another drive
+						drive_source = pathlib.Path(source).drive
+						drive_destination = pathlib.Path(destination).drive
+						
+						if drive_source != drive_destination:
+							move(source, destination)
+						else: # not moving drives so os.rename is sufficient
+							os.rename(os.path.join(file['Path'], file['Name']), destination)
 				
 				# Copy Directory
 				elif os.path.isdir(os.path.join(file['Path'], file['Name'])):
