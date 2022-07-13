@@ -42,8 +42,9 @@
             "C:\\Program Files\\Sublime Text 3\\sublime_text.exe"
         ]
     },
-    "default_file_width": "600",
-    "default_date_width": "200",
-    "default_type_width": "200",
-    "default_size_width": "100"
+    "default_file_width": 600,
+    "default_date_width": 200,
+    "default_type_width": 200,
+    "default_size_width": 100,
+    "to_do_list": []
 }

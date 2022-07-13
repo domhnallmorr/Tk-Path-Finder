@@ -5,6 +5,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
 import os
+import time
 
 from ttkbootstrap import Style
 
@@ -15,6 +16,7 @@ import root_tab
 import settings_screen
 import sidebar_tree
 import tkexplorer_icons
+import todo_list
 import undo_redo
 
 class MainApplication(ttk.Frame):
@@ -29,7 +31,6 @@ class MainApplication(ttk.Frame):
 		
 		# Styles
 		self.style = Style('darkly')
-		self.default_pady = 10
 
 		self.setup_menu()
 		
@@ -41,7 +42,7 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = '0.26.1'
+		self.version = '0.27.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -94,6 +95,9 @@ class MainApplication(ttk.Frame):
 			self.open_with_apps = {}
 			
 		# --------------- DISPLAY SETTINGS ---------------
+		self.default_padx = 5
+		self.default_pady = 10
+		
 		if "default_file_width" in self.config_data.keys():
 			self.default_file_width = int(self.config_data["default_file_width"])
 		else:
@@ -114,25 +118,36 @@ class MainApplication(ttk.Frame):
 		else:
 			self.default_size_width = 100
 			
+		# --------------- TODO LIST ---------------
+		if "to_do_list" in self.config_data.keys():
+			self.to_do_list = self.config_data["to_do_list"]
+		else:
+			self.to_do_list = []
+			
 	def setup_menu(self):
 		menu = tk.Menu(self.master)
 		self.master.config(menu=menu)
 
 		# ________ SETTINGS ________
 		settings_menu = tk.Menu(menu, tearoff=0)
-		menu.add_cascade(label='Settings',menu=settings_menu)
-		settings_menu.add_command(label = 'Edit Settings', command=self.edit_settings)
+		menu.add_cascade(label="Settings", menu=settings_menu)
+		settings_menu.add_command(label = "Edit Settings", command=self.edit_settings)
 
 		style_menu = tk.Menu(menu, tearoff = 0)
-		settings_menu.add_cascade(label = 'Style', menu=style_menu)
+		settings_menu.add_cascade(label = "Style", menu=style_menu)
 		
 		for s in ['cosmo', 'flatly', 'journal', 'litera', 'lumen', 'minty', 'pulse', 'sandstone', 'united', 'yeti', 'cyborg', 'darkly', 'solar', 'superhero'] :
 			style_menu.add_command(label=s, command = lambda style=s: self.switch_style(style))
-			
+
+		# ________ TOOLS ________
+		tools_menu = tk.Menu(menu, tearoff=0)
+		menu.add_cascade(label="Tools", menu=tools_menu)
+		tools_menu.add_command(label = "To Do List", command=lambda self=self: todo_list.launch_to_do_list(self))
+		
 		# ________ ABOUT ________
 		about_menu = tk.Menu(menu, tearoff=0)
-		menu.add_cascade(label='About',menu=about_menu)
-		about_menu.add_command(label = 'About Tk Path Finder', command = lambda self=self: about_screen.about(self))
+		menu.add_cascade(label="About" ,menu=about_menu)
+		about_menu.add_command(label = "About Tk Path Finder", command = lambda self=self: about_screen.about(self))
 		
 	def setup_notebook(self):
 		self.notebook = ttk.Notebook(self.container)
