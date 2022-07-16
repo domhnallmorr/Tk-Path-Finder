@@ -12,6 +12,7 @@ from ttkbootstrap import Style
 import about_screen
 import autoscrollbar
 import config_file_manager
+import diary_frontend
 import root_tab
 import settings_screen
 import sidebar_tree
@@ -42,7 +43,7 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = '0.27.0'
+		self.version = '0.28.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -131,10 +132,10 @@ class MainApplication(ttk.Frame):
 		# ________ SETTINGS ________
 		settings_menu = tk.Menu(menu, tearoff=0)
 		menu.add_cascade(label="Settings", menu=settings_menu)
-		settings_menu.add_command(label = "Edit Settings", command=self.edit_settings)
+		settings_menu.add_command(label="Edit Settings", command=self.edit_settings)
 
-		style_menu = tk.Menu(menu, tearoff = 0)
-		settings_menu.add_cascade(label = "Style", menu=style_menu)
+		style_menu = tk.Menu(menu, tearoff=0)
+		settings_menu.add_cascade(label="Style", menu=style_menu)
 		
 		for s in ['cosmo', 'flatly', 'journal', 'litera', 'lumen', 'minty', 'pulse', 'sandstone', 'united', 'yeti', 'cyborg', 'darkly', 'solar', 'superhero'] :
 			style_menu.add_command(label=s, command = lambda style=s: self.switch_style(style))
@@ -142,12 +143,17 @@ class MainApplication(ttk.Frame):
 		# ________ TOOLS ________
 		tools_menu = tk.Menu(menu, tearoff=0)
 		menu.add_cascade(label="Tools", menu=tools_menu)
+		
+		notes_menu = tk.Menu(menu, tearoff=0)
+		tools_menu.add_cascade(label="Notes", menu=notes_menu)
+		notes_menu.add_command(label="Diary", command=lambda self=self: diary_frontend.launch_diary(self))
+		
 		tools_menu.add_command(label = "To Do List", command=lambda self=self: todo_list.launch_to_do_list(self))
 		
 		# ________ ABOUT ________
 		about_menu = tk.Menu(menu, tearoff=0)
 		menu.add_cascade(label="About" ,menu=about_menu)
-		about_menu.add_command(label = "About Tk Path Finder", command = lambda self=self: about_screen.about(self))
+		about_menu.add_command(label="About Tk Path Finder", command = lambda self=self: about_screen.about(self))
 		
 	def setup_notebook(self):
 		self.notebook = ttk.Notebook(self.container)

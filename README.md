@@ -13,6 +13,8 @@ A lightweight file explorer based on tabs within tabs written in python (Tkinter
   - "Open with" functionality.
   - Plugin system (very much WIP at this time).
   - Compatible with MS Teams folders
+  - To Do List
+  - Diary
   - Dark and Light themes
 
 ## Limitations
