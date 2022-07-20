@@ -567,26 +567,34 @@ class RenameWindow(ttk.Frame):
 		super(RenameWindow, self).__init__()
 		top=self.top=Toplevel(master)
 		top.grab_set()
+		
+		self.top.title("Rename Branch Tab")
+		
 		self.mainapp = mainapp
 		self.branch_tab = branch_tab
 		self.button = 'cancel'
-		
-		ttk.Label(self.top, text='Name').grid(row=0, column=0)
+
+		#self.setup_title_bar()		
 		self.name_entry = ttk.Entry(self.top, width=60)
-		self.name_entry.grid(row=0, column=1, padx=5)
+		self.name_entry.grid(row=1, column=0, columnspan=5, padx=self.mainapp.default_padx, pady=self.mainapp.default_pady)
 		self.name_entry.insert(0, branch_tab.text)
+		self.top.grid_columnconfigure(0, weight=1)
 		
-		if branch_tab.lock_name:
-			self.lock = IntVar(value=1)
-		else:
-			self.lock = IntVar(value=0)
-		ttk.Checkbutton(self.top, text="Lock Name", variable=self.lock).grid(row=0, column=2, sticky='w', padx=5, pady=5)
+		self.lock = IntVar(value=1)
+		ttk.Checkbutton(self.top, text="Lock Name", variable=self.lock).grid(row=2, column=2, sticky='w', padx=self.mainapp.default_padx, pady=self.mainapp.default_pady)
 		
 		# Buttons
 		self.ok_btn = ttk.Button(self.top, text='OK', width=10, style='success.TButton', command=lambda button='ok': self.cleanup(button))
-		self.ok_btn.grid(row=2, column=0, padx=5, pady=5, sticky='ne')
+		self.ok_btn.grid(row=2, column=3, padx=self.mainapp.default_padx, pady=self.mainapp.default_pady, sticky='ne')
 		self.cancel_btn = ttk.Button(self.top, text='Cancel', width=10, style='danger.TButton', command=lambda button='cancel': self.cleanup(button))
-		self.cancel_btn.grid(row=2, column=1, padx=5, pady=5, sticky='nw')		
+		self.cancel_btn.grid(row=2, column=4, padx=self.mainapp.default_padx, pady=self.mainapp.default_pady, sticky='nw')		
+		
+	def setup_title_bar(self):
+		self.top.overrideredirect(True)
+		title_bar = tk.Frame(self.top, bg="red")
+		close_button = Button(title_bar, text='X', command=self.top.destroy)
+		close_button.pack(side=RIGHT)
+		title_bar.grid(row=0, column=0, columnspan=5, padx=self.mainapp.default_padx, pady=self.mainapp.default_pady)
 		
 	def cleanup(self, button):
 		

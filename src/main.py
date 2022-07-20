@@ -44,7 +44,7 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = '0.29.1'
+		self.version = '0.29.2'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
