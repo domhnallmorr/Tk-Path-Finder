@@ -13,6 +13,7 @@ import about_screen
 import autoscrollbar
 import config_file_manager
 import diary_frontend
+import notes_frontend
 import root_tab
 import settings_screen
 import sidebar_tree
@@ -43,7 +44,7 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = '0.28.0'
+		self.version = '0.29.0'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -125,6 +126,12 @@ class MainApplication(ttk.Frame):
 		else:
 			self.to_do_list = []
 			
+		# --------------- NOTES CATEGORIES ---------------
+		if "notes_categories" in self.config_data.keys():
+			self.notes_categories = self.config_data["notes_categories"]
+		else:
+			self.notes_categories = {"General": ["Default"],}# "Projects": ["Default"]}	
+			
 	def setup_menu(self):
 		menu = tk.Menu(self.master)
 		self.master.config(menu=menu)
@@ -145,8 +152,11 @@ class MainApplication(ttk.Frame):
 		menu.add_cascade(label="Tools", menu=tools_menu)
 		
 		notes_menu = tk.Menu(menu, tearoff=0)
+		tools_menu.add_command(label="Diary", command=lambda self=self: diary_frontend.launch_diary(self))
+		
 		tools_menu.add_cascade(label="Notes", menu=notes_menu)
-		notes_menu.add_command(label="Diary", command=lambda self=self: diary_frontend.launch_diary(self))
+		notes_menu.add_command(label="Manage Notes Categories", command=lambda self=self: notes_frontend.launch_notes_categories(self))
+		notes_menu.add_command(label="Edit Notes", command=lambda self=self: notes_frontend.launch_notes_page(self))
 		
 		tools_menu.add_command(label = "To Do List", command=lambda self=self: todo_list.launch_to_do_list(self))
 		

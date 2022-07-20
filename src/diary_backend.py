@@ -7,6 +7,7 @@ def create_database():
 	conn = sqlite3.connect('notes.db')
 	cursor = conn.cursor()
 	cursor.execute("CREATE TABLE IF NOT EXISTS diary(datestamp TEXT, tags TEXT, text TEXT)")
+	cursor.execute("CREATE TABLE IF NOT EXISTS notes(category TEXT, subcategory TEXT, tags TEXT, page TEXT, text TEXT)")
 
 	conn.commit()
 	cursor.close()
