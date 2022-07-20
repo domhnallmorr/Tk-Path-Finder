@@ -66,7 +66,7 @@ class RootTab(ttk.Frame):
 		
 	def create_branch_tab(self):
 		tab = branch_tab.BranchTab(self, self.mainapp, self.id, self.id, 40)
-		self.notebook.add(tab, text="Desktop")
+		self.notebook.add(tab, image=self.mainapp.branch_icon2, compound=tk.LEFT, text="Desktop")
 		tab.update_tab(tab.explorer.current_directory) #initalise the treeview data in branch tab
 		self.id += 1
 		

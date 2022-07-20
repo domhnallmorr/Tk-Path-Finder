@@ -44,7 +44,7 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = '0.29.3'
+		self.version = '0.29.4'
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -186,7 +186,7 @@ class MainApplication(ttk.Frame):
 		
 	def create_root_tab(self):
 		tab = root_tab.RootTab(self, self.id, self.id, 40)
-		self.notebook.add(tab, image=self.anchor_node_icon2, compound=tk.LEFT, text=f'{str(self.id).ljust(20)}')
+		self.notebook.add(tab, image=self.root_icon2, compound=tk.LEFT, text=f'{str(self.id).ljust(20)}')
 
 		self.id += 1
 		
