@@ -11,6 +11,7 @@ import threading
 import time
 
 from ttkbootstrap.dialogs import dialogs
+from ttkbootstrap.scrolled import ScrolledText
 
 import treeview_functions
 import autoscrollbar
@@ -27,7 +28,7 @@ class DiaryWindow(ttk.Frame):
 	def __init__(self, mainapp):
 		super(DiaryWindow, self).__init__()
 		top=self.top=Toplevel(mainapp.master)
-		top.grab_set()
+		#top.grab_set()
 		self.mainapp = mainapp
 		self.backend = diary_backend.DiaryBackend()
 		self.data = {}
@@ -44,10 +45,9 @@ class DiaryWindow(ttk.Frame):
 		self.setup_text_widget()
 		
 		self.top.protocol("WM_DELETE_WINDOW", self.on_closing)
-		# self.stop_database_thread = False
-		# self.database_thread = threading.Thread(target=self.update_database_thread)
-		# self.database_thread.start()
-	
+
+		self.top.state('zoomed')
+		
 	def on_closing(self):
 		self.get_text_input()
 
@@ -62,6 +62,8 @@ class DiaryWindow(ttk.Frame):
 
 		self.notes_frame = LabelFrame(self.top, text="Notes:")
 		self.notes_frame.pack(expand=True, fill=BOTH, padx=self.mainapp.default_padx, pady=self.mainapp.default_pady)
+		self.notes_frame.grid_columnconfigure(1, weight=1)
+		self.notes_frame.grid_rowconfigure(0, weight=1)
 		
 	def setup_labels(self):
 		today = date.today()
@@ -99,7 +101,13 @@ class DiaryWindow(ttk.Frame):
 
 	def setup_text_widget(self):
 		self.general_text = tk.Text(self.notes_frame)# width=110, height=10)
-		self.general_text.pack(expand=True, fill=BOTH, padx=self.mainapp.default_padx, pady=self.mainapp.default_pady)
+		#self.general_text.pack(side=LEFT, expand=True, fill=BOTH, padx=self.mainapp.default_padx, pady=self.mainapp.default_pady)
+		self.general_text.grid(row=0, column=0, columnspan=2, sticky="NSEW")
+		
+		vsb = autoscrollbar.AutoScrollbar(self.notes_frame, orient="vertical", command=self.general_text.yview)
+		vsb.grid(row=0, column=2, columnspan=1, sticky="NS")
+		
+		self.general_text.configure(yscrollcommand=vsb.set)
 		
 		# Add any text present in database_thread
 		txt = self.backend.read_date_from_database(self.date)
