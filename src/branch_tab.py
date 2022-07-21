@@ -382,7 +382,18 @@ class BranchTab(ttk.Frame):
 					document.save(os.path.join(self.explorer.current_directory, new_name))
 					
 				else:
-					os.rename(os.path.join(self.explorer.current_directory, self.orig_file_name), os.path.join(self.explorer.current_directory, new_name))
+					try:
+						os.rename(os.path.join(self.explorer.current_directory, self.orig_file_name), os.path.join(self.explorer.current_directory, new_name))
+					except Exception as e:
+						if "being used by another" in str(e).lower():
+							msg = "Permission Denied, Ensure Document is not Open in Another Process"
+							
+						else:
+							msg = f"The Following Error Occured\n{str(e)}"
+							
+						messagebox.showerror('Error', message=msg)
+						
+						
 				self.update_tab(self.explorer.current_directory)
 
 			# Add to Undo Stack
