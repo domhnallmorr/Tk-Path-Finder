@@ -19,11 +19,18 @@ import config_file_manager
 import diary_backend
 
 def launch_diary(mainapp):
-	w=DiaryWindow(mainapp)
-	mainapp.master.wait_window(w.top)
-	config_file_manager.write_config_file(mainapp)
-	w.stop_database_thread = True
-
+	if mainapp.diary_open is False:
+		mainapp.diary_open = True
+		
+		mainapp.diary_window = DiaryWindow(mainapp)
+		mainapp.master.wait_window(mainapp.diary_window.top)
+		config_file_manager.write_config_file(mainapp)
+		
+		mainapp.diary_open = False
+	else:
+		mainapp.diary_window.top.state('zoomed')
+		mainapp.diary_window.top.lift()
+		
 class DiaryWindow(ttk.Frame):
 	def __init__(self, mainapp):
 		super(DiaryWindow, self).__init__()

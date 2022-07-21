@@ -44,11 +44,12 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = "0.29.7"
+		self.version = "0.29.8"
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
 		self.main_module = "__init__"
+		self.diary_open = False
 		
 		if 'text_editor' in self.config_data.keys():
 			self.text_editor = self.config_data['text_editor']
