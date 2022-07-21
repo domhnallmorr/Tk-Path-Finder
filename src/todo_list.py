@@ -111,6 +111,13 @@ class ToDoListWindow(ttk.Frame):
 		if msg:
 			self.treeview.delete(selected_iid)
 			self.mainapp.to_do_list.pop(current_idx)
+			
+			# renumber all items
+			for idx, task in enumerate(self.mainapp.to_do_list):
+				self.mainapp.to_do_list[idx][0] = idx + 1
+			
+			treeview_functions.write_data_to_treeview_general(self.treeview, 'replace', self.mainapp.to_do_list)
+			self.update_tags()
 
 	def delete_all(self):		
 		msg = messagebox.askyesno(title='Delete All Tasks', message='Delete All Tasks? This Cannot be Undone.')
