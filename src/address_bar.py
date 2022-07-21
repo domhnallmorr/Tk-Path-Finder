@@ -14,5 +14,5 @@ class AddressBarEntry(ttk.Entry):
 		self.insert(0, self.branch_tab.explorer.current_directory) #inserts new value assigned by 2nd parameter
 		
 	def enter_event(self, event):
-		self.branch_tab.update_tab(self.get())
+		self.branch_tab.update_tab(self.get().rstrip().lstrip())
 		self.update_bar()
