@@ -24,7 +24,7 @@ class FileExplorerBackend:
 		directory_data = []
 		file_data = []
 		
-		data = subprocess.run(f'dir "{directory}"', shell=True, stdout=subprocess.PIPE).stdout.splitlines()
+		data = subprocess.run(f'chcp 65001 | dir "{directory}"', shell=True, stdout=subprocess.PIPE).stdout.splitlines()
 
 		if data == [] or len(data) == 5: #empty list means something has gone wrong
 			try:
