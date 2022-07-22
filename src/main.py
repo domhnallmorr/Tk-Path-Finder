@@ -12,12 +12,12 @@ from ttkbootstrap import Style
 import about_screen
 import autoscrollbar
 import config_file_manager
-import diary_frontend
-import notes_frontend
 import root_tab
 import settings_screen
 import sidebar_tree
 import tkexplorer_icons
+from Tools import diary_frontend
+from Tools import notes_frontend
 from Tools import pdf_tools_frontend
 import todo_list
 import undo_redo
@@ -45,7 +45,7 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = "0.30.0"
+		self.version = "0.31.0"
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -163,10 +163,9 @@ class MainApplication(ttk.Frame):
 		pdf_menu = tk.Menu(menu, tearoff=0)
 		tools_menu.add_cascade(label="PDF Tools", menu=pdf_menu)
 		pdf_menu.add_command(label="Extract Pages", command=lambda self=self: pdf_tools_frontend.launch_pdf_extractor(self))
-		#pdf_menu.add_command(label="Merge PDFs", command=lambda self=self: notes_frontend.launch_notes_page(self))
+		pdf_menu.add_command(label="Merge PDFs", command=lambda self=self: pdf_tools_frontend.launch_pdf_merger(self))
 		
 		tools_menu.add_command(label = "To Do List", command=lambda self=self: todo_list.launch_to_do_list(self))
-		
 		
 		
 		# ________ ABOUT ________

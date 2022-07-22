@@ -1,6 +1,6 @@
 import os
 import sqlite3
-import diary_backend
+from Tools import diary_backend
 
 
 class NotesBackend:

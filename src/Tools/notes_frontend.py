@@ -10,7 +10,7 @@ from tkinter import font as tkfont
 import treeview_functions
 import autoscrollbar
 import config_file_manager
-import notes_backend
+from Tools import notes_backend
 
 def launch_notes_categories(mainapp):
 	w=NotesCategoriesWindow(mainapp)

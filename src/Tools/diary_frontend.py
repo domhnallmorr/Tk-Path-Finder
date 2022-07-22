@@ -16,7 +16,7 @@ from ttkbootstrap.scrolled import ScrolledText
 import treeview_functions
 import autoscrollbar
 import config_file_manager
-import diary_backend
+from Tools import diary_backend
 
 def launch_diary(mainapp):
 	if mainapp.diary_open is False:
