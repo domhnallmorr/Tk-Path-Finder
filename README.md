@@ -15,6 +15,10 @@ A lightweight file explorer based on tabs within tabs written in python (Tkinter
   - Compatible with MS Teams folders
   - To Do List
   - Diary
+  - Notes
+  - PDF Tools
+		- Extract Pages
+		- Merge PDFs
   - Dark and Light themes
 
 ## Limitations
@@ -32,6 +36,8 @@ A lightweight file explorer based on tabs within tabs written in python (Tkinter
 
 [ttkbootstrap](https://ttkbootstrap.readthedocs.io/en/latest/)
 
+[PyPDF2](https://pypi.org/project/PyPDF2/)
+
 pip install openpyxl
 
 pip install pyperclip
@@ -39,6 +45,8 @@ pip install pyperclip
 pip install python-docx
 
 pip install ttkbootstrap
+
+pip install PyPDF2
 
 
 ## Preview
