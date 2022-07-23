@@ -63,30 +63,7 @@
         {
             "0": [
                 {
-                    "src": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
-                }
-            ]
-        },
-        {
-            "Project 1": [
-                {
-                    "src": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
-                },
-                {
-                    "Tab 1": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder"
-                },
-                {
-                    "Tab 2": "C:\\Users\\domhn\\Documents\\Python"
-                }
-            ]
-        },
-        {
-            "Project 2": [
-                {
-                    "src": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
-                },
-                {
-                    "Project 2": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
+                    "Python": "C:\\Users\\domhn\\Documents\\Python"
                 }
             ]
         }

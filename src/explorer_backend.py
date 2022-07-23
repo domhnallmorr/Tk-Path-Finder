@@ -5,6 +5,7 @@ import subprocess
 from subprocess import DEVNULL
 import time
 import datetime
+import re
 
 class FileExplorerBackend:
 	def __init__(self, mainapp):
@@ -35,10 +36,10 @@ class FileExplorerBackend:
 		elif type(data) is list:
 			data = data[5:-2]
 			for d in data:
-				d= d.decode("utf-8") 
+				d = d.decode("utf-8") 
 				
 				if '<DIR>' in d:
-					d = d.split('<DIR>')
+					d = re.split("(?<!\s) ", d)
 					if d[-1].strip() != '.' and d[-1].strip() != '..':
 						directory_data.append([d[-1].strip(), '-', 'Folder', '-'])
 				else:
