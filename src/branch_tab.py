@@ -15,6 +15,7 @@ from tkinter import simpledialog
 from docx import Document
 from openpyxl import Workbook
 import pyperclip
+from ttkbootstrap.themes import standard
 
 from Custom_Widgets import address_bar
 import autoscrollbar
@@ -108,11 +109,24 @@ class BranchTab(ttk.Frame):
 		self.treeview.bind("<Double-1>", self.OnDoubleClick)
 		self.treeview.bind("<Button-1>", self.OnLeftClick)
 		self.treeview.bind("<Button-3>", self.OnRightClick)
+		self.treeview.bind("<Motion>", self.highlight_row)
+
 		
 		vsb = autoscrollbar.AutoScrollbar(self, orient="vertical", command=self.treeview.yview)
 		vsb.grid(row=1, column=16, sticky='NSEW')
 		self.treeview.configure(yscrollcommand=vsb.set)
+		
+		# tags
+		self.update_tags()
 
+	def update_tags(self):
+		highlight_color = standard.STANDARD_THEMES[self.mainapp.style_name]["colors"]["active"]
+		self.treeview.tag_configure('highlight', background=highlight_color)
+		
+	def highlight_row(self, event):
+		item = self.treeview.identify_row(event.y)
+		self.treeview.tk.call(self.treeview, "tag", "remove", "highlight")
+		self.treeview.tk.call(self.treeview, "tag", "add", "highlight", item)
 
 	def update_treeview(self, directory_data):
 		treeview_functions.write_data_to_treeview(self, self.mainapp, self.treeview, 'replace', directory_data)

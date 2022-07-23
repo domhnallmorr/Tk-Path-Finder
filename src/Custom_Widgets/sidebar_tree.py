@@ -7,6 +7,7 @@ from tkinter.ttk import *
 from tkinter import simpledialog
 from tkinter import messagebox
 
+from ttkbootstrap.themes import standard
 import config_file_manager
 
 class QuickAccessTreeview(ttk.Treeview):
@@ -25,6 +26,7 @@ class QuickAccessTreeview(ttk.Treeview):
 		#bind left click event
 		self.bind('<<TreeviewSelect>>',lambda event, : self.singleclick(event))
 		self.bind("<Button-3>",lambda event,: self.onrightclick(event))
+		self.bind("<Motion>", self.highlight_row)
 
 		self.close_btn = tk.Button(mainapp.sidebar_frame, image=self.mainapp.close_icon2, background='white', relief=FLAT,
 				command= lambda action=False: self.open_close_all_nodes(action))
@@ -38,6 +40,8 @@ class QuickAccessTreeview(ttk.Treeview):
 		
 		self.update_btn_bg()
 		
+		self.update_tags()
+		
 	def update_btn_bg(self):
 		s = ttk.Style()
 		bg = s.lookup('TFrame', 'background')
@@ -45,6 +49,16 @@ class QuickAccessTreeview(ttk.Treeview):
 		self.close_btn.config(bg=bg)
 		self.up_btn.config(bg=bg)
 		self.down_btn.config(bg=bg)
+
+	def update_tags(self):
+		highlight_color = standard.STANDARD_THEMES[self.mainapp.style_name]["colors"]["active"]
+		self.tag_configure('highlight', background=highlight_color)
+		
+	def highlight_row(self, event):
+		item = self.identify_row(event.y)
+		item = f'"{item}"'
+		self.tk.call(self, "tag", "remove", "highlight")
+		self.tk.call(self, "tag", "add", "highlight", item)
 		
 	def setup_nodes(self):
 		self.node_iids = {}

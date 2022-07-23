@@ -34,7 +34,8 @@ class MainApplication(ttk.Frame):
 		self.setup_variables()
 		
 		# Styles
-		self.style = Style('darkly')
+		self.style = Style("darkly")
+		self.style_name = "darkly"
 
 		self.setup_menu()
 		
@@ -46,7 +47,7 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = "0.31.1"
+		self.version = "0.31.2"
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -164,9 +165,6 @@ class MainApplication(ttk.Frame):
 
 		for s in self.themes["dark"]:
 			dark_style_menu.add_command(label=s, command = lambda style=s: self.switch_style(style))
-			
-		# for s in ['cosmo', 'flatly', 'journal', 'litera', 'lumen', 'minty', 'pulse', 'sandstone', 'united', 'yeti', 'cyborg', 'darkly', 'solar', 'superhero'] :
-			# style_menu.add_command(label=s, command = lambda style=s: self.switch_style(style))
 
 		# ________ TOOLS ________
 		tools_menu = tk.Menu(menu, tearoff=0)
@@ -268,8 +266,14 @@ class MainApplication(ttk.Frame):
 		return current_root_tab, current_branch_tab
 		
 	def switch_style(self, style):
+		self.style_name = style
 		self.style = Style(style)
 		self.quick_access_tree.update_btn_bg()
+		
+		for tab in self.notebook.children.keys():
+			self.notebook.children[tab].update_tags()
+
+		self.quick_access_tree.update_tags()
 		
 	def edit_settings(self):
 		self.w=settings_screen.SettingsWindow(self, self.master)

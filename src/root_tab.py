@@ -86,3 +86,7 @@ class RootTab(ttk.Frame):
 			tab.lock_name = self.w.lock
 			tab.text = self.w.name
 			self.notebook.tab(tab, text=self.w.name)
+
+	def update_tags(self):
+		# this is a dummy function called when style changes
+		pass
