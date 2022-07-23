@@ -8,13 +8,14 @@ import os
 import time
 
 from ttkbootstrap import Style
+from ttkbootstrap.themes import standard
 
 import about_screen
 import autoscrollbar
 import config_file_manager
+from Custom_Widgets import sidebar_tree
 import root_tab
 import settings_screen
-import sidebar_tree
 import tkexplorer_icons
 from Tools import diary_frontend
 from Tools import notes_frontend
@@ -45,7 +46,7 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = "0.31.0"
+		self.version = "0.31.1"
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -133,7 +134,14 @@ class MainApplication(ttk.Frame):
 			self.notes_categories = self.config_data["notes_categories"]
 		else:
 			self.notes_categories = {"General": ["Default"],}# "Projects": ["Default"]}	
-			
+
+		# --------------- GET THEMES ---------------
+		self.themes = {"light": [], "dark":[]}
+
+		for theme in standard.STANDARD_THEMES.keys():
+			theme_type = standard.STANDARD_THEMES[theme]["type"].lower()
+			self.themes[theme_type].append(theme)
+	
 	def setup_menu(self):
 		menu = tk.Menu(self.master)
 		self.master.config(menu=menu)
@@ -146,8 +154,19 @@ class MainApplication(ttk.Frame):
 		style_menu = tk.Menu(menu, tearoff=0)
 		settings_menu.add_cascade(label="Style", menu=style_menu)
 		
-		for s in ['cosmo', 'flatly', 'journal', 'litera', 'lumen', 'minty', 'pulse', 'sandstone', 'united', 'yeti', 'cyborg', 'darkly', 'solar', 'superhero'] :
-			style_menu.add_command(label=s, command = lambda style=s: self.switch_style(style))
+		light_style_menu = tk.Menu(menu, tearoff=0)
+		dark_style_menu = tk.Menu(menu, tearoff=0)
+		style_menu.add_cascade(label="Light", menu=light_style_menu)
+		style_menu.add_cascade(label="Dark", menu=dark_style_menu)
+		
+		for s in self.themes["light"]:
+			light_style_menu.add_command(label=s, command = lambda style=s: self.switch_style(style))
+
+		for s in self.themes["dark"]:
+			dark_style_menu.add_command(label=s, command = lambda style=s: self.switch_style(style))
+			
+		# for s in ['cosmo', 'flatly', 'journal', 'litera', 'lumen', 'minty', 'pulse', 'sandstone', 'united', 'yeti', 'cyborg', 'darkly', 'solar', 'superhero'] :
+			# style_menu.add_command(label=s, command = lambda style=s: self.switch_style(style))
 
 		# ________ TOOLS ________
 		tools_menu = tk.Menu(menu, tearoff=0)

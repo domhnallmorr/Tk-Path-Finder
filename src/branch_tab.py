@@ -16,7 +16,7 @@ from docx import Document
 from openpyxl import Workbook
 import pyperclip
 
-import address_bar
+from Custom_Widgets import address_bar
 import autoscrollbar
 import explorer_backend
 import file_comparison
