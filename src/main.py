@@ -47,7 +47,7 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = "0.31.3"
+		self.version = "0.32.0"
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -136,6 +136,12 @@ class MainApplication(ttk.Frame):
 		else:
 			self.notes_categories = {"General": ["Default"],}# "Projects": ["Default"]}	
 
+		# --------------- LAST SESSION ---------------
+		if "last_session" in self.config_data.keys():
+			self.last_session = self.config_data["last_session"]
+		else:
+			self.last_session = None
+		
 		# --------------- GET THEMES ---------------
 		self.themes = {"light": [], "dark":[]}
 
@@ -146,6 +152,11 @@ class MainApplication(ttk.Frame):
 	def setup_menu(self):
 		menu = tk.Menu(self.master)
 		self.master.config(menu=menu)
+
+		# ________ FILE ________
+		file_menu = tk.Menu(menu, tearoff=0)
+		menu.add_cascade(label="File", menu=file_menu)
+		file_menu.add_command(label="Load Last Session", command=self.load_last_session)
 
 		# ________ SETTINGS ________
 		settings_menu = tk.Menu(menu, tearoff=0)
@@ -184,7 +195,6 @@ class MainApplication(ttk.Frame):
 		
 		tools_menu.add_command(label = "To Do List", command=lambda self=self: todo_list.launch_to_do_list(self))
 		
-		
 		# ________ ABOUT ________
 		about_menu = tk.Menu(menu, tearoff=0)
 		menu.add_cascade(label="About" ,menu=about_menu)
@@ -215,16 +225,19 @@ class MainApplication(ttk.Frame):
 
 		self.id += 1
 		
+		self.gen_session_data()
 		return tab
 
 	def delete_root_tab(self, tab):
 		if len(self.notebook.tabs()) > 1:
 			self.notebook.forget(tab)
+			self.gen_session_data()
 
 	def delete_branch_tab(self, tab):
 		if len(tab.root_tab.notebook.tabs()) > 1:
+			tab.root_tab.branch_tab_deleted(tab)
 			tab.root_tab.notebook.forget(tab)
-		
+			
 	def setup_main_frames(self):
 		#self.top_frame = Frame(self.parent) # for toolbar and address bar
 		#self.top_frame.grid(row=0,column=0, sticky="n")
@@ -274,6 +287,22 @@ class MainApplication(ttk.Frame):
 			self.notebook.children[tab].update_tags()
 
 		self.quick_access_tree.update_tags()
+	
+	def gen_session_data(self):
+		self.session = []
+		for tab in self.notebook.children.keys():
+			if "tab" in str(type(self.notebook.children[tab])).lower():
+				if self.notebook.children[tab].tab_type == "root":
+					root_tab_name = self.notebook.children[tab].text
+					self.session.append({root_tab_name: []})
+					
+					for branch in self.notebook.children[tab].branch_tabs:
+						txt = self.notebook.children[tab].branch_tabs[branch].text
+						directory = self.notebook.children[tab].branch_tabs[branch].explorer.current_directory
+						
+						self.session[-1][root_tab_name].append({txt: directory})
+						
+		config_file_manager.write_config_file(self)
 		
 	def edit_settings(self):
 		self.w=settings_screen.SettingsWindow(self, self.master)
@@ -287,6 +316,24 @@ class MainApplication(ttk.Frame):
 			self.default_type_width = self.w.default_type_width
 			self.default_size_width = self.w.default_size_width
 			config_file_manager.write_config_file(self)
+
+	def load_last_session(self):
+		
+		if self.last_session is not None:
+			for root in self.last_session:
+				root_name = list(root.keys())[0]
+				
+				tab = self.create_root_tab()
+				tab.enact_rename(root_name)
+				
+				for branch in root[root_name]:
+					branch_tab = tab.create_branch_tab()
+					tab.enact_branch_tab_rename(branch_tab, True, list(branch.keys())[0])
+					branch_tab.update_tab(branch[list(branch.keys())[0]])
+					
+				# delete the default first tab
+				first_tab = branch_tab.root_tab.notebook.tabs()[0]
+				branch_tab.root_tab.notebook.forget(first_tab)
 
 	def load_plugins(self):
 		loader_details = (

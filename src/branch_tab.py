@@ -38,6 +38,8 @@ class BranchTab(ttk.Frame):
 		self.lock_name = False
 		self.lock_filter = False
 		
+		self.tab_type = "branch"
+		
 		# GRID
 		self.tree_colspan = 16
 		self.grid_columnconfigure(self.tree_colspan-1, weight=1)
@@ -83,6 +85,8 @@ class BranchTab(ttk.Frame):
 				self.forward_button.config(state='enabled')
 			else:
 				self.forward_button.config(state='disabled')
+				
+			self.mainapp.gen_session_data()
 				
 	def setup_buttons(self):
 		#Up a level

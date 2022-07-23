@@ -17,6 +17,8 @@ def write_config_file(mainapp):
 	save_dict['default_size_width'] = mainapp.default_size_width
 	save_dict['to_do_list'] = mainapp.to_do_list
 	save_dict['notes_categories'] = mainapp.notes_categories
+	save_dict['last_session'] = mainapp.session
+	
 	
 	with open('tk_path_finder_config.json', 'w') as outfile:
 		json.dump(save_dict, outfile, indent=4)

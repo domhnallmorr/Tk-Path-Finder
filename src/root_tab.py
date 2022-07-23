@@ -45,6 +45,8 @@ class RootTab(ttk.Frame):
 		self.text = text
 		self.width = width
 		
+		self.tab_type = "root"
+		
 		self.id = 0
 		self.branch_tabs = {}
 		
@@ -65,28 +67,48 @@ class RootTab(ttk.Frame):
 			self.branch_tabs = {0: tab}
 		
 	def create_branch_tab(self):
+		self.id += 1
 		tab = branch_tab.BranchTab(self, self.mainapp, self.id, self.id, 40)
 		self.notebook.add(tab, image=self.mainapp.branch_icon2, compound=tk.LEFT, text="Desktop")
 		tab.update_tab(tab.explorer.current_directory) #initalise the treeview data in branch tab
-		self.id += 1
+		self.branch_tabs[self.id] = tab
 		
 		return tab
 		
 	def rename_tab(self):
 		new_name = simpledialog.askstring(title = "Rename Tab", prompt = "New Name:".ljust(100), initialvalue=self.text)
 		if new_name != None:
-			self.mainapp.notebook.tab(self, text=f'{str(new_name).ljust(20)}')
-			self.text = new_name
+			self.enact_rename(new_name)
+			
+	def enact_rename(self, new_name):
+		self.mainapp.notebook.tab(self, text=f'{str(new_name).ljust(20)}')
+		self.text = new_name
+		self.mainapp.gen_session_data()
 			
 	def rename_branch_tab(self, tab):
 		self.w=branch_tab.RenameWindow(self.mainapp, self.master, tab)
 		self.master.wait_window(self.w.top)
 		
 		if self.w.button == 'ok':
-			tab.lock_name = self.w.lock
-			tab.text = self.w.name
-			self.notebook.tab(tab, text=self.w.name)
+			lock = self.w.lock
+			name = self.w.name
+			self.enact_branch_tab_rename(tab, lock, name)
+
+	def enact_branch_tab_rename(self, tab, lock, name):
+		tab.lock_name = lock
+		tab.text = name
+		self.notebook.tab(tab, text=name)
+		self.mainapp.gen_session_data()
+
 
 	def update_tags(self):
 		# this is a dummy function called when style changes
 		pass
+		
+	def branch_tab_deleted(self, tab):
+		for branch in self.branch_tabs.keys():
+			if self.branch_tabs[branch] == tab:
+				self.branch_tabs.pop(branch)
+				
+				break
+	
