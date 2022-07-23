@@ -137,4 +137,7 @@ class FileExplorerBackend:
 		
 	def open_in_cmd(self):
 		subprocess.Popen("start /wait cmd.exe", cwd=self.current_directory, shell=True, stdout=DEVNULL)
+		
+	def open_in_explorer(self):
+		subprocess.Popen(f'explorer "{self.current_directory}"')
 				

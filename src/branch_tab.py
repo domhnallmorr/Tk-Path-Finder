@@ -257,6 +257,7 @@ class BranchTab(ttk.Frame):
 				popup_menu.add_command(label="Paste", command=self.paste_file)		
 				popup_menu.add_separator()
 			popup_menu.add_command(label="Open in cmd", command=self.explorer.open_in_cmd)
+			popup_menu.add_command(label="Open in explorer", command=self.explorer.open_in_explorer)
 			
 			try:
 				popup_menu.tk_popup(event.x_root, event.y_root, 0)
