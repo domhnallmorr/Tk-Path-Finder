@@ -47,7 +47,7 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = "0.32.0"
+		self.version = "0.32.2"
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -283,8 +283,10 @@ class MainApplication(ttk.Frame):
 		self.style = Style(style)
 		self.quick_access_tree.update_btn_bg()
 		
+		# Update gover color in treeviews
 		for tab in self.notebook.children.keys():
-			self.notebook.children[tab].update_tags()
+			if "tab" in str(type(tab)).lower():
+				self.notebook.children[tab].update_tags()
 
 		self.quick_access_tree.update_tags()
 	
