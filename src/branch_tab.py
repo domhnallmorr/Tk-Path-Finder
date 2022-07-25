@@ -115,6 +115,7 @@ class BranchTab(ttk.Frame):
 		self.treeview.bind("<Button-3>", self.OnRightClick)
 		self.treeview.bind("<Motion>", self.highlight_row)
 
+
 		
 		vsb = autoscrollbar.AutoScrollbar(self, orient="vertical", command=self.treeview.yview)
 		vsb.grid(row=1, column=16, sticky='NSEW')

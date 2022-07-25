@@ -39,11 +39,11 @@ class FileExplorerBackend:
 				d = d.decode("utf-8") 
 				
 				if '<DIR>' in d:
-					d = re.split("(?<!\s) ", d)
+					d = d.split('<DIR>')
 					if d[-1].strip() != '.' and d[-1].strip() != '..':
 						directory_data.append([d[-1].strip(), '-', 'Folder', '-'])
 				else:
-					d = d.split()
+					d = re.split("(?<!\s) ", d)
 					filename = ' '.join(d[3:])
 					try:
 						size = int(int(d[2].replace(',', ''))*0.001)
