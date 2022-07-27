@@ -27,6 +27,7 @@ class QuickAccessTreeview(ttk.Treeview):
 		self.bind('<<TreeviewSelect>>',lambda event, : self.singleclick(event))
 		self.bind("<Button-3>",lambda event,: self.onrightclick(event))
 		self.bind("<Motion>", self.highlight_row)
+		self.bind("<Leave>", self.leave_treeview)
 
 		self.close_btn = tk.Button(mainapp.sidebar_frame, image=self.mainapp.close_icon2, background='white', relief=FLAT,
 				command= lambda action=False: self.open_close_all_nodes(action))
@@ -228,6 +229,9 @@ class QuickAccessTreeview(ttk.Treeview):
 		self.nodes = copy.deepcopy(nodes)
 		del nodes
 		config_file_manager.write_config_file(self.mainapp)
+
+	def leave_treeview(self, event):
+		self.tk.call(self, "tag", "remove", "highlight")
 		
 class AddLinkWindow(ttk.Frame):
 	def __init__(self, mainapp, master, mode, node, name='', path='',):

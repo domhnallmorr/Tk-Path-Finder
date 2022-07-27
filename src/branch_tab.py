@@ -114,9 +114,8 @@ class BranchTab(ttk.Frame):
 		self.treeview.bind("<Button-1>", self.OnLeftClick)
 		self.treeview.bind("<Button-3>", self.OnRightClick)
 		self.treeview.bind("<Motion>", self.highlight_row)
+		self.treeview.bind("<Leave>", self.leave_treeview)
 
-
-		
 		vsb = autoscrollbar.AutoScrollbar(self, orient="vertical", command=self.treeview.yview)
 		vsb.grid(row=1, column=16, sticky='NSEW')
 		self.treeview.configure(yscrollcommand=vsb.set)
@@ -124,6 +123,9 @@ class BranchTab(ttk.Frame):
 		# tags
 		self.update_tags()
 
+	def leave_treeview(self, event):
+		self.treeview.tk.call(self.treeview, "tag", "remove", "highlight")
+		
 	def update_tags(self):
 		highlight_color = standard.STANDARD_THEMES[self.mainapp.style_name]["colors"]["active"]
 		self.treeview.tag_configure('highlight', background=highlight_color)
