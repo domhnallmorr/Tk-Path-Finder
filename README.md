@@ -28,6 +28,8 @@ A lightweight file explorer based on tabs within tabs written in python (Tkinter
 
 ## Prerequisites
 
+[natsort](https://natsort.readthedocs.io/en/master/)
+
 [openpycl](https://openpyxl.readthedocs.io/en/stable/)
 
 [pyperclip](https://pypi.org/project/pyperclip/)
@@ -37,6 +39,8 @@ A lightweight file explorer based on tabs within tabs written in python (Tkinter
 [ttkbootstrap](https://ttkbootstrap.readthedocs.io/en/latest/)
 
 [PyPDF2](https://pypi.org/project/PyPDF2/)
+
+pip install natsort
 
 pip install openpyxl
 

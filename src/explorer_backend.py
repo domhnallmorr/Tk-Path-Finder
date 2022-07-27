@@ -1,5 +1,6 @@
 import collections
 import copy
+from natsort import natsorted
 import os
 import subprocess
 from subprocess import DEVNULL
@@ -66,6 +67,7 @@ class FileExplorerBackend:
 				self.forward_directories.popleft()
 				self.previous_directories.append(self.current_directory)
 
+		directory_data = natsorted(directory_data)
 		# Sorting
 		if sort == 'date':
 			directory_data = list(reversed(sorted(directory_data, key=lambda x: x[1])))
