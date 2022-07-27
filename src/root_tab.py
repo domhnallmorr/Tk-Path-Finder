@@ -76,12 +76,15 @@ class RootTab(ttk.Frame):
 		return tab
 		
 	def rename_tab(self):
-		new_name = simpledialog.askstring(title = "Rename Tab", prompt = "New Name:".ljust(100), initialvalue=self.text)
-		if new_name != None:
+		self.w=branch_tab.RenameWindow(self.mainapp, self.master, self, tab_type="root")
+		self.master.wait_window(self.w.top)
+		
+		if self.w.button == "ok":			
+			new_name = self.w.name
 			self.enact_rename(new_name)
 			
 	def enact_rename(self, new_name):
-		self.mainapp.notebook.tab(self, text=f'{str(new_name).ljust(20)}')
+		self.mainapp.notebook.tab(self, text=f"{str(new_name).ljust(20)}")
 		self.text = new_name
 		self.mainapp.gen_session_data()
 			
@@ -89,7 +92,7 @@ class RootTab(ttk.Frame):
 		self.w=branch_tab.RenameWindow(self.mainapp, self.master, tab)
 		self.master.wait_window(self.w.top)
 		
-		if self.w.button == 'ok':
+		if self.w.button == "ok":
 			lock = self.w.lock
 			name = self.w.name
 			self.enact_branch_tab_rename(tab, lock, name)
