@@ -46,7 +46,18 @@
     "default_date_width": 200,
     "default_type_width": 200,
     "default_size_width": 100,
-    "to_do_list": [],
+    "to_do_list": [
+        [
+            1,
+            "Open",
+            "Some Important Task"
+        ],
+        [
+            2,
+            "Closed",
+            "Some Important Task That's Now Complete"
+        ]
+    ],
     "notes_categories": {
         "General": [
             "Default"
@@ -61,14 +72,7 @@
     },
     "last_session": [
         {
-            "dsdfsf": [
-                {
-                    "src": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
-                }
-            ]
-        },
-        {
-            "sdfsdfsdffd": [
+            "0": [
                 {
                     "src": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
                 }

@@ -55,3 +55,21 @@ pip install PyPDF2
 
 ## Preview
 ![alt text](https://i.imgur.com/SEP1Pj4.png)
+
+![alt text](https://imgur.com/4uuoOeG.png)
+
+![alt text](https://i.imgur.com/zxXQ8hS.png)
+
+![alt text](https://i.imgur.com/oJ79w68.png)
+
+![alt text](https://i.imgur.com/Ms0HQ7l.png
+)
+![alt text](https://i.imgur.com/C4p6s9J.png)
+
+![alt text](https://i.imgur.com/AOYEmRY.png)
+
+![alt text](https://i.imgur.com/2BST8GQ.png)
+
+
+
+

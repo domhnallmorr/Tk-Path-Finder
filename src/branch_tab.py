@@ -534,16 +534,18 @@ class AddFoldersWindow(ttk.Frame):
 		self.branch_tab = branch_tab
 		
 		self.top.title(f"New Folder(s)")
-		self.button = 'cancel'
+		self.button = "cancel"
 
 		self.folder_text = tk.Text(self.top, width=110, height=10)
-		self.folder_text.grid(row=1, column=0, columnspan = 8, sticky='NE',padx=5, pady=5, ipadx=2, ipady=5)
+		self.folder_text.grid(row=1, column=0, columnspan = 8, sticky='NSEW',padx=5, pady=5, ipadx=2, ipady=5)
+		self.top.grid_rowconfigure(1, weight=1)
+		self.top.grid_columnconfigure(0, weight=1)
 		
 		# Buttons
 		self.ok_btn = ttk.Button(self.top, text='OK', width=10, style='success.TButton', command=lambda button='ok': self.cleanup(button))
-		self.ok_btn.grid(row=2, column=0, padx=5, pady=5, sticky='ne')
+		self.ok_btn.grid(row=2, column=6, padx=5, pady=5, sticky='ne')
 		self.cancel_btn = ttk.Button(self.top, text='Cancel', width=10, style='danger.TButton', command=lambda button='cancel': self.cleanup(button))
-		self.cancel_btn.grid(row=2, column=1, padx=5, pady=5, sticky='nw')
+		self.cancel_btn.grid(row=2, column=7, padx=5, pady=5, sticky='nw')
 		self.folder_text.bind('<Control-d>', self.duplicate_line)
 		
 	def duplicate_line(self, event):
@@ -656,6 +658,7 @@ class FilterWindow(ttk.Frame):
 		self.mainapp = mainapp
 		self.branch_tab = branch_tab
 		self.button = "cancel"
+		self.top.title(f"Filter Files")
 		
 		self.file_types = {}
 		for file in branch_tab.directory_data:
