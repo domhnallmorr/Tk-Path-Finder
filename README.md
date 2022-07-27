@@ -8,18 +8,19 @@ A lightweight file explorer based on tabs within tabs written in python (Tkinter
   - Tabs within tabs layout. 
   - Search functionality.
   - Basic file comparison functionality.
+  - Filter by file extension.
   - Rename files.
   - Create multiple folders at once (hit cntrl-d in the craete folder window to duplicate line).
   - "Open with" functionality.
   - Plugin system (very much WIP at this time).
-  - Compatible with MS Teams folders
-  - To Do List
-  - Diary
-  - Notes
+  - Compatible with MS Teams folders.
+  - To Do List.
+  - Diary.
+  - Notes.
   - PDF Tools
 		- Extract Pages
-		- Merge PDFs
-  - Dark and Light themes
+		- Merge PDFs.
+  - Dark and Light themes.
 
 ## Limitations
   - Only tested on windows 10.

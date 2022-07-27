@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
+from tkinter import messagebox
 import os
 import time
 
@@ -47,7 +48,7 @@ class MainApplication(ttk.Frame):
 		self.load_plugins()
 
 	def setup_variables(self):
-		self.version = "0.32.8"
+		self.version = "0.32.9"
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -280,7 +281,15 @@ class MainApplication(ttk.Frame):
 		
 	def switch_style(self, style):
 		self.style_name = style
-		self.style = Style(style)
+		
+		try:
+			self.style = Style(style)
+		except Exception as e:
+			if "bad window path name" in str(e):
+				pass # ignore error when trying to acceess a top level window that's been destroyed
+			else:
+				messagebox.showerror("Error", message=f"The following message occured {str(e)}")
+				
 		self.quick_access_tree.update_btn_bg()
 		
 		# Update hover color in treeviews
