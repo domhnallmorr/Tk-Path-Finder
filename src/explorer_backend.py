@@ -68,6 +68,7 @@ class FileExplorerBackend:
 				self.previous_directories.append(self.current_directory)
 
 		directory_data = natsorted(directory_data)
+		file_data = natsorted(file_data)
 		# Sorting
 		if sort == 'date':
 			directory_data = list(reversed(sorted(directory_data, key=lambda x: x[1])))
