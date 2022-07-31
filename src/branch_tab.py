@@ -241,7 +241,7 @@ class BranchTab(ttk.Frame):
 					popup_menu.add_separator()
 			
 				elif os.path.isdir(os.path.join(self.explorer.current_directory, file_name)):
-					popup_menu.add_command(label="Rename", command=lambda mode='edit', initialvalue=file_name: self.new_file(mode, initialvalue))
+					popup_menu.add_command(label="Rename", command=lambda mode='edit folder', initialvalue=file_name: self.new_file(mode, initialvalue))
 					
 			else: # if file not selected, add plugin menu if any run_on_folders plugins are present
 				if len(plugins) > 0:
@@ -364,13 +364,13 @@ class BranchTab(ttk.Frame):
 			self.mainapp.undo_redo_states.reset_redo()		
 
 	#def rename_folder(sel)
-	def new_file(self, mode, initialvalue=''):
-		if mode == 'edit':
+	def new_file(self, mode, initialvalue=""):
+		if mode == "edit" or mode == "edit folder":
 			self.orig_file_name = initialvalue
-		elif mode == 'new excel':
-			initialvalue = '.xlsx'
-		elif mode == 'new word':
-			initialvalue = '.docx'
+		elif mode == "new excel":
+			initialvalue = ".xlsx"
+		elif mode == "new word":
+			initialvalue = ".docx"
 		
 		if mode == "edit":
 			window_mode = "Rename"
@@ -388,7 +388,11 @@ class BranchTab(ttk.Frame):
 			#check file does not exist
 			if mode == "new" or mode == "new excel" or mode == "new word":
 				if os.path.isfile(os.path.join(self.explorer.current_directory, new_name)):
-					msg = 'That File Already Exists!'
+					msg = "That File Already Exists!"
+					
+			if mode == "edit folder":
+				if os.path.isdir(os.path.join(self.explorer.current_directory, new_name)):
+					msg = "That Folder Already Exists!"
 					
 			# Check if user input is just a bunch of spaces
 			if new_name.strip() == '':
@@ -402,9 +406,9 @@ class BranchTab(ttk.Frame):
 				messagebox.showerror('Error', message=msg)
 				self.new_file(mode, initialvalue=new_name)
 			else:
-				if mode == 'new':
+				if mode == "new":
 					with open(os.path.join(self.explorer.current_directory, new_name), 'w') as f:
-						f.write('')
+						f.write("")
 						
 				# New Excel File
 				elif mode == 'new excel':
@@ -422,7 +426,11 @@ class BranchTab(ttk.Frame):
 					except Exception as e:
 						if "being used by another" in str(e).lower():
 							msg = "Permission Denied, Ensure Document is not Open in Another Process"
-							
+						elif "access is denied" in str(e).lower():
+							if mode == "edit folder":
+								msg = "Access Denied, Ensure No Files are Open in the Folder"
+							else:
+								msg = "Access Denied"
 						else:
 							msg = f"The Following Error Occured\n{str(e)}"
 							
