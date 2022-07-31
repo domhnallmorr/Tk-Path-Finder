@@ -240,6 +240,9 @@ class BranchTab(ttk.Frame):
 								
 					popup_menu.add_separator()
 			
+				elif os.path.isdir(os.path.join(self.explorer.current_directory, file_name)):
+					popup_menu.add_command(label="Rename", command=lambda mode='edit', initialvalue=file_name: self.new_file(mode, initialvalue))
+					
 			else: # if file not selected, add plugin menu if any run_on_folders plugins are present
 				if len(plugins) > 0:
 					popup_menu.add_cascade(label = 'Plugins',menu=plugin_menu)
@@ -359,7 +362,8 @@ class BranchTab(ttk.Frame):
 			self.mainapp.undo_redo_states.add_action_to_undo_stack(data)
 
 			self.mainapp.undo_redo_states.reset_redo()		
-			
+
+	#def rename_folder(sel)
 	def new_file(self, mode, initialvalue=''):
 		if mode == 'edit':
 			self.orig_file_name = initialvalue
@@ -367,14 +371,22 @@ class BranchTab(ttk.Frame):
 			initialvalue = '.xlsx'
 		elif mode == 'new word':
 			initialvalue = '.docx'
-			
-		new_name = simpledialog.askstring(title="New File", prompt = "File Name:".ljust(100), initialvalue=initialvalue)
 		
-		if new_name:
+		if mode == "edit":
+			window_mode = "Rename"
+		else:
+			window_mode = "New"
+			
+		#new_name = simpledialog.askstring(title="New File", prompt = "File Name:".ljust(100), initialvalue=initialvalue)
+		self.w=RenameWindow(self.mainapp, self.master, initialvalue, component_type="file", mode=window_mode)
+		self.master.wait_window(self.w.top)
+
+		if self.w.button == "ok":
+			new_name = self.w.name
 			msg = None
 			
 			#check file does not exist
-			if mode == 'new' or mode == 'new excel':
+			if mode == "new" or mode == "new excel" or mode == "new word":
 				if os.path.isfile(os.path.join(self.explorer.current_directory, new_name)):
 					msg = 'That File Already Exists!'
 					
@@ -383,7 +395,8 @@ class BranchTab(ttk.Frame):
 				msg = 'Enter a File Name'
 				
 			# Check for special characters
-			msg = self.explorer.check_special_characters(new_name)
+			if msg is None:
+				msg = self.explorer.check_special_characters(new_name)
 			
 			if msg:
 				messagebox.showerror('Error', message=msg)
@@ -598,25 +611,28 @@ class AddFoldersWindow(ttk.Frame):
 			self.top.destroy()
 			
 class RenameWindow(ttk.Frame):
-	def __init__(self, mainapp, master, branch_tab, tab_type="branch"):
+	def __init__(self, mainapp, master, initialvalue, component_type="branch", mode="Rename"):
 		super(RenameWindow, self).__init__()
 		top=self.top=Toplevel(master)
 		top.grab_set()
 		
-		self.top.title("Rename Tab")
+		if component_type == "file":
+			self.top.title(f"{mode} File")
+		else:
+			self.top.title(f"{mode} Tab")
 		
 		self.mainapp = mainapp
-		self.branch_tab = branch_tab
-		self.tab_type = tab_type
+		self.initialvalue = initialvalue
+		self.component_type = component_type
 		self.button = "cancel"
 
 		#self.setup_title_bar()		
 		self.name_entry = ttk.Entry(self.top, width=60)
 		self.name_entry.grid(row=1, column=0, columnspan=5, padx=self.mainapp.default_padx, pady=self.mainapp.default_pady, sticky="ew")
-		self.name_entry.insert(0, branch_tab.text)
+		self.name_entry.insert(0, initialvalue)
 		self.top.grid_columnconfigure(0, weight=1)
 		
-		if tab_type == "branch":
+		if component_type == "branch":
 			self.lock = IntVar(value=1)
 			ttk.Checkbutton(self.top, text="Lock Name", variable=self.lock).grid(row=2, column=2, sticky='w', padx=self.mainapp.default_padx, pady=self.mainapp.default_pady)
 		
@@ -641,7 +657,7 @@ class RenameWindow(ttk.Frame):
 			else:
 				self.name = self.name_entry.get()
 				
-				if self.tab_type == "branch":
+				if self.component_type == "branch":
 					if self.lock.get() == 1:
 						self.lock = True
 					else:

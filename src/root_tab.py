@@ -76,7 +76,7 @@ class RootTab(ttk.Frame):
 		return tab
 		
 	def rename_tab(self):
-		self.w=branch_tab.RenameWindow(self.mainapp, self.master, self, tab_type="root")
+		self.w=branch_tab.RenameWindow(self.mainapp, self.master, self.text, component_type="root")
 		self.master.wait_window(self.w.top)
 		
 		if self.w.button == "ok":			
@@ -89,7 +89,7 @@ class RootTab(ttk.Frame):
 		self.mainapp.gen_session_data()
 			
 	def rename_branch_tab(self, tab):
-		self.w=branch_tab.RenameWindow(self.mainapp, self.master, tab)
+		self.w=branch_tab.RenameWindow(self.mainapp, self.master, tab.text)
 		self.master.wait_window(self.w.top)
 		
 		if self.w.button == "ok":
