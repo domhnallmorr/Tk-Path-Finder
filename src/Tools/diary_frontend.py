@@ -101,6 +101,7 @@ class DiaryWindow(ttk.Frame):
 		self.date_changed()
 
 	def calender_select(self):
+		self.get_text_input()
 		w = dialogs.DatePickerDialog()
 		self.date = w.date_selected
 		self.date_changed()

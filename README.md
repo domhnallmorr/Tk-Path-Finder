@@ -9,7 +9,7 @@ A lightweight file explorer based on tabs within tabs written in python (Tkinter
   - Search functionality.
   - Basic file comparison functionality.
   - Filter by file extension.
-  - Rename files.
+  - Rename files and folders.
   - Create multiple folders at once (hit cntrl-d in the craete folder window to duplicate line).
   - "Open with" functionality.
   - Plugin system (very much WIP at this time).

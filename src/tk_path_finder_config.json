@@ -74,7 +74,16 @@
         {
             "0": [
                 {
-                    "Testing": "C:\\Users\\domhn\\Documents\\Python\\Testing"
+                    "Phase 1": "C:\\Users\\domhn\\Documents\\Python\\ML\\Beam_Optimisation\\Phase 1"
+                },
+                {
+                    "python": "C:\\Users\\domhn\\Documents\\Python\\FEA\\gmsh-4.10.5-Windows64\\tutorials\\python"
+                },
+                {
+                    "FEA Testing": "C:\\Users\\domhn\\Documents\\Python\\Testing\\FEA Testing"
+                },
+                {
+                    "Tk Path Finder": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder"
                 }
             ]
         }
