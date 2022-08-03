@@ -387,7 +387,8 @@ class BranchTab(ttk.Frame):
 			
 			#check file does not exist
 			if mode == "new" or mode == "new excel" or mode == "new word":
-				if os.path.isfile(os.path.join(self.explorer.current_directory, new_name)):
+				#if os.path.isfile(os.path.join(self.explorer.current_directory, new_name)):
+				if new_name in [d[0] for d in self.directory_data]:
 					msg = "That File Already Exists!"
 					
 			if mode == "edit folder":

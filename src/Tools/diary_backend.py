@@ -35,9 +35,9 @@ class DiaryBackend:
 		data = self.cursor.execute(f"SELECT * FROM diary WHERE datestamp = '{date}'").fetchall()
 
 		if len(data) == 0:
-			self.cursor.execute(f"INSERT INTO diary VALUES('{date}', '', '{txt}')")
+			self.cursor.execute("INSERT INTO diary VALUES(?, '', ?)", (date, txt))
 		else:
-			self.cursor.execute(f"UPDATE diary SET text = '{txt}' WHERE datestamp = '{date}'")
+			self.cursor.execute(f"UPDATE diary SET text = ? WHERE datestamp = ?", (txt, date))
 			
 		self.conn.commit()		
 	

@@ -2,8 +2,6 @@
     "links": {
         "I001": {
             "Desktop": "C:\\Users\\domhn\\Desktop",
-            "Torrents": "C:\\Users\\domhn\\Downloads\\Torrents",
-            "Squid Game": "C:\\Users\\domhn\\Downloads\\Torrents\\Squid.Game.S01.KOREAN.WEBRip.x265-ION265",
             "Downloads": "C:\\Users\\domhn\\Downloads",
             "Recoil Example": "C:\\Users\\domhn\\Documents\\Work\\Recoil\\Recoil - 1m Heave - 11.7ppg"
         },
@@ -73,15 +71,6 @@
     "last_session": [
         {
             "0": [
-                {
-                    "Phase 1": "C:\\Users\\domhn\\Documents\\Python\\ML\\Beam_Optimisation\\Phase 1"
-                },
-                {
-                    "python": "C:\\Users\\domhn\\Documents\\Python\\FEA\\gmsh-4.10.5-Windows64\\tutorials\\python"
-                },
-                {
-                    "FEA Testing": "C:\\Users\\domhn\\Documents\\Python\\Testing\\FEA Testing"
-                },
                 {
                     "Tk Path Finder": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder"
                 }
