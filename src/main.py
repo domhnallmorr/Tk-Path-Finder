@@ -46,9 +46,10 @@ class MainApplication(ttk.Frame):
 		self.setup_tabs()
 		#config_file_manager.write_config_file(self)
 		self.load_plugins()
-
+		self.last_session = copy.deepcopy(self.last_session_init)
+		
 	def setup_variables(self):
-		self.version = "0.33.2"
+		self.version = "0.33.3"
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -84,6 +85,7 @@ class MainApplication(ttk.Frame):
 			'.rar': ['RAR File', self.rar_icon2],
 			'.torrent': ['Torrent File', self.new_icon2],
 			'.txt': ['Text File', self.text_icon2],
+			'.xls': ['Excel Worksheet 97-2003', self.excel_icon2],
 			'.xlsm': ['Marco Enabled Excel Worksheet', self.excel_icon2],
 			'.xlsx': ['Excel Worksheet', self.excel_icon2],
 			'.zip': ['ZIP File', self.zip_icon2],
@@ -139,9 +141,9 @@ class MainApplication(ttk.Frame):
 
 		# --------------- LAST SESSION ---------------
 		if "last_session" in self.config_data.keys():
-			self.last_session = self.config_data["last_session"]
+			self.last_session_init = self.config_data["last_session"]
 		else:
-			self.last_session = None
+			self.last_session_init = None
 		
 		# --------------- GET THEMES ---------------
 		self.themes = {"light": [], "dark":[]}
@@ -301,6 +303,7 @@ class MainApplication(ttk.Frame):
 	
 	def gen_session_data(self):
 		self.session = []
+
 		for tab in self.notebook.children.keys():
 			if "tab" in str(type(self.notebook.children[tab])).lower():
 				if self.notebook.children[tab].tab_type == "root":

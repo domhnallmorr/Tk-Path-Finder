@@ -70,7 +70,7 @@ class DiaryWindow(ttk.Frame):
 		self.notes_frame = LabelFrame(self.top, text="Notes:")
 		self.notes_frame.pack(expand=True, fill=BOTH, padx=self.mainapp.default_padx, pady=self.mainapp.default_pady)
 		self.notes_frame.grid_columnconfigure(1, weight=1)
-		self.notes_frame.grid_rowconfigure(0, weight=1)
+		self.notes_frame.grid_rowconfigure(1, weight=1)
 		
 	def setup_labels(self):
 		today = date.today()
@@ -89,6 +89,8 @@ class DiaryWindow(ttk.Frame):
 		ttk.Button(self.date_frame, image=self.mainapp.calender_white_icon2, style='primary.Outline.TButton', command=self.calender_select).grid(row=0, column=3, padx=2)
 		ttk.Button(self.date_frame, text=u'\u2192', command=self.forward_one_day, style='primary.TButton').grid(row=0, column=4, padx=2)
 		self.date_frame.grid_columnconfigure(1, weight=1)
+		
+		ttk.Button(self.notes_frame, image=self.mainapp.bullet_point_dark_icon2, command=self.add_bullet_point, style='primary.TButton').grid(row=0, column=0, padx=self.mainapp.default_padx, pady=self.mainapp.default_pady)
 		
 	def back_one_day(self):
 		self.get_text_input()
@@ -110,18 +112,24 @@ class DiaryWindow(ttk.Frame):
 	def setup_text_widget(self):
 		self.general_text = tk.Text(self.notes_frame)# width=110, height=10)
 		#self.general_text.pack(side=LEFT, expand=True, fill=BOTH, padx=self.mainapp.default_padx, pady=self.mainapp.default_pady)
-		self.general_text.grid(row=0, column=0, columnspan=2, sticky="NSEW")
+		self.general_text.grid(row=1, column=0, columnspan=2, sticky="NSEW", padx=self.mainapp.default_padx, pady=self.mainapp.default_pady)
 		
 		vsb = autoscrollbar.AutoScrollbar(self.notes_frame, orient="vertical", command=self.general_text.yview)
-		vsb.grid(row=0, column=2, columnspan=1, sticky="NS")
+		vsb.grid(row=1, column=2, columnspan=1, sticky="NS")
 		
 		self.general_text.configure(yscrollcommand=vsb.set)
 		
 		# Add any text present in database_thread
 		txt = self.backend.read_date_from_database(self.date)
 		self.general_text.insert("end", txt["General"])		
+		self.general_text.bind('<Return>', self.enter_event)
 
-
+	def add_bullet_point(self):
+		self.general_text.insert("insert", u"\u2022" + " ")
+		
+	def enter_event(self, event):
+		pass
+		
 	def get_text_input(self):
 		self.data[self.date] = {"General": self.general_text.get("1.0","end")}
 		
