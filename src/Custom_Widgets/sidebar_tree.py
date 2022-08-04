@@ -242,8 +242,11 @@ class AddLinkWindow(ttk.Frame):
 		self.node = node
 
 		self.mode = mode	
-		self.top.title(f"Add New Link")
-		self.button = 'cancel'
+		if mode == "edit":
+			self.top.title(f"Edit Link")
+		else:
+			self.top.title(f"Add New Link")
+		self.button = "cancel"
 		
 		ttk.Label(self.top, text='Name:').grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
 		ttk.Label(self.top, text='Path:').grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
@@ -255,11 +258,13 @@ class AddLinkWindow(ttk.Frame):
 		self.path_entry.grid(row=1, column=1, columnspan=4, padx=5, pady=5, sticky='nsew')
 		
 		self.ok_btn = ttk.Button(self.top, text='OK', width=10, style='success.TButton', command=lambda button='ok': self.cleanup(button))
-		self.ok_btn.grid(row=2, column=0, padx=5, pady=5, sticky='ne')
+		self.ok_btn.grid(row=2, column=3, padx=5, pady=5, sticky='ne')
 		self.cancel_btn = ttk.Button(self.top, text='Cancel', width=10, style='danger.TButton', command=lambda button='cancel': self.cleanup(button))
-		self.cancel_btn.grid(row=2, column=1, padx=5, pady=5, sticky='nw')
+		self.cancel_btn.grid(row=2, column=4, padx=5, pady=5, sticky='nw')
 		
-		if mode == 'edit':
+		self.top.grid_columnconfigure(1, weight=1)
+		
+		if mode == "edit":
 			self.name_entry.insert(0, name)
 			self.path_entry.insert(0, path)
 			self.original_name = name

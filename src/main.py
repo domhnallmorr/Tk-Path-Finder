@@ -49,7 +49,7 @@ class MainApplication(ttk.Frame):
 		self.last_session = copy.deepcopy(self.last_session_init)
 		
 	def setup_variables(self):
-		self.version = "0.33.3"
+		self.version = "0.33.4"
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
