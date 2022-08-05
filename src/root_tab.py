@@ -8,13 +8,12 @@ import branch_tab
 
 def right_click(event):
 	clicked_tab = event.widget.mainapp.notebook.tk.call(event.widget.mainapp.notebook._w, "identify", "tab", event.x, event.y)
-	#tab_object = event.widget.nametowidget(event.widget.select(clicked_tab))
 	event.widget.select(clicked_tab)
 	tab_object = event.widget.nametowidget(event.widget.select())
 	popup_menu = tk.Menu(event.widget, tearoff=0)
 	popup_menu.add_command(label="Add Root Tab", command=event.widget.mainapp.create_root_tab, image=event.widget.mainapp.plus_icon2, compound='left')
 	popup_menu.add_command(label="Rename Root Tab", command=tab_object.rename_tab, image=event.widget.mainapp.edit_icon2, compound='left')
-	popup_menu.add_command(label="Delete Root Tab", command=lambda tab=clicked_tab: event.widget.mainapp.delete_root_tab(tab), image=event.widget.mainapp.delete_icon2, compound='left')
+	popup_menu.add_command(label="Delete Root Tab", command=lambda tab=tab_object: event.widget.mainapp.delete_root_tab(tab), image=event.widget.mainapp.delete_icon2, compound='left')
 
 	try:
 		popup_menu.tk_popup(event.x_root, event.y_root, 0)
@@ -72,7 +71,7 @@ class RootTab(ttk.Frame):
 		self.notebook.add(tab, image=self.mainapp.branch_icon2, compound=tk.LEFT, text="Desktop")
 		tab.update_tab(tab.explorer.current_directory) #initalise the treeview data in branch tab
 		self.branch_tabs[self.id] = tab
-		
+		self.mainapp.gen_session_data()
 		return tab
 		
 	def rename_tab(self):

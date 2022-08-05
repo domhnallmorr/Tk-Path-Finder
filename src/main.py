@@ -49,7 +49,7 @@ class MainApplication(ttk.Frame):
 		self.last_session = copy.deepcopy(self.last_session_init)
 		
 	def setup_variables(self):
-		self.version = "0.33.4"
+		self.version = "0.33.5"
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -233,13 +233,14 @@ class MainApplication(ttk.Frame):
 
 	def delete_root_tab(self, tab):
 		if len(self.notebook.tabs()) > 1:
-			self.notebook.forget(tab)
+			tab.destroy()
 			self.gen_session_data()
 
 	def delete_branch_tab(self, tab):
 		if len(tab.root_tab.notebook.tabs()) > 1:
 			tab.root_tab.branch_tab_deleted(tab)
-			tab.root_tab.notebook.forget(tab)
+			tab.destroy()
+			self.gen_session_data()
 			
 	def setup_main_frames(self):
 		#self.top_frame = Frame(self.parent) # for toolbar and address bar
