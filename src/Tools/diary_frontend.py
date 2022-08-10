@@ -50,7 +50,7 @@ class DiaryWindow(ttk.Frame):
 		self.setup_labels()
 		self.setup_buttons()
 		self.setup_text_widget()
-		
+	
 		self.top.protocol("WM_DELETE_WINDOW", self.on_closing)
 
 		self.top.state('zoomed')
@@ -146,3 +146,15 @@ class DiaryWindow(ttk.Frame):
 	def update_top_label(self):
 		date_text = f"{self.date.strftime('%d')} {self.date.strftime('%B')} {self.date.strftime('%Y')}"
 		self.top_label.config(text=date_text)
+
+	def cut(self, event):
+		if self.general_text.selection_get():
+			self.selected = self.general_text.selection_get()
+			self.selected.delete("sel.first", "self.last")
+		
+	def copy(self, event):
+		print("Copying")
+
+	def paste(self, event):
+		print("Copying")
+		

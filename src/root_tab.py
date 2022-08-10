@@ -37,12 +37,13 @@ def right_click_branch(event):
 
 	
 class RootTab(ttk.Frame):
-	def __init__(self, mainapp, id, text, width):
+	def __init__(self, mainapp, id, text, width, create_default_tab=True):
 		super(RootTab, self).__init__(mainapp.notebook) #check if this convention is right
 		self.mainapp = mainapp
 		self.id = id
 		self.text = text
 		self.width = width
+		self.create_default_tab = create_default_tab
 		
 		self.tab_type = "root"
 		
@@ -58,7 +59,8 @@ class RootTab(ttk.Frame):
 		self.notebook.mainapp = self.mainapp
 		self.notebook.root_tab = self
 		self.setup_tabs()
-		self.notebook.create_branch_tab = self.create_branch_tab
+		if self.create_default_tab is True:
+			self.notebook.create_branch_tab = self.create_branch_tab
 		
 	def setup_tabs(self):
 		if self.branch_tabs == {}:

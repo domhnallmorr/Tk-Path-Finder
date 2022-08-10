@@ -5,7 +5,8 @@ A lightweight file explorer based on tabs within tabs written in python (Tkinter
 
 ## Features
   - Quick Access Sidebar, links can be grouped into individual folders.
-  - Tabs within tabs layout. 
+  - Tabs within tabs layout.
+  - Load Last Session.
   - Search functionality.
   - Basic file comparison functionality.
   - Filter by file extension.
@@ -18,7 +19,7 @@ A lightweight file explorer based on tabs within tabs written in python (Tkinter
   - Diary.
   - Notes.
   - PDF Tools
-		- Extract Pages
+		- Extract Pages.
 		- Merge PDFs.
   - Dark and Light themes.
 

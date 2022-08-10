@@ -35,7 +35,6 @@ class MainApplication(ttk.Frame):
 		self.setup_variables()
 		
 		# Styles
-		self.style = Style("darkly")
 		self.style_name = "darkly"
 
 		self.setup_menu()
@@ -47,9 +46,10 @@ class MainApplication(ttk.Frame):
 		#config_file_manager.write_config_file(self)
 		self.load_plugins()
 		self.last_session = copy.deepcopy(self.last_session_init)
+		self.switch_style("darkly")
 		
 	def setup_variables(self):
-		self.version = "0.33.5"
+		self.version = "0.33.6"
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
@@ -222,8 +222,8 @@ class MainApplication(ttk.Frame):
 			tab = self.create_root_tab()
 			self.root_tabs = {0: tab}
 		
-	def create_root_tab(self):
-		tab = root_tab.RootTab(self, self.id, self.id, 40)
+	def create_root_tab(self, create_default_tab=True):
+		tab = root_tab.RootTab(self, self.id, self.id, 40, create_default_tab)
 		self.notebook.add(tab, image=self.root_icon2, compound=tk.LEFT, text=f'{str(self.id).ljust(20)}')
 
 		self.id += 1
@@ -287,6 +287,7 @@ class MainApplication(ttk.Frame):
 		
 		try:
 			self.style = Style(style)
+			self.style.configure('Treeview', rowheight=17)
 		except Exception as e:
 			if "bad window path name" in str(e):
 				pass # ignore error when trying to acceess a top level window that's been destroyed
@@ -338,7 +339,7 @@ class MainApplication(ttk.Frame):
 			for root in self.last_session:
 				root_name = list(root.keys())[0]
 				
-				tab = self.create_root_tab()
+				tab = self.create_root_tab(create_default_tab=False)
 				tab.enact_rename(root_name)
 				
 				for branch in root[root_name]:
@@ -346,10 +347,6 @@ class MainApplication(ttk.Frame):
 					tab.enact_branch_tab_rename(branch_tab, True, list(branch.keys())[0])
 					branch_tab.update_tab(branch[list(branch.keys())[0]])
 					
-				# delete the default first tab
-				first_tab = branch_tab.root_tab.notebook.tabs()[0]
-				branch_tab.root_tab.notebook.forget(first_tab)
-
 	def load_plugins(self):
 		loader_details = (
 			importlib.machinery.ExtensionFileLoader,
