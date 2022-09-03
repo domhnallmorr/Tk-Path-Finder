@@ -22,10 +22,9 @@ def right_click(event):
 			
 def right_click_branch(event):
 	tab_object = event.widget.nametowidget(event.widget.select())
-	#clicked_tab = event.widget.mainapp.notebook.tk.call(event.widget.mainapp.notebook._w, "identify", "tab", event.x, event.y)
 
 	popup_menu = tk.Menu(event.widget, tearoff=0)
-	popup_menu.add_command(label="Add Branch Tab", command=event.widget.create_branch_tab, image=event.widget.mainapp.plus_icon2, compound='left')
+	popup_menu.add_command(label="Add Branch Tab", command=event.widget.root_tab.create_branch_tab, image=event.widget.mainapp.plus_icon2, compound='left')
 	popup_menu.add_command(label="Rename Branch Tab", command=lambda tab=tab_object: event.widget.root_tab.rename_branch_tab(tab), image=event.widget.mainapp.edit_icon2, compound='left')
 	popup_menu.add_command(label="Delete Branch Tab", command=lambda tab=tab_object: event.widget.mainapp.delete_branch_tab(tab), image=event.widget.mainapp.delete_icon2, compound='left')
 
