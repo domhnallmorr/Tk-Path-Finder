@@ -345,8 +345,14 @@ class BranchTab(ttk.Frame):
 			messagebox.showerror('Error', message='Default Text Editor has not been Defined')
 			
 	def open_with_app(self, app, file):
-		subprocess.call([app, file])
-	
+		try:
+			subprocess.call([app, file])
+		except Exception as e:
+			msg = str(e)
+			if "cannot find the file" in msg:
+				msg = f'The app "{app}" cannot be found'
+			messagebox.showerror('Error', message=f"The following error occured\n\n {msg}")
+			
 	def new_folders(self):
 		self.w=AddFoldersWindow(self.mainapp, self.master, self)
 		self.master.wait_window(self.w.top)

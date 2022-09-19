@@ -49,7 +49,7 @@ class MainApplication(ttk.Frame):
 		self.switch_style("darkly")
 		
 	def setup_variables(self):
-		self.version = "0.33.8"
+		self.version = "0.33.9"
 		self.parent.title(f"Tk Path Finder V{self.version}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"

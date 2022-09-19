@@ -38,6 +38,9 @@
     "open_with_apps": {
         ".py": [
             "C:\\Program Files\\Sublime Text 3\\sublime_text.exe"
+        ],
+        ".json": [
+            "fdgdfgdg"
         ]
     },
     "default_file_width": 600,
