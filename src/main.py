@@ -1,4 +1,5 @@
 import copy
+import datetime
 import importlib
 import tkinter as tk
 from tkinter import *
@@ -49,8 +50,9 @@ class MainApplication(ttk.Frame):
 		self.switch_style("darkly")
 		
 	def setup_variables(self):
-		self.version = "0.33.9"
-		self.parent.title(f"Tk Path Finder V{self.version}")
+		self.version = "0.34.0"
+		year, week_num, day_of_week = datetime.date.today().isocalendar()
+		self.parent.title(f"Tk Path Finder V{self.version} - Week {week_num}")
 		self.config_data = config_file_manager.load_config_file(self)
 		self.plugin_folder = ".\Plugins"
 		self.main_module = "__init__"

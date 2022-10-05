@@ -116,7 +116,7 @@ class SettingsWindow(ttk.Frame):
 		self.treeview = treeview_functions.create_treeview(self.open_with_frame, column_names, column_widths, height)
 		#self.treeview.pack(expand=True, fill=BOTH)
 		self.treeview.grid(row=4, column=0, columnspan=16, sticky='NSEW', pady=self.mainapp.default_pady)
-		self.treeview.bind("<Double-1>", self.on_left_click)
+		self.treeview.bind("<Button-1>", self.on_left_click)
 		
 		vsb = autoscrollbar.AutoScrollbar(self.open_with_frame, orient="vertical", command=self.treeview.yview)
 		vsb.grid(row=4, column=16, sticky='NSEW')
