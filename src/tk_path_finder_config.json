@@ -1,83 +1,71 @@
 {
-    "links": {
-        "I001": {
-            "Desktop": "C:\\Users\\domhn\\Desktop",
-            "Downloads": "C:\\Users\\domhn\\Downloads",
-            "Recoil Example": "C:\\Users\\domhn\\Documents\\Work\\Recoil\\Recoil - 1m Heave - 11.7ppg"
+    "quick_access_tree": {
+        "Py9ndoHN": {
+            "text": "1",
+            "links": {}
         },
-        "new node": {
-            "test link": "C:\\",
-            "dfsdf": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
+        "QHFEkjyH": {
+            "text": "3",
+            "links": {
+                "gG2p5bPl": {
+                    "text": "v",
+                    "path": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder Refactor\\Refactor"
+                }
+            }
         },
-        "Some node": {
-            "Link1": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src",
-            "Link2": "C:\\Users\\domhn\\Downloads\\Tk-Path-Finder-0.10.0\\Tk-Path-Finder-0.10.0\\src"
-        },
-        "I00A": {
-            "Testing": "C:\\Users\\domhn\\Documents\\Python\\Testing",
-            "3.9": "C:\\Python39",
-            "Roskam": "C:\\Users\\domhn\\Documents\\Python\\Roskam\\src"
-        },
-        "I00F": {}
-    },
-    "node_iids": {
-        "I00F": "asdasd",
-        "I001": "Default",
-        "I00A": "Python",
-        "Some node": "Some node",
-        "new node": "new node 1"
-    },
-    "nodes": {
-        "asdasd": "I00F",
-        "Default": "I001",
-        "Python": "I00A",
-        "Some node": "Some node",
-        "new node 1": "new node"
+        "2xUFg7H3": {
+            "text": "4",
+            "links": {
+                "1RapknmU": {
+                    "text": "1",
+                    "path": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder Refactor"
+                },
+                "GYT3Cl5R": {
+                    "text": "3",
+                    "path": "C:\\Users\\domhn\\Documents\\Python"
+                }
+            }
+        }
     },
     "text_editor": "C:\\Program Files (x86)\\Notepad++\\notepad++.exe",
     "open_with_apps": {
         ".py": [
             "C:\\Program Files\\Sublime Text 3\\sublime_text.exe"
-        ],
-        ".json": [
-            "fdgdfgdg"
         ]
     },
-    "default_file_width": 600,
-    "default_date_width": 200,
-    "default_type_width": 200,
-    "default_size_width": 100,
+    "default_file_width": "400",
+    "default_date_width": "200",
+    "default_type_width": "300",
+    "default_size_width": "100",
     "to_do_list": [
         [
             1,
             "Open",
-            "Some Important Task"
-        ],
-        [
-            2,
-            "Closed",
-            "Some Important Task That's Now Complete"
+            "Task 2"
         ]
     ],
-    "notes_categories": {
-        "General": [
-            "Default"
-        ],
-        "Stena Projects": [
-            "Default",
-            "Stena Project 1"
-        ],
-        "Maersk Projects": [
-            "Default"
-        ]
-    },
-    "last_session": [
-        {
-            "0": [
-                {
-                    "src": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
+    "session_data": {
+        "jtarhe7w": {
+            "text": "Project 1",
+            "branch_tabs": {
+                "iYfMlegB": {
+                    "text": "Refactor",
+                    "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder Refactor\\Refactor"
+                },
+                "QHX3OG1n": {
+                    "text": "Python",
+                    "directory": "C:\\Users\\domhn\\Documents\\Python"
                 }
-            ]
+            }
+        },
+        "n12uOlzH": {
+            "text": "Project 2",
+            "branch_tabs": {
+                "IOorXiiQ": {
+                    "text": "Refactor",
+                    "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder Refactor\\Refactor"
+                }
+            }
         }
-    ]
+    }
 }
