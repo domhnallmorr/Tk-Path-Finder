@@ -136,8 +136,11 @@ class Model:
 		config_file_manager.write_config_file(self)
 		return branch_id
 		
-	def get_branch_tab_text(self, id):
-		return self.branch_tabs[id].text
+	def get_branch_tab_text(self, branch_id):
+		return self.branch_tabs[branch_id].text
+
+	def get_branch_tab_directory(self, branch_id):
+		return self.branch_tabs[branch_id].current_directory
 		
 	def get_file_type(self, filename):
 		filename, file_extension = os.path.splitext(filename)

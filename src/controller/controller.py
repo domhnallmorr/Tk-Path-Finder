@@ -131,6 +131,11 @@ class Controller:
 		else:
 			self.model.delete_branch_tab(root_id, branch_id)
 			self.view.delete_branch_tab(branch_id)
+			
+	def duplicate_branch_tab(self, root_id, branch_id):
+		default_directory = self.model.get_branch_tab_directory(branch_id)
+		default_text = self.model.get_branch_tab_text(branch_id)
+		self.add_branch_tab(root_id, default_text=default_text, default_directory=default_directory)
 
 	def rename_root_tab(self, root_id):
 		initialvalue = self.model.root_tabs[root_id]["text"]

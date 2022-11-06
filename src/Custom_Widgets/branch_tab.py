@@ -78,11 +78,11 @@ class BranchTab(ttk.Frame):
 	def update(self, data, mode):
 		# ------------- IF USER RENAMED TAB -------------
 		if mode == "rename":
-			self.root_tab.notebook.tab(self, text=data["text"])
+			self.root_tab.notebook.tab(self, text=data["text"].ljust(20))
 		else: # ------------- ELSE IF USER CHANGED DIRECTORY -------------
 			# ------------- IF THE TAB TEXT IS NOT LOCKED BY USER, UPDATE IT -------------
 			if data["text_locked"] is False:
-				self.root_tab.notebook.tab(self, text=data["text"])
+				self.root_tab.notebook.tab(self, text=data["text"].ljust(20))
 
 			self.address_bar_entry.update_bar(data["current_directory"])
 			self.update_treeview(data["tabular_data"])
