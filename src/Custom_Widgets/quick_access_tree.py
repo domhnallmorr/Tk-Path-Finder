@@ -15,14 +15,6 @@ class QuickAccessTreeview(ttk.Treeview):
 	def __init__(self, view, nodes=['Default']):
 		super(QuickAccessTreeview, self).__init__(view.sidebar_frame, selectmode='browse', show="tree")
 		self.view = view
-		#self.nodes = {n: None for n in nodes} #this is to keep track of the tree iids for each node
-		#self.links = {self.nodes[node]: {} for node in self.nodes}
-		
-		# self.links = copy.deepcopy(mainapp.config_data['links'])
-		# self.node_iids = copy.deepcopy(mainapp.config_data['node_iids'])
-		# self.nodes = copy.deepcopy(mainapp.config_data['nodes'])
-		# self.setup_nodes()
-		# self.setup_links()
 		
 		# #bind left click event
 		self.bind('<<TreeviewSelect>>',lambda event, : self.single_click(event))
@@ -41,13 +33,12 @@ class QuickAccessTreeview(ttk.Treeview):
 		self.down_btn.grid(row=1, column=2, sticky="w", padx=0)
 		
 		self.update_btn_bg()
-		
 		self.update_tags()
 		
 	def update_btn_bg(self):
 		s = ttk.Style()
-		bg = s.lookup('TFrame', 'background')
-		
+		bg = s.lookup("TFrame", "background")
+	
 		self.close_btn.config(bg=bg)
 		self.up_btn.config(bg=bg)
 		self.down_btn.config(bg=bg)

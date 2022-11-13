@@ -22,8 +22,10 @@ class BranchTabModel:
 		else:
 			self.text_locked = True
 		self.directory_data = []
-		self.filter = [] # the file extensions that will be removed from view
+		self.filter_type = None # filter by extension or filename
+		self.filter = [] # the file extensions that will be removed from view, or the text to search for in files
 		self.lock_filter = False
+		self.filter_text = ""
 
 		self.previous_directories = collections.deque(maxlen=10)
 		self.forward_directories = collections.deque(maxlen=10)
@@ -33,23 +35,30 @@ class BranchTabModel:
 		# Remove any filtered out extensions
 		if self.filter != []:
 			file_data = []
+			
 			for file in self.file_data:
 				filename, file_extension = os.path.splitext(file[0])
-				if file_extension not in self.filter:
-					file_data.append(file)
+				
+				if self.filter_type == "extension":
+					if file_extension not in self.filter:
+						file_data.append(file)
+				
+				elif self.filter_type == "name":
+					if self.filter[0] in filename:
+						file_data.append(file)		
 		else:
 			file_data = self.file_data
 
 		return {"id": self.id_key, "current_directory": self.current_directory, "tabular_data": self.directory_data + file_data,
 				"text_locked": self.text_locked, "text": self.text, "len_filter": len(self.filter), "file_data": file_data,
-				"directory_data": self.directory_data,
+				"directory_data": self.directory_data, "lock_filter": self.lock_filter, "filter_text": self.filter_text,
 				"no_previous_directories": len(self.previous_directories), "no_forward_directories": len(self.forward_directories)}
 
 	def directory_changed(self, directory):
 		self.list_directory(directory=directory)
 	
 	def list_directory(self, directory=None, mode="normal", sort=None):
-		file_data = ''
+		file_data = ""
 		msg = None
 		directory_data = []
 		file_data = []
@@ -149,9 +158,13 @@ class BranchTabModel:
 			
 		return file_extensions
 		
-	def update_filter(self, filter, lock_filter):
+	def update_filter(self, filter, lock_filter, filter_type):
 		self.lock_filter = lock_filter
 		self.filter = filter
+		self.filter_type = filter_type
+
+		if self.filter_type == "name":
+			self.filter_text = self.filter[0]
 	
 	def show_only_extension_type(self, extension, mode):
 		self.filter = []

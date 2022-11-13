@@ -412,6 +412,7 @@ class Controller:
 		current_directory = self.model.branch_tabs[branch_id].current_directory
 		
 		if mode == "select_file_types": # user will select file extensions to be filtered out
+			filter_type = "extension"
 			file_extensions = self.model.branch_tabs[branch_id].get_file_extensions()
 			lock_filter = self.model.branch_tabs[branch_id].lock_filter
 
@@ -422,13 +423,24 @@ class Controller:
 				self.mainapp.master.wait_window(self.w.top)
 			
 				if self.w.button == "ok":
-					self.model.branch_tabs[branch_id].update_filter(self.w.filter, self.w.lock_filter)
+					self.model.branch_tabs[branch_id].update_filter(self.w.filter, self.w.lock_filter, filter_type)
 					self.update_branch_tab(branch_id, current_directory, mode="refresh")
 
 		elif mode in ["hide_this", "show_this", "remove_filter"]:
+			filter_type = "extension"
 			self.model.branch_tabs[branch_id].show_only_extension_type(extension, mode)
 			self.update_branch_tab(branch_id, current_directory, mode="refresh")
 
+		elif mode == "select_file_names":
+			filter_type = "name"
+			data = self.model.branch_tabs[branch_id].assemble_view_data()
+			text, filter = self.view.launch_filter_filename_window(self.mainapp.master, data)
+			
+			if text is not None:
+				self.model.branch_tabs[branch_id].update_filter(filter, False, filter_type)
+				self.update_branch_tab(branch_id, current_directory, mode="refresh")			
+			
+			
 	def launch_diary(self):
 		self.diary_window = diary_window.DiaryWindow(self.mainapp.master, self.view)
 		self.mainapp.master.wait_window(self.diary_window.top)

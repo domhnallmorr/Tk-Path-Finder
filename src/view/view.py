@@ -8,7 +8,7 @@ from ttkbootstrap import Style
 from ttkbootstrap.themes import standard
 
 from custom_widgets import autoscrollbar, branch_tab, root_tab, quick_access_tree
-from view import menubar, tkexplorer_icons
+from view import filter_windows, menubar, tkexplorer_icons
 
 class View:
 	def __init__(self, root, parent, controller, config_data):
@@ -166,14 +166,13 @@ class View:
 			else:
 				messagebox.showerror("Error", message=f"The following message occured {str(e)}")
 				
-		# self.quick_access_tree.update_btn_bg()
+		self.quick_access_tree.update_btn_bg()
 		
 		# Update hover color in treeviews
-		for tab in self.main_notebook.children.keys():
-			if "tab" in tab.lower():
-				# self.main_notebook.children[tab].update_tags()
-				pass
-		# self.quick_access_tree.update_tags()		
+		for tab in self.branch_tabs.keys():
+			self.branch_tabs[tab].update_tags()
+				
+		self.quick_access_tree.update_tags()		
 		
 	def ask_yes_no(self, msg):
 		answer = messagebox.askyesno(title="Confirm", message=msg)
@@ -184,4 +183,10 @@ class View:
 		for root_id in self.root_tabs:
 			self.delete_root_tab(root_id)
 		self.root_tabs = {}
-		self.branch_tabs = {}		
+		self.branch_tabs = {}	
+
+	def launch_filter_filename_window(self, master, data):
+		self.w = filter_windows.FilterNameWindow(master, self, data)
+		master.wait_window(self.w.top)
+		
+		return self.w.text, self.w.filter

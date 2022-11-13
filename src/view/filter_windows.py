@@ -41,8 +41,6 @@ class FilterExtensionWindow(ttk.Frame):
 		self.ok_btn.grid(row=row+2, column=2, padx=5, pady=10, sticky="ne")
 		self.cancel_btn = ttk.Button(self.top, text="Cancel", width=10, style="danger.TButton", command=lambda button="cancel": self.cleanup(button))
 		self.cancel_btn.grid(row=row+2, column=3, padx=5, pady=10, sticky="nw")		
-
-
 		
 	def select_all_file(self):
 		for file_extension in self.file_types.keys():
@@ -62,3 +60,46 @@ class FilterExtensionWindow(ttk.Frame):
 			self.button = button
 				
 		self.top.destroy()
+		
+		
+class FilterNameWindow(ttk.Frame):
+	def __init__(self, master, view, data):
+		super(FilterNameWindow, self).__init__()
+		top=self.top=Toplevel(master)
+		top.grab_set()
+		
+		self.view = view
+		self.files = data["file_data"]
+		self.lock_filter = data["lock_filter"]
+
+		self.button = "cancel"
+		self.top.title(f"Filter Files by Name")
+		
+		
+		Label(self.top, text="Enter Text:").grid(row=0, column=0, sticky='ew', padx=5, pady=5)
+		self.text_entry = Entry(self.top, width=50)
+		self.text_entry.grid(row=0, column=1, columnspan=3 ,sticky='ew', padx=5, pady=5)
+		self.text_entry.insert(0, data["filter_text"])
+		
+		# Buttons
+		self.ok_btn = ttk.Button(self.top, text="OK", width=10, style="success.TButton", command=lambda button="ok": self.cleanup(button))
+		self.ok_btn.grid(row=1, column=2, padx=5, pady=10, sticky="ne")
+		self.cancel_btn = ttk.Button(self.top, text="Cancel", width=10, style="danger.TButton", command=lambda button="cancel": self.cleanup(button))
+		self.cancel_btn.grid(row=1, column=3, padx=5, pady=10, sticky="nw")	
+		
+		self.top.grid_columnconfigure(1, weight=1)
+		
+	def cleanup(self, button):
+		if button == "ok":
+			self.text = self.text_entry.get()
+			if self.text.strip() == "":
+				self.text = None
+				
+			self.button = button
+		else:
+			self.text = None
+			
+		self.filter = [self.text]
+		self.top.destroy()
+			
+		
