@@ -152,18 +152,18 @@ class SettingsWindow(ttk.Frame):
 		current_app = self.treeview.item(iid, 'values')[0]
 		
 		if self.extension_entry.get() != current_extension:
-			self.open_with_apps[current_extension].remove(current_app)
+			self.config_data["open_with_apps"][current_extension].remove(current_app)
 			
-			if len(self.open_with_apps[current_extension]) == 0:
-				del self.open_with_apps[current_extension]
+			if len(self.config_data["open_with_apps"][current_extension]) == 0:
+				del self.config_data["open_with_apps"][current_extension]
 			
-			if self.extension_entry.get() not in self.open_with_apps.keys():
-				self.open_with_apps[self.extension_entry.get()] = []
+			if self.extension_entry.get() not in self.config_data["open_with_apps"].keys():
+				self.config_data["open_with_apps"][self.extension_entry.get()] = []
 			
-			self.open_with_apps[self.extension_entry.get()].append(self.app_entry.get())
+			self.config_data["open_with_apps"][self.extension_entry.get()].append(self.app_entry.get())
 			
 		else:
-			self.open_with_apps[self.extension_entry.get()].replace(current_app, self.app_entry.get())
+			self.config_data["open_with_apps"][self.extension_entry.get()].replace(current_app, self.app_entry.get())
 		
 		self.treeview.item(iid, text=self.extension_entry.get())
 		self.treeview.item(iid, values=[self.app_entry.get()])
@@ -176,10 +176,10 @@ class SettingsWindow(ttk.Frame):
 		msg = messagebox.askyesno(title="Delete App", message="Delete This App? This Cannot be Undone.")
 		if msg:
 			self.treeview.delete(iid)
-			self.open_with_apps[current_extension].remove(current_app)
+			self.config_data["open_with_apps"][current_extension].remove(current_app)
 			
-			if len(self.open_with_apps[current_extension]) == 0:
-				del self.open_with_apps[current_extension]
+			if len(self.config_data["open_with_apps"][current_extension]) == 0:
+				del self.config_data["open_with_apps"][current_extension]
 
 	def convert_open_with_apps_to_list(self):
 		extensions = sorted(list(self.config_data["open_with_apps"].keys()))
@@ -197,13 +197,14 @@ class SettingsWindow(ttk.Frame):
 		self.app_entry.insert(0, app_name)
 
 	def on_left_click(self, event):
-		item = self.treeview.identify('item',event.x,event.y)
+		item = self.treeview.identify('item', event.x, event.y)
 		
-		self.extension_entry.delete(0, 'end')
-		self.extension_entry.insert(0, self.treeview.item(item, "text"))
+		if item:
+			self.extension_entry.delete(0, 'end')
+			self.extension_entry.insert(0, self.treeview.item(item, "text"))
 
-		self.app_entry.delete(0, 'end')
-		self.app_entry.insert(0, self.treeview.item(item, "values")[0])	
+			self.app_entry.delete(0, 'end')
+			self.app_entry.insert(0, self.treeview.item(item, "values")[0])	
 		
 	def cleanup(self, button):
 		self.button = button

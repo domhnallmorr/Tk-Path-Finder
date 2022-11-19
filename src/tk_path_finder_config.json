@@ -31,6 +31,9 @@
     "open_with_apps": {
         ".py": [
             "C:\\Program Files\\Sublime Text 3\\sublime_text.exe"
+        ],
+        ".txt": [
+            "C:\\Program Files\\Sublime Text 3\\sublime_text.exe"
         ]
     },
     "default_file_width": "400",
@@ -45,10 +48,10 @@
         ]
     ],
     "session_data": {
-        "axewheJI": {
+        "5tndDnrg": {
             "text": "0",
             "branch_tabs": {
-                "rhEit00Q": {
+                "P57WQ967": {
                     "text": "src",
                     "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
                 }
