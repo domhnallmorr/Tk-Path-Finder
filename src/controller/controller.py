@@ -176,7 +176,7 @@ class Controller:
 			if self.model.text_editor:
 				app = self.model.text_editor
 			else:
-				messagebox.showerror('Error', message='Default Text Editor has not been Defined')		
+				self.view.show_error("Default Text Editor has not been Defined")		
 		
 		if app:
 			threading.Thread(target=lambda app=app, file=full_path:self.open_with_app(app, file)).start()
@@ -253,7 +253,7 @@ class Controller:
 							self.update_branch_tab(branch_id, current_directory, mode="normal")
 							break
 						except Exception as e:
-							self.view,show_error(f"The following error occured:\n{str(e)}")
+							self.view.show_error(f"The following error occured:\n{str(e)}")
 						
 					else:
 						self.view.show_error(msg)
@@ -268,9 +268,6 @@ class Controller:
 			if "being used by another" in str(e).lower():
 				msg = "Permission Denied, Ensure Document is not Open in Another Process"
 			elif "access is denied" in str(e).lower():
-				if mode == "edit folder":
-					msg = "Access Denied, Ensure No Files are Open in the Folder"
-				else:
 					msg = "Access Denied"
 			else:
 				msg = f"The Following Error Occured\n{str(e)}"
