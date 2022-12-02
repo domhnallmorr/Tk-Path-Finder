@@ -90,7 +90,8 @@ class View:
 	def setup_main_notebook(self):
 		self.main_notebook = ttk.Notebook(self.container)
 		self.main_notebook.pack(expand=True, fill=BOTH, side=LEFT)
-		self.main_notebook.bind('<Button-3>', self.right_click_root)
+		self.main_notebook.bind("<Button-3>", self.right_click_root)
+		self.main_notebook.bind("<B1-Motion>", self.reorder)
 
 	def setup_quick_access(self):
 		self.quick_access_tree = quick_access_tree.QuickAccessTreeview(self)
@@ -190,3 +191,12 @@ class View:
 		master.wait_window(self.w.top)
 		
 		return self.w.text, self.w.filter
+		
+	def reorder(self, event):
+		try:
+			index = self.main_notebook.index(f"@{event.x},{event.y}")
+			self.main_notebook.insert(index, child=self.main_notebook.select())
+		except tk.TclError:
+			pass
+			
+			

@@ -17,6 +17,7 @@ class RootTab(ttk.Frame):
 		self.notebook = ttk.Notebook(self)
 		self.notebook.pack(expand=True, fill=BOTH, side=LEFT)
 		self.notebook.bind('<Button-3>', self.right_click_branch)
+		self.notebook.bind("<B1-Motion>", self.reorder)
 		
 	def add_branch_tab(self, tab, text):
 		self.notebook.add(tab, image=self.view.branch_icon2, compound=tk.LEFT, text=f"{text.ljust(20)}")
@@ -35,3 +36,10 @@ class RootTab(ttk.Frame):
 			popup_menu.tk_popup(event.x_root, event.y_root, 0)
 		finally:
 			popup_menu.grab_release()
+
+	def reorder(self, event):
+		try:
+			index = self.notebook.index(f"@{event.x},{event.y}")
+			self.notebook.insert(index, child=self.notebook.select())
+		except tk.TclError:
+			pass
