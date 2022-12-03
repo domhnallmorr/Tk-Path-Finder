@@ -14,7 +14,12 @@ class RenameWindow(ttk.Frame):
 			self.top.title(f"{mode} Branch Tab")
 		else:
 			self.top.title(f"{mode} Tab")
-		
+			
+		if mode == "new_file":
+			self.top.title("New File")
+		if mode == "edit_file":
+			self.top.title("Rename File")
+			
 		self.initialvalue = initialvalue
 		self.component_type = component_type
 		self.button = "cancel"
@@ -34,7 +39,8 @@ class RenameWindow(ttk.Frame):
 		self.cancel_btn = ttk.Button(self.top, text='Cancel', width=10, style='danger.TButton', command=lambda button='cancel': self.cleanup(button))
 		self.cancel_btn.grid(row=2, column=4, padx=self.view.default_padx, pady=self.view.default_pady, sticky='nw')	
 		
-		
+		self.name_entry.focus()
+
 	def cleanup(self, button):
 		
 		if button == "ok":

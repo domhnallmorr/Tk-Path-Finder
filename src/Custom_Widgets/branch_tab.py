@@ -158,7 +158,7 @@ class BranchTab(ttk.Frame):
 						# plugins.append(p)
 					
 					# --------------- Open With Default Text Editor
-					popup_menu.add_command(label="Open in Text Editor", command=lambda branch_id=self.branch_id, file_name=file_name: self.view.controller.open_file_clicked(branch_id, file_name))
+					popup_menu.add_command(label="Open in Text Editor", command=lambda branch_id=self.branch_id, file_name=file_name: self.view.controller.open_file_clicked(branch_id, file_name), image=self.view.text_editor_icon2, compound="left")
 
 					# --------------- Open With Another App
 					# Ask controller to get open_with_apps
@@ -179,7 +179,7 @@ class BranchTab(ttk.Frame):
 					else:
 						mode="edit_folder"
 						
-					popup_menu.add_command(label="Rename", command=lambda mode=mode, initialvalue=file_name, branch_id=self.branch_id: self.view.controller.new_edit_file_folder(mode, initialvalue, branch_id))
+					popup_menu.add_command(label="Rename", command=lambda mode=mode, initialvalue=file_name, branch_id=self.branch_id: self.view.controller.new_edit_file_folder(mode, initialvalue, branch_id), image=self.view.rename_icon2, compound="left")
 					
 					popup_menu.add_separator()
 					
@@ -191,7 +191,7 @@ class BranchTab(ttk.Frame):
 					# --------------- Filtering
 					if item_type != "Folder":
 						filter_menu = tk.Menu(popup_menu, tearoff=0)
-						popup_menu.add_cascade(label = "Filter",menu=filter_menu)
+						popup_menu.add_cascade(label = "Filter", menu=filter_menu, image=self.view.filter_icon2, compound="left")
 						filter_menu.add_command(label="Hide This File Type",
 									command=lambda branch_id=self.branch_id, mode="hide_this", file_extension=file_extension: self.view.controller.filter_files(branch_id, mode, file_extension), compound="left",)
 						filter_menu.add_command(label="Show Just This File Type",
@@ -216,17 +216,18 @@ class BranchTab(ttk.Frame):
 				for file_iid in self.treeview.selection():
 					selection.append(self.treeview.item(file_iid, 'text'))
 				
-				popup_menu.add_command(label="Cut", command=lambda files=selection, branch_id=self.branch_id, mode="cut": self.view.controller.copy_cut_file_folder(files, branch_id, mode))
-				popup_menu.add_command(label="Copy", command=lambda files=selection, branch_id=self.branch_id, mode="copy": self.view.controller.copy_cut_file_folder(files, branch_id, mode))
+				popup_menu.add_command(label="Cut", command=lambda files=selection, branch_id=self.branch_id, mode="cut": self.view.controller.copy_cut_file_folder(files, branch_id, mode), image=self.view.cut_icon2, compound="left")
+				popup_menu.add_command(label="Copy", command=lambda files=selection, branch_id=self.branch_id, mode="copy": self.view.controller.copy_cut_file_folder(files, branch_id, mode), image=self.view.copy_icon2, compound="left")
 				
 			if self.view.controller.file_to_copy != None or self.view.controller.file_to_cut != None:
-				popup_menu.add_command(label="Paste", command=lambda branch_id=self.branch_id: self.view.controller.paste_file_folder(branch_id))		
+				popup_menu.add_command(label="Paste", command=lambda branch_id=self.branch_id: self.view.controller.paste_file_folder(branch_id), image=self.view.paste_icon2, compound="left")		
 				
-				
+			if iid:
+				popup_menu.add_separator()
 			
 			# ------------------ OPEN CMD/EXPLORER ------------------	
-			popup_menu.add_command(label="Open in cmd", command=lambda mode="cmd", branch_id=self.branch_id: self.view.controller.open_in_cmd_explorer(mode, branch_id))
-			popup_menu.add_command(label="Open in explorer", command=lambda mode="explorer", branch_id=self.branch_id: self.view.controller.open_in_cmd_explorer(mode, branch_id))
+			popup_menu.add_command(label="Open in cmd", command=lambda mode="cmd", branch_id=self.branch_id: self.view.controller.open_in_cmd_explorer(mode, branch_id), image=self.view.cmd_icon2, compound="left")
+			popup_menu.add_command(label="Open in explorer", command=lambda mode="explorer", branch_id=self.branch_id: self.view.controller.open_in_cmd_explorer(mode, branch_id), image=self.view.file_explorer_icon2, compound="left")
 			
 			try:
 				popup_menu.tk_popup(event.x_root, event.y_root, 0)
