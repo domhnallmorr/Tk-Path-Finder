@@ -575,3 +575,9 @@ class Controller:
 		self.model.quick_access_tree_model.update_order(quick_access_order)
 		self.model.update_quick_access_tree_config_file()
 		
+	def update_root_tabs_order(self, root_tabs_order):
+		self.model.update_root_tabs_order(root_tabs_order)
+		
+	def update_branch_tabs_order(self, root_id, branch_tabs_order):
+		self.model.update_branch_tabs_order(root_id, branch_tabs_order)
+	

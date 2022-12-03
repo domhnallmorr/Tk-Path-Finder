@@ -41,5 +41,15 @@ class RootTab(ttk.Frame):
 		try:
 			index = self.notebook.index(f"@{event.x},{event.y}")
 			self.notebook.insert(index, child=self.notebook.select())
+			self.get_branch_tabs_order()
 		except tk.TclError:
 			pass
+			
+	def get_branch_tabs_order(self):
+		branch_tabs_order = []
+		for t in self.notebook.tabs():
+			branch_tabs_order.append(self.notebook.nametowidget(t).branch_id)
+		
+		#reordered_dict = {k: self.branch[k] for k in root_tabs_order}
+		# self.root_tabs = reordered_dict
+		self.view.controller.update_branch_tabs_order(self.root_id, branch_tabs_order)

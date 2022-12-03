@@ -200,4 +200,11 @@ class Model:
 		data = self.quick_access_tree_model.assemble_config_file_data()
 		self.update_config_data({"quick_access_tree": data})
 		
+	def update_root_tabs_order(self, root_tabs_order):
+		reordered_dict = {k: self.config_data["session_data"][k] for k in root_tabs_order}
+		self.config_data["session_data"] = copy.deepcopy(reordered_dict)
+
+	def update_branch_tabs_order(self, root_id, branch_tabs_order):
+		reordered_dict = {k: self.config_data["session_data"][root_id]["branch_tabs"][k] for k in branch_tabs_order}		
+		self.config_data["session_data"][root_id]["branch_tabs"] = copy.deepcopy(reordered_dict)
 		

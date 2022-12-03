@@ -1,3 +1,4 @@
+import copy
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
@@ -70,7 +71,7 @@ class View:
 		for theme in standard.STANDARD_THEMES.keys():
 			theme_type = standard.STANDARD_THEMES[theme]["type"].lower()
 			self.themes[theme_type].append(theme)
-			
+		
 	def setup_main_frames(self):
 		self.rootpane = ttk.PanedWindow(self.parent, orient=tk.HORIZONTAL)
 		self.rootpane.pack(expand=True, fill=BOTH, side=LEFT)
@@ -196,7 +197,16 @@ class View:
 		try:
 			index = self.main_notebook.index(f"@{event.x},{event.y}")
 			self.main_notebook.insert(index, child=self.main_notebook.select())
+			self.get_root_tabs_order()
 		except tk.TclError:
 			pass
 			
-			
+	def get_root_tabs_order(self):
+		root_tabs_order = []
+		for t in self.main_notebook.tabs():
+			root_tabs_order.append(self.main_notebook.nametowidget(t).root_id)
+		
+		reordered_dict = {k: self.root_tabs[k] for k in root_tabs_order}
+		self.root_tabs = reordered_dict
+		self.controller.update_root_tabs_order(root_tabs_order)
+		
