@@ -6,11 +6,13 @@ A lightweight file explorer based on tabs within tabs written in python (Tkinter
 ## Features
   - Quick Access Sidebar, links can be grouped into individual folders.
   - Tabs within tabs layout.
+  - Tabs can be reordered.
   - Load Last Session.
   - Search functionality.
   - Filter by file extension.
   - Filter files containing string.
   - Rename files and folders.
+  - Cut/Copy Files using the default windows dialog.
   - Create multiple folders at once (hit cntrl-d in the craete folder window to duplicate line).
   - "Open with" functionality.
   - Compatible with MS Teams folders.

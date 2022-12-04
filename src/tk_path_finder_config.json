@@ -48,10 +48,32 @@
         ]
     ],
     "session_data": {
-        "H25azKMT": {
+        "3zJtRXE8": {
             "text": "0",
             "branch_tabs": {
-                "UulEwxZG": {
+                "dSSp9OcV": {
+                    "text": "Downloads",
+                    "directory": "C:\\Users\\domhn\\Downloads"
+                },
+                "qfJRFuyw": {
+                    "text": "Desktop",
+                    "directory": "C:\\Users\\domhn\\Desktop"
+                }
+            }
+        },
+        "FME7A7iR": {
+            "text": "1",
+            "branch_tabs": {
+                "dOMj5ynM": {
+                    "text": "src",
+                    "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
+                }
+            }
+        },
+        "I5wkSXpm": {
+            "text": "2",
+            "branch_tabs": {
+                "3kbQanul": {
                     "text": "src",
                     "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
                 }

@@ -3,6 +3,8 @@ from distutils.dir_util import copy_tree
 import os
 import pathlib
 from shutil import copyfile, move
+import pythoncom
+from win32com.shell import shell
 import subprocess
 from subprocess import DEVNULL
 import threading
@@ -347,7 +349,6 @@ class Controller:
 	def paste_file_folder(self, branch_id):
 		current_directory = self.model.branch_tabs[branch_id].current_directory
 		
-		action_if_duplicate = "ask"
 		if self.file_to_copy == None:
 			files_to_process = self.file_to_cut
 			task = "cut"
@@ -355,53 +356,19 @@ class Controller:
 			files_to_process = self.file_to_copy
 			task = "copy"
 		
+		fo = pythoncom.CoCreateInstance(shell.CLSID_FileOperation, None, pythoncom.CLSCTX_INPROC_SERVER, shell.IID_IFileOperation)
+		
 		for source in files_to_process:
-			file_name = os.path.basename(source) # file name including extension
-			destination = os.path.join(current_directory, file_name)
+			src = shell.SHCreateItemFromParsingName(source, None, shell.IID_IShellItem)
+			dst = shell.SHCreateItemFromParsingName(current_directory, None, shell.IID_IShellItem)
 			
-			try:
-				# Add number to file name if duplicate
-				if os.path.isfile(destination) or os.path.isdir(destination):
-					counter = 1
-					while True: # Check if File Exists
-						filename, file_extension = os.path.splitext(file_name) #filename here does not include extension
-						new_name = f"{filename}({counter}){file_extension}"
-						new_path = os.path.join(current_directory, new_name)
-						
-						if not os.path.isfile(new_path) and not os.path.isdir(new_path):
-							destination = new_path
-							break
-						counter += 1
-			
-				# Copy File
-				if os.path.isfile(source):
-
-					if task == "copy":
-						copyfile(source, destination)
-					elif task == "cut":
-						# check if we are moving file to another drive
-						drive_source = pathlib.Path(source).drive
-						drive_destination = pathlib.Path(destination).drive
-						
-						if drive_source != drive_destination:
-							move(source, destination)
-						else: # not moving drives so os.rename is sufficient
-							os.rename(source, destination)
+			# Schedule the operations
+			if task == "copy":
+				fo.CopyItem(src, dst, None, None)
+			elif task == "cut":
+				fo.MoveItem(src, dst, None, None)
 				
-				# Copy Directory
-				elif os.path.isdir(source):
-					if task == "copy":
-						copy_tree(source, destination)
-						# paste_windows.paste_folder(self.mainapp, self, os.path.join(file['Path'], file['Name']), destination)
-					elif task == "cut":
-						move(source, destination)
-						
-			except PermissionError:
-				msg = f"Permission Denied to Paste {source}"
-				self.view.show_error(msg)
-			except Exception as e:
-				msg = f"The Following Error Occured Pasting {source}\n{str(e)}"
-				self.view.show_error(msg)
+		fo.PerformOperations()
 				
 		self.update_branch_tab(branch_id, current_directory, mode="normal")		
 		
