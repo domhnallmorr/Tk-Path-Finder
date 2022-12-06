@@ -119,6 +119,11 @@ class BranchTab(ttk.Frame):
 				self.view.controller.refresh_tab(self.branch_id, sort="size")
 			else:
 				self.view.controller.refresh_tab(self.branch_id)
+			
+		# If no item selected, deselect any existing items
+		if not self.treeview.identify_row(event.y):
+			for item in self.treeview.selection():
+				self.treeview.selection_remove(item)
 
 	def double_click_treeview(self, event):
 		# msg = None

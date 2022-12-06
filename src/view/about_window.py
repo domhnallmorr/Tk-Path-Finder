@@ -20,5 +20,5 @@ def about(mainapp):
         at your own risk.''')
 	l3.grid(row=2, column=0, columnspan=5, ipadx=3, padx=10)
 	
-	b = ttk.Button(win, text="Okay", command=win.destroy)
+	b = ttk.Button(win, text="OK", command=win.destroy, style="success.TButton")
 	b.grid(row=3, column=2, pady=10)

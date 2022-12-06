@@ -81,7 +81,7 @@ class QuickAccessTreeview(ttk.Treeview):
 				current_root_tab = self.view.main_notebook.nametowidget(self.view.main_notebook.select())
 				current_branch_tab = current_root_tab.notebook.nametowidget(current_root_tab.notebook.select()).branch_id
 				self.view.controller.link_clicked(parent_iid, item_iid, current_branch_tab)
-
+					
 	def on_right_click(self, event):
 		self.unbind("<Button 1>")
 		# select row under mouse
@@ -92,7 +92,7 @@ class QuickAccessTreeview(ttk.Treeview):
 			self.bind('<<TreeviewSelect>>',lambda event, click='right': self.single_click(event, click))
 			
 		popup_menu = tk.Menu(event.widget, tearoff=0)
-		popup_menu.add_command(label="Add New Folder", command=self.view.controller.add_new_quick_access_folder, image=self.view.plus_icon2, compound="left",)
+		popup_menu.add_command(label="Add New Folder", command=self.view.controller.add_new_quick_access_folder, image=self.view.folder_icon2, compound="left",)
 		
 		if len(event.widget.selection()) > 0:
 			item_iid = event.widget.selection()[0]
@@ -114,38 +114,6 @@ class QuickAccessTreeview(ttk.Treeview):
 			popup_menu.grab_release()
 		
 		self.bind('<<TreeviewSelect>>',lambda event, click='single': self.single_click(event, click))
-
-	# def add_link(self, event, mode):
-		# #Get the Node
-		# item_iid = event.widget.selection()[0]
-		# parent_iid = event.widget.parent(item_iid)	
-		# if parent_iid:
-			# node = parent_iid
-		# else:
-			# node = item_iid
-			
-		# if mode == 'edit':
-			# item_iid = event.widget.selection()[0]
-			# parent_iid = event.widget.parent(item_iid)
-			# name = self.item(item_iid, 'text')
-			# path = self.links[parent_iid][name]
-		# else:
-			# name = ''
-			# path = ''
-			
-		# self.w=AddLinkWindow(self.mainapp, self.master, mode, node, name=name, path=path)
-		# self.master.wait_window(self.w.top)
-		
-		# if self.w.button == 'ok':
-			# if mode == 'new':
-				# item_iid = event.widget.selection()[0]
-				# iid = self.insert(item_iid,'end', text=self.w.name)
-				# self.links[item_iid][self.w.name] = self.w.path
-			# else:
-				# self.item(item_iid, text=self.w.name)
-				# del self.links[parent_iid][name]
-				# self.links[parent_iid][self.w.name] = self.w.path
-			# config_file_manager.write_config_file(self.mainapp)
 	
 	def launch_new_link_window(self, master, mode, text=None, path=None):
 		self.w = link_window.AddLinkWindow(master, mode, text=text, path=path)
@@ -186,11 +154,6 @@ class QuickAccessTreeview(ttk.Treeview):
 			self.move(i, self.parent(i), self.index(i)+1)
 
 		self.update_links_order()
-
-	# def update_folder_order(self):
-		# children = tree.get_children()
-		# for child in children:
-			# children += get_all_children(tree, child)
 			
 	def update_links_order(self):
 		quick_access_order = {}

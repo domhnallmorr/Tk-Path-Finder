@@ -20,7 +20,7 @@ class FilterExtensionWindow(ttk.Frame):
 		ttk.Separator(self.top, orient="horizontal").grid(row=1, column=1, sticky='ew', padx=5, pady=5)
 		
 		row = 2
-		for file_extension in sorted(list(self.file_types.keys())):
+		for file_extension in sorted(list(self.file_types.keys()), key=str.casefold): #ignore case
 			self.file_types[file_extension]["var"] = IntVar(value=self.file_types[file_extension]["var"])
 			var = self.file_types[file_extension]["var"]
 			description = self.file_types[file_extension]["description"]
@@ -34,7 +34,7 @@ class FilterExtensionWindow(ttk.Frame):
 		if self.lock_filter is True:
 			initialvalue = 1
 		self.lock_filter = IntVar(value=initialvalue)
-		ttk.Checkbutton(self.top, text=f"Lock in this filter:", variable=self.lock_filter).grid(row=row+1, column=1, sticky="w", padx=5, pady=10)	
+		ttk.Checkbutton(self.top, text=f"Lock in this filter", variable=self.lock_filter).grid(row=row+1, column=1, sticky="w", padx=5, pady=10)	
 					
 		# Buttons
 		self.ok_btn = ttk.Button(self.top, text="OK", width=10, style="success.TButton", command=lambda button="ok": self.cleanup(button))

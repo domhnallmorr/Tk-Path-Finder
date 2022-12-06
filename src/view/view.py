@@ -150,7 +150,7 @@ class View:
 		root_id = tab_object.root_id
 		
 		popup_menu = tk.Menu(event.widget, tearoff=0)
-		popup_menu.add_command(label="Add Root Tab", command=self.controller.add_root_tab, image=self.plus_icon2, compound='left')
+		popup_menu.add_command(label="Add Root Tab", command=self.controller.add_root_tab, image=self.root_icon2, compound='left')
 		popup_menu.add_command(label="Rename Root Tab", command=lambda root_id=root_id: self.controller.rename_root_tab(root_id), image=self.edit_icon2, compound='left')
 		popup_menu.add_command(label="Delete Root Tab", command=lambda root_id=root_id: self.controller.delete_root_tab(root_id), image=self.delete_icon2, compound='left')
 
