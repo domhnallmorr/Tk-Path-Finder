@@ -164,13 +164,14 @@ class View:
 		
 		try:
 			self.style = Style(style)
-			self.style.configure('Treeview', rowheight=17)
+			
 		except Exception as e:
 			if "bad window path name" in str(e):
 				pass # ignore error when trying to acceess a top level window that's been destroyed
 			else:
 				messagebox.showerror("Error", message=f"The following message occured {str(e)}")
-				
+		
+		self.style.configure('Treeview', rowheight=17)
 		self.quick_access_tree.update_btn_bg()
 		
 		# Update hover color in treeviews

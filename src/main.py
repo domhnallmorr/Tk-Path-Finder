@@ -20,7 +20,7 @@ class MainApplication(ttk.Frame):
 		self.controller = controller.Controller(root, parent, self)
 		
 		# ----------------- VERSION -----------------------
-		self.version = "0.41.2"
+		self.version = "0.42.0"
 		# ----------------- WEEK NUMBER -----------------------
 		year, week_num, day_of_week = datetime.date.today().isocalendar()
 		

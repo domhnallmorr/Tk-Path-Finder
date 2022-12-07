@@ -44,6 +44,9 @@ class Controller:
 		return root_id
 			
 	def add_branch_tab(self, root_id, default_text=None, default_directory=None):
+		if default_directory is None:
+			default_directory = os.getcwd()
+			
 		# ----------------- ADD A SINGLE DEFAULT BRANCH TAB -----------------
 		id_key = self.model.add_branch_tab(root_id, default_text, default_directory)
 		
@@ -51,6 +54,7 @@ class Controller:
 		
 		# ----------------- UPDATE BRANCH TAB VIEW -----------------
 		self.view.update_branch_tab(copy.deepcopy(self.model.branch_tabs[id_key].assemble_view_data()))
+		self.update_branch_tab(id_key, default_directory)
 	
 	def update_branch_tab(self, branch_id, directory, mode="normal", sort=None):
 		msg = self.model.branch_tabs[branch_id].list_directory(directory=directory, mode=mode, sort=sort)
@@ -438,20 +442,47 @@ class Controller:
 			session_data = self.model.last_session
 
 			if answer is True:
-				# delete tabs from model
-				self.model.delete_all_tabs()
+				missing_directories = self.check_load_last_session_folders_exist(session_data)
 				
-				# delete tabs from view
-				self.view.delete_all_tabs()
+				answer = True
+				if missing_directories != []:
+					msg = "Some Directories are not Accessible, Do You Want to Continue?"
+					for d in missing_directories:
+						msg = msg + "\n" + d
+					
+					answer = self.view.ask_yes_no(msg)
 			
-				for root_id in session_data.keys():
-					new_root_id = self.add_root_tab(default_branch_tab=False, default_text=session_data[root_id]["text"])
+				if answer:
+					# delete tabs from model
+					self.model.delete_all_tabs()
+					
+					# delete tabs from view
+					self.view.delete_all_tabs()
+				
+					for root_id in session_data.keys():
+						new_root_id = self.add_root_tab(default_branch_tab=False, default_text=session_data[root_id]["text"])
+				
+						for branch_id in session_data[root_id]["branch_tabs"].keys():
+							default_text = session_data[root_id]["branch_tabs"][branch_id]["text"]
+							default_directory = session_data[root_id]["branch_tabs"][branch_id]["directory"]
+							
+							if default_directory in missing_directories:
+								default_directory = None
+								
+							self.add_branch_tab(new_root_id, default_text, default_directory)
+	
+	def check_load_last_session_folders_exist(self, session_data):
+		missing_directories = []
+		for root_id in session_data.keys():
 			
-					for branch_id in session_data[root_id]["branch_tabs"].keys():
-						default_text = session_data[root_id]["branch_tabs"][branch_id]["text"]
-						default_directory = session_data[root_id]["branch_tabs"][branch_id]["directory"]
-						self.add_branch_tab(new_root_id, default_text, default_directory)
-						
+			for branch_id in session_data[root_id]["branch_tabs"].keys():
+				default_directory = session_data[root_id]["branch_tabs"][branch_id]["directory"] 
+				
+				if os.path.isdir(default_directory) is False:
+					missing_directories.append(default_directory)
+					
+		return set(missing_directories)
+		
 	def search(self, branch_id):
 		data = self.model.branch_tabs[branch_id].assemble_view_data()
 		self.w = search_window.SearchWindow(self.mainapp.master, data)

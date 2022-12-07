@@ -29,7 +29,8 @@ class SettingsWindow(ttk.Frame):
 		top.grab_set()
 		self.view = view
 		self.config_data = config_data
-		self.button = 'cancel'
+		self.button = "cancel"
+		self.top.title("Settings")
 		
 		# treeview_data = self.convert_open_with_apps_to_list()
 		self.setup_notebook()

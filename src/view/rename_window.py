@@ -19,6 +19,12 @@ class RenameWindow(ttk.Frame):
 			self.top.title("New File")
 		if mode == "edit_file":
 			self.top.title("Rename File")
+
+		if mode == "new_excel":
+			self.top.title("New Excel File")
+
+		if mode == "new_word":
+			self.top.title("New Word File")
 			
 		self.initialvalue = initialvalue
 		self.component_type = component_type

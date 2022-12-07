@@ -29,7 +29,7 @@ class BranchTab(ttk.Frame):
 	def setup_buttons(self):
 		#Up a level
 		self.back_button = ttk.Button(self, text=u'\u2190', command=lambda branch_id=self.branch_id: self.view.controller.back_one_level(branch_id), state='disabled', style='primary.TButton')
-		self.back_button.grid(row=0, column=0)
+		self.back_button.grid(row=0, column=0, padx=(self.view.default_padx, 0))
 
 		self.forward_button = ttk.Button(self, text=u'\u2192', command=lambda branch_id=self.branch_id: self.view.controller.fwd_one_level(branch_id), state='disabled', style='primary.TButton')
 		self.forward_button.grid(row=0, column=1)
@@ -48,7 +48,7 @@ class BranchTab(ttk.Frame):
 		height = 20
 
 		self.treeview = treeview_functions.create_treeview(self, column_names, column_widths, height)
-		self.treeview.grid(row=1, column=0, columnspan=16, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
+		self.treeview.grid(row=1, column=0, columnspan=16, sticky='NSEW', padx=0, pady=(self.view.default_pady, 0))
 		self.treeview.bind("<Double-1>", self.double_click_treeview)
 		self.treeview.bind("<Button-1>", self.left_click_treeview)
 		self.treeview.bind("<Button-3>", self.right_click_treeview)
