@@ -174,6 +174,9 @@ class Controller:
 			
 			# update view settings
 			self.view.default_file_width = self.model.config_data["default_file_width"]
+			self.view.default_date_width = self.model.config_data["default_date_width"]
+			self.view.default_type_width = self.model.config_data["default_type_width"]
+			self.view.default_size_width = self.model.config_data["default_size_width"]
 		
 	def open_file_clicked(self, branch_id, file_name, app=None):
 		full_path = os.path.join(self.model.branch_tabs[branch_id].current_directory, file_name)
