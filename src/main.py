@@ -1,3 +1,4 @@
+import os
 import datetime
 import tkinter as tk
 from tkinter import *
@@ -5,11 +6,19 @@ from tkinter import ttk
 from tkinter.ttk import *
 from tkinter import messagebox
 
-from controller import controller
-from model import config_file_manager
+try: 
+	from ttkbootstrap import Style
+	from ttkbootstrap.themes import standard
+	from controller import controller
+	from model import config_file_manager
 
-from ttkbootstrap import Style
-from ttkbootstrap.themes import standard
+
+except Exception as e: 
+	print(f"Some requirments not found: {e}")
+	input("Press Enter to fix issue: ")
+	os.system("pip install natsort openpyxl pyperclip python-docx ttkbootstrap PyPDF2")
+	
+
 
 class MainApplication(ttk.Frame):
 	def __init__(self, parent, *args, **kwargs):
