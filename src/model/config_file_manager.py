@@ -1,6 +1,7 @@
 import copy
 import json
 import os
+import shutil
 
 def write_config_file(model):
 	save_dict = {}
@@ -27,13 +28,23 @@ def write_config_file(model):
 		json.dump(save_dict, outfile, indent=4)
 		
 def load_config_file(mainapp):
-	if not os.path.isfile('tk_path_finder_config.json'):
+	
+	backup_config_file(mainapp)
+
+	if not os.path.isfile("tk_path_finder_config.json"):
 		generate_default_config_file()
 		
-	with open('tk_path_finder_config.json') as f:
+	with open("tk_path_finder_config.json") as f:
 		data = json.load(f)
 	return data
 	
+def backup_config_file(mainapp):
+	if os.path.isfile("tk_path_finder_config_backup1.json"):
+		shutil.copyfile("tk_path_finder_config_backup1.json", "tk_path_finder_config_backup2.json")
+
+	if os.path.isfile("tk_path_finder_config.json"):
+		shutil.copyfile("tk_path_finder_config.json", "tk_path_finder_config_backup1.json")
+
 def generate_default_config_file():
 	
 	save_dict = {}
