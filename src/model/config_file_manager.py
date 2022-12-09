@@ -11,10 +11,11 @@ def write_config_file(model):
 	save_dict["open_with_apps"] = model.config_data["open_with_apps"]
 	
 	# ------- TREEVIEW COLUMN WIDTHS -------
-	save_dict['default_file_width'] = model.config_data["default_file_width"]
-	save_dict['default_date_width'] = model.config_data["default_date_width"]
-	save_dict['default_type_width'] = model.config_data["default_type_width"]
-	save_dict['default_size_width'] = model.config_data["default_size_width"]
+	save_dict["default_file_width"] = model.config_data["default_file_width"]
+	save_dict["default_date_width"] = model.config_data["default_date_width"]
+	save_dict["default_type_width"] = model.config_data["default_type_width"]
+	save_dict["default_size_width"] = model.config_data["default_size_width"]
+	save_dict["default_style"] = model.config_data["default_style"]
 
 	save_dict["to_do_list"] = model.config_data["to_do_list"]
 	save_dict["session_data"] = model.config_data["session_data"]

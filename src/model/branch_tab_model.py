@@ -3,7 +3,7 @@ import os
 import subprocess
 import re
 
-from natsort import natsorted
+from natsort import natsorted, ns
 
 class BranchTabModel:
 	def __init__(self, model, id_key, current_directory, root_id, default_text):
@@ -110,7 +110,7 @@ class BranchTabModel:
 				self.previous_directories.append(self.current_directory)
 
 		directory_data = natsorted(directory_data)
-		file_data = natsorted(file_data)
+		file_data = natsorted(file_data, alg=ns.IGNORECASE)
 		# Sorting
 		if sort == 'date':
 			directory_data = list(reversed(sorted(directory_data, key=lambda x: x[1])))

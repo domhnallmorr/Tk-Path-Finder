@@ -582,3 +582,7 @@ class Controller:
 	def update_branch_tabs_order(self, root_id, branch_tabs_order):
 		self.model.update_branch_tabs_order(root_id, branch_tabs_order)
 	
+	def update_style(self, style):
+		self.view.switch_style(style)
+		self.model.style_updated(style)
+		

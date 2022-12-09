@@ -63,25 +63,26 @@ class SettingsWindow(ttk.Frame):
 		self.display_frame.grid(row=2, column=0, columnspan=8, rowspan=2, sticky='NSEW',padx=5, pady=5, ipadx=2, ipady=5)
 
 	def setup_display(self):		
-		ttk.Label(self.display_frame, text='Filename Column Width:').grid(row=1, column=0, columnspan=1, sticky='NSEW', pady=self.view.default_pady)
+		ttk.Label(self.display_frame, text="Filename Column Width:").grid(row=1, column=0, columnspan=1, sticky="NSEW", pady=self.view.default_pady)
 		self.file_width_entry = ttk.Entry(self.display_frame)
 		self.file_width_entry.insert(0, self.view.default_file_width)
-		self.file_width_entry.grid(row=1, column=1, sticky='NSEW', pady=self.view.default_pady)
+		self.file_width_entry.grid(row=1, column=1, sticky="NSEW", pady=self.view.default_pady)
 		
-		ttk.Label(self.display_frame, text='Date Column Width:').grid(row=2, column=0, columnspan=1, sticky='NSEW', pady=self.view.default_pady)
+		ttk.Label(self.display_frame, text="Date Column Width:").grid(row=2, column=0, columnspan=1, sticky="NSEW", pady=self.view.default_pady)
 		self.date_width_entry = ttk.Entry(self.display_frame)
 		self.date_width_entry.insert(0, self.view.default_date_width)
-		self.date_width_entry.grid(row=2, column=1, sticky='NSEW', pady=self.view.default_pady)
+		self.date_width_entry.grid(row=2, column=1, sticky="NSEW", pady=self.view.default_pady)
 
-		ttk.Label(self.display_frame, text='Type Column Width:').grid(row=3, column=0, columnspan=1, sticky='NSEW', pady=self.view.default_pady)
+		ttk.Label(self.display_frame, text="Type Column Width:").grid(row=3, column=0, columnspan=1, sticky="NSEW", pady=self.view.default_pady)
 		self.type_width_entry = ttk.Entry(self.display_frame)
 		self.type_width_entry.insert(0, self.view.default_type_width)
-		self.type_width_entry.grid(row=3, column=1, sticky='NSEW', pady=self.view.default_pady)
+		self.type_width_entry.grid(row=3, column=1, sticky="NSEW", pady=self.view.default_pady)
 
-		ttk.Label(self.display_frame, text='Size Column Width:').grid(row=4, column=0, columnspan=1, sticky='NSEW', pady=self.view.default_pady)
+		ttk.Label(self.display_frame, text="Size Column Width:").grid(row=4, column=0, columnspan=1, sticky="NSEW", pady=self.view.default_pady)
 		self.size_width_entry = ttk.Entry(self.display_frame)
 		self.size_width_entry.insert(0, self.view.default_size_width)
-		self.size_width_entry.grid(row=4, column=1, sticky='NSEW', pady=self.view.default_pady)
+		self.size_width_entry.grid(row=4, column=1, sticky="NSEW", pady=self.view.default_pady)
+		
 		
 	def setup_text_editor(self):
 		ttk.Label(self.text_editor_frame, text='Text Editor Path:', width=18).grid(row=0, column=0, columnspan=1, sticky='NSEW', pady=self.view.default_pady)

@@ -27,7 +27,7 @@ class View:
 		
 		menubar.setup_menubar(self)
 		
-		self.switch_style("darkly")
+		self.switch_style(self.style_name)
 
 	def setup_variables(self):
 		self.known_file_types = {
@@ -65,8 +65,6 @@ class View:
 		
 		self.root_tabs = {}
 		self.branch_tabs = {}
-		
-		self.style_name = "darkly"
 
 		# --------------- GET THEMES ---------------
 		self.themes = {"light": [], "dark":[]}
@@ -129,6 +127,8 @@ class View:
 		self.default_date_width = config_data["default_date_width"]
 		self.default_type_width = config_data["default_type_width"]
 		self.default_size_width = config_data["default_size_width"]
+		
+		self.style_name = config_data["default_style"]
 	
 	def update_root_tab_text(self, root_id, text):
 		self.main_notebook.tab(self.root_tabs[root_id], text=f"{text.ljust(20)}")
@@ -178,7 +178,7 @@ class View:
 		for tab in self.branch_tabs.keys():
 			self.branch_tabs[tab].update_tags()
 				
-		self.quick_access_tree.update_tags()		
+		self.quick_access_tree.update_tags()
 		
 	def ask_yes_no(self, msg):
 		answer = messagebox.askyesno(title="Confirm", message=msg)

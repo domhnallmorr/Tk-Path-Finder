@@ -28,6 +28,12 @@ class Model:
 			self.last_session = copy.deepcopy(self.config_data["session_data"])
 		else:
 			self.last_session = None
+			
+		if "default_style" not in self.config_data.keys():
+			self.default_style = "darkly"
+			self.config_data["default_style"] = "darkly"
+		else:
+			self.default_style = self.config_data["default_style"]
 		
 		# ------------ TREEVIEW COLUMN WIDTHS ------------
 		if "default_file_width" not in self.config_data.keys():
@@ -47,7 +53,6 @@ class Model:
 			
 		self.config_data["session_data"] = {}
 		
-	
 		self.root_tabs = {}
 		self.branch_tabs = {}
 		
@@ -210,4 +215,8 @@ class Model:
 	def update_branch_tabs_order(self, root_id, branch_tabs_order):
 		reordered_dict = {k: self.config_data["session_data"][root_id]["branch_tabs"][k] for k in branch_tabs_order}		
 		self.config_data["session_data"][root_id]["branch_tabs"] = copy.deepcopy(reordered_dict)
+		
+	def style_updated(self, style):
+		self.config_data["default_style"] = style
+		config_file_manager.write_config_file(self)
 		

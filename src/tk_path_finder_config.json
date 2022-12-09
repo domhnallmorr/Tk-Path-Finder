@@ -40,6 +40,7 @@
     "default_date_width": "200",
     "default_type_width": "300",
     "default_size_width": "100",
+    "default_style": "darkly",
     "to_do_list": [
         [
             1,
@@ -48,10 +49,10 @@
         ]
     ],
     "session_data": {
-        "vQwQubxg": {
+        "KRYI1Sjx": {
             "text": "0",
             "branch_tabs": {
-                "A4EV92rg": {
+                "NuEDCsvu": {
                     "text": "src",
                     "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
                 }

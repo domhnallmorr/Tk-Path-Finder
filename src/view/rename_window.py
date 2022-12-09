@@ -33,6 +33,7 @@ class RenameWindow(ttk.Frame):
 		self.name_entry = ttk.Entry(self.top, width=60)
 		self.name_entry.grid(row=1, column=0, columnspan=5, padx=self.view.default_padx, pady=self.view.default_pady, sticky="ew")
 		self.name_entry.insert(0, initialvalue)
+		self.name_entry.bind('<Return>', lambda event, button="ok": self.cleanup(button, event))
 		self.top.grid_columnconfigure(0, weight=1)
 		
 		if component_type == "branch_tab":
@@ -47,8 +48,7 @@ class RenameWindow(ttk.Frame):
 		
 		self.name_entry.focus()
 
-	def cleanup(self, button):
-		
+	def cleanup(self, button, event=None):
 		if button == "ok":
 			if self.name_entry.get() == '':
 				messagebox.showerror("Error", message="Enter a Name")
