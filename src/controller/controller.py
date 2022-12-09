@@ -493,9 +493,12 @@ class Controller:
 		
 	def add_new_quick_access_folder(self, text=None, folder_id=None, update_config_data=True, idx=0):
 		# get text 
-		if text is None:
-			text = self.view.quick_access_tree.edit_folder_name(mode="new", initialvalue="")
-		
+		if text is None: # Text is not None when the app loads, as it takes the text from the config file
+			self.w = rename_window.RenameWindow(self.mainapp.master, self.view, initialvalue="", component_type="quick_access_folder", mode="new_quick_access")
+			self.mainapp.master.wait_window(self.w.top)
+			
+			if self.w.button == "ok":
+				text = self.w.name
 		if text:
 			folder_id = self.model.quick_access_tree_model.add_new_folder(text, folder_id=folder_id)
 			self.view.quick_access_tree.insert_new_folder(folder_id, text, idx=idx)
@@ -507,7 +510,12 @@ class Controller:
 		initialvalue = self.model.quick_access_tree_model.folders[folder_id].text
 		
 		if text is None:
-			text = self.view.quick_access_tree.edit_folder_name(mode="new", initialvalue=initialvalue)
+			# text = self.view.quick_access_tree.edit_folder_name(mode="new", initialvalue=initialvalue)
+			self.w = rename_window.RenameWindow(self.mainapp.master, self.view, initialvalue=initialvalue, component_type="quick_access_folder", mode="edit_quick_access")
+			self.mainapp.master.wait_window(self.w.top)
+			
+			if self.w.button == "ok":
+				text = self.w.name
 			
 		if text:
 			self.model.quick_access_tree_model.rename_folder(folder_id, text)
@@ -538,7 +546,6 @@ class Controller:
 				self.model.update_quick_access_tree_config_file()
 				
 	def add_new_link(self, folder_id, mode, text=None, path=None, link_id=None, update_config_data=True):
-
 		if text is None:
 			text, path = self.view.quick_access_tree.launch_new_link_window(self.mainapp.master, mode)
 		

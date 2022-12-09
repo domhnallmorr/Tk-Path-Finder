@@ -26,6 +26,12 @@ class RenameWindow(ttk.Frame):
 		if mode == "new_word":
 			self.top.title("New Word File")
 			
+		if mode == "new_quick_access":
+			self.top.title("New Quick Access Folder")
+
+		if mode == "edit_quick_access":
+			self.top.title("Edit Quick Access Folder")
+			
 		self.initialvalue = initialvalue
 		self.component_type = component_type
 		self.button = "cancel"

@@ -52,19 +52,6 @@ class QuickAccessTreeview(ttk.Treeview):
 		item = f'"{item}"'
 		self.tk.call(self, "tag", "remove", "highlight")
 		self.tk.call(self, "tag", "add", "highlight", item)
-		
-	# def setup_nodes(self):
-		# self.node_iids = {}
-		# for node in self.nodes:
-			# #self.insert("",'end', node, text=node, image=self.mainapp.folder_icon2)
-			# iid = self.insert("",'end', self.nodes[node], text=node, image=self.mainapp.folder_icon2)
-			# self.nodes[node] = iid
-			# self.node_iids[iid] = node
-	
-	def edit_folder_name(self, mode="new", initialvalue=""):
-		text = simpledialog.askstring(title="New Folder", prompt="Folder Name:".ljust(100), initialvalue=initialvalue)
-		
-		return text
 			
 	def insert_new_folder(self, folder_id, text, idx=0):
 		self.insert("", idx, iid=folder_id, text=text, image=self.view.folder_icon2)
@@ -158,7 +145,6 @@ class QuickAccessTreeview(ttk.Treeview):
 	def update_links_order(self):
 		quick_access_order = {}
 		for folder_id in self.get_children():
-			print(folder_id)
 			quick_access_order[folder_id] = []
 			
 			for link_id in self.get_children(folder_id):
