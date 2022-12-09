@@ -223,7 +223,7 @@ class Controller:
 							break
 					
 					# ------------- MAKE SURE FILE DOES NOT EXIST ALREADY
-					if mode in ["edit_file", "new_file", "new_excel", "new_word", "edit_folder"]:
+					if mode in ["new_file", "new_excel", "new_word"]:
 						if os.path.isfile(os.path.join(current_directory, name_input)) or os.path.isdir(os.path.join(current_directory, name_input)):
 							msg = "That File/Folder Already Exists"
 							
