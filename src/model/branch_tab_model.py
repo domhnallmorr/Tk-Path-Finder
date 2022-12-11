@@ -1,4 +1,5 @@
 import collections
+from datetime import datetime
 import os
 import subprocess
 import re
@@ -114,10 +115,19 @@ class BranchTabModel:
 		# Sorting
 		if sort == 'date':
 			directory_data = list(reversed(sorted(directory_data, key=lambda x: x[1])))
-			file_data = list(reversed(sorted(file_data, key=lambda x: x[1])))
+
+			# add date time data
+			for idx, file in enumerate(file_data):
+				dt_object1 = datetime.strptime(file[1], "%d/%m/%Y %H:%M")
+				file_data[idx].append(dt_object1)
+			
+			file_data = list(reversed(sorted(file_data, key=lambda x: x[-1])))
+			file_data = [f[:-1] for f in file_data] # remove dt_object1
+			
 		elif sort == 'file_type':
 			directory_data = list(reversed(sorted(directory_data, key=lambda x: x[2])))
 			file_data = list(reversed(sorted(file_data, key=lambda x: x[2])))
+			
 		elif sort == 'size':
 			directory_data = list(reversed(sorted(directory_data, key=lambda x: x[3])))
 			file_data = list(reversed(sorted(file_data, key=lambda x: x[3])))
