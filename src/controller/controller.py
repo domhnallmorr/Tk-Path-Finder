@@ -364,7 +364,7 @@ class Controller:
 			task = "copy"
 		
 		fo = pythoncom.CoCreateInstance(shell.CLSID_FileOperation, None, pythoncom.CLSCTX_INPROC_SERVER, shell.IID_IFileOperation)
-		
+		print(dir(fo))
 		for source in files_to_process:
 			src = shell.SHCreateItemFromParsingName(source, None, shell.IID_IShellItem)
 			dst = shell.SHCreateItemFromParsingName(current_directory, None, shell.IID_IShellItem)
@@ -592,4 +592,25 @@ class Controller:
 	def update_style(self, style):
 		self.view.switch_style(style)
 		self.model.style_updated(style)
+		
+	def duplicate_files(self, files, branch_id):
+		current_directory = self.model.branch_tabs[branch_id].current_directory
+		
+		for file in files:
+			original = os.path.join(current_directory, file)
+			filename, file_extension = os.path.splitext(file)
+			count = 1
+			
+			while True:
+				if os.path.isfile(f"{current_directory}\\{filename}({count}){file_extension}") is False:
+					try:
+						target = os.path.join(current_directory, f"{filename}({count}){file_extension}")
+						copyfile(original, target)
+						self.update_branch_tab(branch_id, current_directory)
+					except Exception as e:
+						self.view.show_error({str(e)})
+					break
+				else:
+					count += 1
+			
 		

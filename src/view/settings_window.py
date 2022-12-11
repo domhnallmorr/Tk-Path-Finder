@@ -32,7 +32,6 @@ class SettingsWindow(ttk.Frame):
 		self.button = "cancel"
 		self.top.title("Settings")
 		
-		# treeview_data = self.convert_open_with_apps_to_list()
 		self.setup_notebook()
 		self.setup_label_frames()
 		self.setup_text_editor()
@@ -45,7 +44,6 @@ class SettingsWindow(ttk.Frame):
 
 	def setup_notebook(self):
 		self.notebook = ttk.Notebook(self.top)
-		#self.notebook.pack(expand=True, fill=BOTH, side=LEFT)
 		self.notebook.grid(row=4, column=0, columnspan=8, padx=5, pady=5, sticky='nsew')
 		self.app_tab = ttk.Frame(self.notebook)
 		self.display_tab = ttk.Frame(self.notebook)
@@ -98,12 +96,10 @@ class SettingsWindow(ttk.Frame):
 		ttk.Label(self.open_with_frame, text='File Extension:').grid(row=0, column=0, columnspan=1, sticky='NSEW', pady=self.view.default_pady)
 		self.extension_entry = ttk.Entry(self.open_with_frame)
 		self.extension_entry.grid(row=0, column=1, columnspan=15, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
-		#self.extension_entry.insert(0, '.py')
 		
 		ttk.Label(self.open_with_frame, text='App Path:').grid(row=1, column=0, columnspan=1, sticky='NSEW', pady=self.view.default_pady)
 		self.app_entry = ttk.Entry(self.open_with_frame)
 		self.app_entry.grid(row=1, column=1, columnspan=15, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
-		#self.app_entry.insert(0, 'C:\Program Files\Sublime Text 3\sublime_text.exe')
 
 		self.open_with_frame.grid_columnconfigure(15, weight=1)
 		
@@ -242,9 +238,7 @@ class SettingsWindow(ttk.Frame):
 				self.config_data["default_date_width"] = self.date_width_entry.get()
 				self.config_data["default_type_width"] = self.type_width_entry.get()
 				self.config_data["default_size_width"] = self.size_width_entry.get()
-				# self.default_date_width = self.date_width_entry.get()
-				# self.default_type_width = self.type_width_entry.get()
-				# self.default_size_width = self.size_width_entry.get()
+
 				self.top.destroy()
 			else:
 				messagebox.showerror(title="Input Error", message=msg)

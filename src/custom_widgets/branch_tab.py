@@ -126,7 +126,6 @@ class BranchTab(ttk.Frame):
 				self.treeview.selection_remove(item)
 
 	def double_click_treeview(self, event):
-		# msg = None
 		current_selection = treeview_functions.get_current_selection(self.treeview)
 
 		if len(current_selection[1]) > 0:
@@ -227,7 +226,11 @@ class BranchTab(ttk.Frame):
 			if self.view.controller.file_to_copy != None or self.view.controller.file_to_cut != None:
 				popup_menu.add_command(label="Paste", command=lambda branch_id=self.branch_id: self.view.controller.paste_file_folder(branch_id), image=self.view.paste_icon2, compound="left")		
 				
+				
 			if iid:
+				if item_type != "Folder":
+					popup_menu.add_separator()
+					popup_menu.add_command(label="Duplicate File", command=lambda files=selection, branch_id=self.branch_id: self.view.controller.duplicate_files(files, branch_id), image=self.view.duplicate_icon2, compound="left")
 				popup_menu.add_separator()
 			
 			# ------------------ OPEN CMD/EXPLORER ------------------	

@@ -1,3 +1,18 @@
+try: 
+	from ttkbootstrap import Style
+	from ttkbootstrap.themes import standard
+	import natsort
+	import openpyxl
+	import pyperclip
+	from docx import Document
+	from PyPDF2 import PdfReader
+
+except Exception as e: 
+	import os
+	print(f"Some requirments not found: {e}")
+	input("Press Enter to fix issue: ")
+	os.system("pip install natsort openpyxl pyperclip python-docx ttkbootstrap PyPDF2")
+	
 import datetime
 import tkinter as tk
 from tkinter import *
@@ -7,7 +22,7 @@ from tkinter import messagebox
 
 from controller import controller
 from model import config_file_manager
-
+	
 from ttkbootstrap import Style
 from ttkbootstrap.themes import standard
 
@@ -20,7 +35,7 @@ class MainApplication(ttk.Frame):
 		self.controller = controller.Controller(root, parent, self)
 		
 		# ----------------- VERSION -----------------------
-		self.version = "0.44.1"
+		self.version = "0.45.0"
 		# ----------------- WEEK NUMBER -----------------------
 		year, week_num, day_of_week = datetime.date.today().isocalendar()
 		
