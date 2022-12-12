@@ -61,29 +61,29 @@ class SettingsWindow(ttk.Frame):
 		self.display_frame.grid(row=2, column=0, columnspan=8, rowspan=2, sticky='NSEW',padx=5, pady=5, ipadx=2, ipady=5)
 
 	def setup_display(self):		
-		ttk.Label(self.display_frame, text="Filename Column Width:").grid(row=1, column=0, columnspan=1, sticky="NSEW", pady=self.view.default_pady)
+		ttk.Label(self.display_frame, text="Filename Column Width:").grid(row=1, column=0, columnspan=1, sticky="NSEW", padx=self.view.default_padx, pady=self.view.default_pady)
 		self.file_width_entry = ttk.Entry(self.display_frame)
 		self.file_width_entry.insert(0, self.view.default_file_width)
-		self.file_width_entry.grid(row=1, column=1, sticky="NSEW", pady=self.view.default_pady)
+		self.file_width_entry.grid(row=1, column=1, sticky="NSEW", padx=self.view.default_padx, pady=self.view.default_pady)
 		
-		ttk.Label(self.display_frame, text="Date Column Width:").grid(row=2, column=0, columnspan=1, sticky="NSEW", pady=self.view.default_pady)
+		ttk.Label(self.display_frame, text="Date Column Width:").grid(row=2, column=0, columnspan=1, sticky="NSEW", padx=self.view.default_padx, pady=self.view.default_pady)
 		self.date_width_entry = ttk.Entry(self.display_frame)
 		self.date_width_entry.insert(0, self.view.default_date_width)
-		self.date_width_entry.grid(row=2, column=1, sticky="NSEW", pady=self.view.default_pady)
+		self.date_width_entry.grid(row=2, column=1, sticky="NSEW", padx=self.view.default_padx, pady=self.view.default_pady)
 
-		ttk.Label(self.display_frame, text="Type Column Width:").grid(row=3, column=0, columnspan=1, sticky="NSEW", pady=self.view.default_pady)
+		ttk.Label(self.display_frame, text="Type Column Width:").grid(row=3, column=0, columnspan=1, sticky="NSEW", padx=self.view.default_padx, pady=self.view.default_pady)
 		self.type_width_entry = ttk.Entry(self.display_frame)
 		self.type_width_entry.insert(0, self.view.default_type_width)
-		self.type_width_entry.grid(row=3, column=1, sticky="NSEW", pady=self.view.default_pady)
+		self.type_width_entry.grid(row=3, column=1, sticky="NSEW", padx=self.view.default_padx, pady=self.view.default_pady)
 
-		ttk.Label(self.display_frame, text="Size Column Width:").grid(row=4, column=0, columnspan=1, sticky="NSEW", pady=self.view.default_pady)
+		ttk.Label(self.display_frame, text="Size Column Width:").grid(row=4, column=0, columnspan=1, sticky="NSEW", padx=self.view.default_padx, pady=self.view.default_pady)
 		self.size_width_entry = ttk.Entry(self.display_frame)
 		self.size_width_entry.insert(0, self.view.default_size_width)
-		self.size_width_entry.grid(row=4, column=1, sticky="NSEW", pady=self.view.default_pady)
+		self.size_width_entry.grid(row=4, column=1, sticky="NSEW", padx=self.view.default_padx, pady=self.view.default_pady)
 		
 		
 	def setup_text_editor(self):
-		ttk.Label(self.text_editor_frame, text='Text Editor Path:', width=18).grid(row=0, column=0, columnspan=1, sticky='NSEW', pady=self.view.default_pady)
+		ttk.Label(self.text_editor_frame, text='Text Editor Path:', width=18).grid(row=0, column=0, columnspan=1, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
 		self.text_editor_entry = ttk.Entry(self.text_editor_frame, width=100)
 		self.text_editor_entry.grid(row=0, column=1, columnspan=15, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
 		
@@ -93,11 +93,11 @@ class SettingsWindow(ttk.Frame):
 		self.text_editor_frame.grid_columnconfigure(15, weight=1)
 			
 	def setup_open_with(self):
-		ttk.Label(self.open_with_frame, text='File Extension:').grid(row=0, column=0, columnspan=1, sticky='NSEW', pady=self.view.default_pady)
+		ttk.Label(self.open_with_frame, text='File Extension:').grid(row=0, column=0, columnspan=1, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
 		self.extension_entry = ttk.Entry(self.open_with_frame)
 		self.extension_entry.grid(row=0, column=1, columnspan=15, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
 		
-		ttk.Label(self.open_with_frame, text='App Path:').grid(row=1, column=0, columnspan=1, sticky='NSEW', pady=self.view.default_pady)
+		ttk.Label(self.open_with_frame, text='App Path:').grid(row=1, column=0, columnspan=1, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
 		self.app_entry = ttk.Entry(self.open_with_frame)
 		self.app_entry.grid(row=1, column=1, columnspan=15, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
 
@@ -105,20 +105,20 @@ class SettingsWindow(ttk.Frame):
 		
 		# submit button
 		self.submit = ttk.Button(self.open_with_frame, text='Add', style='success.TButton', command=self.add, width=13)
-		self.submit.grid(row=3, column=0, sticky='ew', pady=10, padx=(0, 10))
+		self.submit.grid(row=3, column=0, sticky='ew', pady=10, padx=(self.view.default_padx, 10))
 		
 		self.edit = ttk.Button(self.open_with_frame, text='Edit Selected', style='info.TButton', command=self.edit_row, width=13)
-		self.edit.grid(row=3, column=1, sticky='ew', pady=10, padx=(0, 10))
+		self.edit.grid(row=3, column=1, sticky='ew', pady=10, padx=(self.view.default_padx, 10))
 
 		self.delete_btn = ttk.Button(self.open_with_frame, text='Delete Selected', style='danger.TButton', command=self.delete_row, width=14)
-		self.delete_btn.grid(row=3, column=2, sticky='ew', pady=10, padx=(0, 10))
+		self.delete_btn.grid(row=3, column=2, sticky='ew', pady=10, padx=(self.view.default_padx, 10))
 		
 		column_names = ['File Extension', 'App']
 		column_widths = [200, 600]
 		height = 14
 
 		self.treeview = treeview_functions.create_treeview(self.open_with_frame, column_names, column_widths, height)
-		self.treeview.grid(row=4, column=0, columnspan=16, sticky='NSEW', pady=self.view.default_pady)
+		self.treeview.grid(row=4, column=0, columnspan=16, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
 		self.treeview.bind("<Button-1>", self.on_left_click)
 		
 		vsb = autoscrollbar.AutoScrollbar(self.open_with_frame, orient="vertical", command=self.treeview.yview)

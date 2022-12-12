@@ -6,6 +6,8 @@ from tkinter.ttk import *
 
 from custom_widgets import address_bar, autoscrollbar
 from ttkbootstrap.themes import standard
+from ttkbootstrap.tooltip import ToolTip
+from ttkbootstrap.constants import *
 from view import treeview_functions
 from view import settings_window
 
@@ -27,20 +29,28 @@ class BranchTab(ttk.Frame):
 		self.setup_treeview()
 
 	def setup_buttons(self):
+		tool_top_delay = 600
 		#Up a level
 		self.back_button = ttk.Button(self, text=u"\u2190", command=lambda branch_id=self.branch_id: self.view.controller.back_one_level(branch_id), state="disabled", style="primary.TButton")
 		self.back_button.grid(row=0, column=0, padx=(self.view.default_padx, 0))
-
+		ToolTip(self.back_button, text="Back", bootstyle=(INFO, INVERSE), delay=tool_top_delay)
+		
 		self.forward_button = ttk.Button(self, text=u"\u2192", command=lambda branch_id=self.branch_id: self.view.controller.fwd_one_level(branch_id), state="disabled", style="primary.TButton")
 		self.forward_button.grid(row=0, column=1)
+		ToolTip(self.forward_button, text="Forward", bootstyle=(INFO, INVERSE), delay=tool_top_delay)
 		
 		self.dropdown_button = ttk.Button(self, text="v", state="disabled", style="primary.TButton")
 		self.dropdown_button.grid(row=0, column=2)
 		self.dropdown_button.bind("<Button-1>", self.dropdown_menu)
+		ToolTip(self.dropdown_button, text="Recent Locations", bootstyle=(INFO, INVERSE), delay=tool_top_delay)
 		
-		ttk.Button(self, text=u"\u2191", command=lambda branch_id=self.branch_id: self.view.controller.up_one_level(branch_id), style="primary.TButton").grid(row=0, column=3)
+		b = ttk.Button(self, text=u"\u2191", command=lambda branch_id=self.branch_id: self.view.controller.up_one_level(branch_id), style="primary.TButton")
+		b.grid(row=0, column=3)
+		ToolTip(b, text="Up One Level", bootstyle=(INFO, INVERSE))
 
-		ttk.Button(self, command=lambda branch_id=self.branch_id: self.view.controller.search(branch_id), image=self.view.search_icon2, style="primary.Outline.TButton").grid(row=0, column=4, padx=6)
+		b = ttk.Button(self, command=lambda branch_id=self.branch_id: self.view.controller.search(branch_id), image=self.view.search_icon2, style="primary.Outline.TButton")
+		b.grid(row=0, column=4, padx=6)
+		ToolTip(b, text="Search", bootstyle=(INFO, INVERSE), delay=tool_top_delay)
 		
 	def setup_adress_bar(self):
 		self.address_bar_entry = address_bar.AddressBarEntry(self)
