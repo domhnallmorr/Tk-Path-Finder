@@ -612,5 +612,9 @@ class Controller:
 					break
 				else:
 					count += 1
-			
+	
+	def get_forward_and_previous_current_directories(self, branch_id):
+		#fwd_directories, previous_directories, current_directory = self.model.branch_tabs[branch_id].get_forward_and_previous_current_directories()
+		return self.model.branch_tabs[branch_id].get_forward_and_previous_current_directories()
 		
+		#return fwd_directories, previous_directories, current_directory

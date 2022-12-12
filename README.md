@@ -9,6 +9,7 @@ A lightweight file explorer based on tabs within tabs written in python (Tkinter
   - Tabs can be reordered.
   - Load Last Session.
   - Search functionality.
+  - Sort by date/file type
   - Filter by file extension.
   - Filter files containing string.
   - Rename files and folders.

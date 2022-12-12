@@ -191,4 +191,5 @@ class BranchTabModel:
 					if file_extension != extension and file_extension not in self.filter:
 						self.filter.append(file_extension)
 					
-	
+	def get_forward_and_previous_current_directories(self):
+		return self.forward_directories, self.previous_directories, self.current_directory

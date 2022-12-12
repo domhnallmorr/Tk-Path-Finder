@@ -28,19 +28,23 @@ class BranchTab(ttk.Frame):
 
 	def setup_buttons(self):
 		#Up a level
-		self.back_button = ttk.Button(self, text=u'\u2190', command=lambda branch_id=self.branch_id: self.view.controller.back_one_level(branch_id), state='disabled', style='primary.TButton')
+		self.back_button = ttk.Button(self, text=u"\u2190", command=lambda branch_id=self.branch_id: self.view.controller.back_one_level(branch_id), state="disabled", style="primary.TButton")
 		self.back_button.grid(row=0, column=0, padx=(self.view.default_padx, 0))
 
-		self.forward_button = ttk.Button(self, text=u'\u2192', command=lambda branch_id=self.branch_id: self.view.controller.fwd_one_level(branch_id), state='disabled', style='primary.TButton')
+		self.forward_button = ttk.Button(self, text=u"\u2192", command=lambda branch_id=self.branch_id: self.view.controller.fwd_one_level(branch_id), state="disabled", style="primary.TButton")
 		self.forward_button.grid(row=0, column=1)
 		
-		ttk.Button(self, text=u'\u2191', command=lambda branch_id=self.branch_id: self.view.controller.up_one_level(branch_id), style='primary.TButton').grid(row=0, column=2)
+		self.dropdown_button = ttk.Button(self, text="v", state="disabled", style="primary.TButton")
+		self.dropdown_button.grid(row=0, column=2)
+		self.dropdown_button.bind("<Button-1>", self.dropdown_menu)
+		
+		ttk.Button(self, text=u"\u2191", command=lambda branch_id=self.branch_id: self.view.controller.up_one_level(branch_id), style="primary.TButton").grid(row=0, column=3)
 
-		ttk.Button(self, command=lambda branch_id=self.branch_id: self.view.controller.search(branch_id), image=self.view.search_icon2, style='primary.Outline.TButton').grid(row=0, column=3, padx=6)
+		ttk.Button(self, command=lambda branch_id=self.branch_id: self.view.controller.search(branch_id), image=self.view.search_icon2, style="primary.Outline.TButton").grid(row=0, column=4, padx=6)
 		
 	def setup_adress_bar(self):
 		self.address_bar_entry = address_bar.AddressBarEntry(self)
-		self.address_bar_entry.grid(row=0, column=4, columnspan=self.tree_colspan-1, padx=6, sticky="NSEW", pady=self.view.default_pady)
+		self.address_bar_entry.grid(row=0, column=5, columnspan=self.tree_colspan-1, padx=6, sticky="NSEW", pady=self.view.default_pady)
 		
 	def setup_treeview(self):
 		column_names = ["Filename", "Date Modified", "Type", "Size"]
@@ -97,6 +101,11 @@ class BranchTab(ttk.Frame):
 				self.forward_button.config(state="disabled")
 			else:
 				self.forward_button.config(state="enabled")
+				
+			if data["no_forward_directories"] + data["no_previous_directories"] == 0:
+				self.dropdown_button.config(state="disabled")
+			else:
+				self.dropdown_button.config(state="enabled")
 				
 		# ------------- ADD ASTERISK IN HEADER TO INDICATE IF FILTER IS IN PLACE -------------
 		if data["len_filter"] != 0:
@@ -254,4 +263,25 @@ class BranchTab(ttk.Frame):
 			finally:
 				popup_menu.grab_release()
 				
-				
+	def dropdown_menu(self, event):
+
+			popup_menu = tk.Menu(event.widget, tearoff=0)
+			
+			fwd_directories, previous_directories, current_directory = self.view.controller.get_forward_and_previous_current_directories(self.branch_id)
+
+			# fwd
+			for directory in reversed(fwd_directories):
+				label = u"\u2192" + "    " + directory
+				popup_menu.add_command(label=label, command=lambda branch_id=self.branch_id, directory=directory:self.view.controller.update_branch_tab(branch_id, directory, mode="fwd"))			
+			
+			popup_menu.add_command(label=u"\u2713" + "    " + current_directory)
+			
+			# previous_directories_directories
+			for directory in previous_directories:
+				label = u"\u2190" + "    " + directory
+				popup_menu.add_command(label=label, command=lambda branch_id=self.branch_id, directory=directory:self.view.controller.update_branch_tab(branch_id, directory, mode="back"))
+						
+			try:
+				popup_menu.tk_popup(event.x_root + 100, event.y_root + 25, 0)
+			finally:
+				popup_menu.grab_release()
