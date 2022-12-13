@@ -19,7 +19,7 @@ def create_treeview(frame, column_names, column_widths, height):
 	cols = tuple(cols)
 
 	for idx, col in enumerate(cols):
-		tree.heading(col, text=column_names[idx])
+		tree.heading(col, text=column_names[idx], anchor=tk.W)
 		tree.column(col,minwidth=0,width=column_widths[idx], stretch='NO')
 
 	return tree

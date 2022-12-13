@@ -448,7 +448,7 @@ class Controller:
 				missing_directories = self.check_load_last_session_folders_exist(session_data)
 				
 				answer = True
-				if missing_directories != []:
+				if list(missing_directories) != []:
 					msg = "Some Directories are not Accessible, Do You Want to Continue?"
 					for d in missing_directories:
 						msg = msg + "\n" + d

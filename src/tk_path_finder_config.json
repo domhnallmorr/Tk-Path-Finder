@@ -44,7 +44,7 @@
             "C:\\Program Files\\Sublime Text 3\\sublime_text.exe"
         ]
     },
-    "default_file_width": "400",
+    "default_file_width": "500",
     "default_date_width": "200",
     "default_type_width": "300",
     "default_size_width": "100",
@@ -57,12 +57,12 @@
         ]
     ],
     "session_data": {
-        "vgLVLNTz": {
+        "hpVb0g4g": {
             "text": "0",
             "branch_tabs": {
-                "AWIh7hT0": {
-                    "text": "ttkbootstrap",
-                    "directory": "C:\\Python39\\Lib\\site-packages\\ttkbootstrap"
+                "xMqMDB1u": {
+                    "text": "src",
+                    "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
                 }
             }
         }

@@ -20,7 +20,7 @@ class BranchTab(ttk.Frame):
 		
 		# ----------------- GRID -----------------
 		self.tree_colspan = 16
-		self.grid_columnconfigure(self.tree_colspan-1, weight=1)
+		self.grid_columnconfigure(14, weight=1)
 		self.grid_rowconfigure(1, weight=1)
 		
 		# ----------------- SETUP WIDGETS -----------------
@@ -46,18 +46,22 @@ class BranchTab(ttk.Frame):
 		
 		b = ttk.Button(self, text=u"\u2191", command=lambda branch_id=self.branch_id: self.view.controller.up_one_level(branch_id), style="primary.TButton")
 		b.grid(row=0, column=3)
-		ToolTip(b, text="Up One Level", bootstyle=(INFO, INVERSE))
+		ToolTip(b, text="Up One Level", bootstyle=(INFO, INVERSE), delay=tool_top_delay)
 
 		b = ttk.Button(self, command=lambda branch_id=self.branch_id: self.view.controller.search(branch_id), image=self.view.search_icon2, style="primary.Outline.TButton")
 		b.grid(row=0, column=4, padx=6)
 		ToolTip(b, text="Search", bootstyle=(INFO, INVERSE), delay=tool_top_delay)
+
+		b = ttk.Button(self, text=u"\u27F3", command=lambda branch_id=self.branch_id: self.view.controller.refresh_tab(self.branch_id), style="primary.TButton")
+		b.grid(row=0, column=15, padx=(0, self.view.default_padx))
+		ToolTip(b, text="Refresh", bootstyle=(INFO, INVERSE), delay=tool_top_delay)
 		
 	def setup_adress_bar(self):
 		self.address_bar_entry = address_bar.AddressBarEntry(self)
-		self.address_bar_entry.grid(row=0, column=5, columnspan=self.tree_colspan-1, padx=6, sticky="NSEW", pady=self.view.default_pady)
+		self.address_bar_entry.grid(row=0, column=5, columnspan=10, padx=(6, 0), sticky="NSEW", pady=self.view.default_pady)
 		
 	def setup_treeview(self):
-		column_names = ["Filename", "Date Modified", "Type", "Size"]
+		column_names = ["   Filename", "Date Modified", "Type", "Size"]
 		column_widths = [self.view.default_file_width, self.view.default_date_width, self.view.default_type_width, self.view.default_size_width]
 		height = 20
 
