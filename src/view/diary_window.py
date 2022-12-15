@@ -121,12 +121,31 @@ class DiaryWindow(ttk.Frame):
 		txt = self.view.controller.read_date_from_database(self.date)
 		self.general_text.insert("end", txt["General"])		
 		self.general_text.bind('<Return>', self.enter_event)
+		self.general_text.bind('<Tab>', self.tab_event)
 
 	def add_bullet_point(self):
 		self.general_text.insert("insert", u"\u2022" + " ")
 		
 	def enter_event(self, event):
-		pass
+		multiple_lines_selected, first_line, last_line = self.check_if_multiple_lines_selected()
+		
+		if multiple_lines_selected is False:
+			current_pos = self.general_text.index(tk.INSERT)
+			current_line = current_pos.split(".")[0]
+			line_text = self.general_text.get(f"{current_line}.0", f"{current_line}.end")
+			
+			bullet_type = None
+			if line_text.lstrip().startswith(u"\u2022"):
+				bullet_type = u"\u2022"
+			elif line_text.lstrip().startswith("-"):
+				bullet_type = "-"
+				
+			if bullet_type is not None:
+				leading_text = line_text[:line_text.index(bullet_type)]
+			
+				self.general_text.insert(current_pos, "\n" + leading_text + bullet_type)
+				
+				return "break"
 		
 	def get_text_input(self):
 		self.data[self.date] = {"General": self.general_text.get("1.0","end")}
@@ -155,3 +174,34 @@ class DiaryWindow(ttk.Frame):
 	def paste(self, event):
 		print("Copying")
 		
+	def tab_event(self, event):
+		current_pos = self.general_text.index(tk.INSERT)
+		
+		multiple_lines_selected, first_line, last_line = self.check_if_multiple_lines_selected()
+		
+		if not multiple_lines_selected:
+			self.general_text.insert(current_pos, "\t")
+		else:
+			for line in range(int(first_line), int(last_line)+1):
+				self.general_text.insert(f"{line}.0", "\t")
+				
+		return "break"
+		
+	def check_if_multiple_lines_selected(self):
+		multiple_lines_selected = False
+		first_line = None
+		last_line = None
+		
+		try:
+			first_line = self.general_text.index("sel.first").split(".")[0]
+			last_line = self.general_text.index("sel.last").split(".")[0]
+			
+			if first_line != last_line:
+				multiple_lines_selected = True
+		except Exception as e:
+			if 'contain any characters tagged with "sel"' in str(e):
+				pass
+			else:
+				self.view.show_error(str(e))
+				
+		return multiple_lines_selected, first_line, last_line

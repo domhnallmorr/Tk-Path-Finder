@@ -39,6 +39,15 @@ def load_config_file(mainapp):
 	return data
 	
 def backup_config_file(mainapp):
+	if os.path.isfile("tk_path_finder_config_backup4.json"):
+		shutil.copyfile("tk_path_finder_config_backup4.json", "tk_path_finder_config_backup5.json")
+		
+	if os.path.isfile("tk_path_finder_config_backup3.json"):
+		shutil.copyfile("tk_path_finder_config_backup3.json", "tk_path_finder_config_backup4.json")
+
+	if os.path.isfile("tk_path_finder_config_backup2.json"):
+		shutil.copyfile("tk_path_finder_config_backup2.json", "tk_path_finder_config_backup3.json")
+
 	if os.path.isfile("tk_path_finder_config_backup1.json"):
 		shutil.copyfile("tk_path_finder_config_backup1.json", "tk_path_finder_config_backup2.json")
 
