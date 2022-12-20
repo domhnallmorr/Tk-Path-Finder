@@ -14,7 +14,7 @@ def create_treeview(frame, column_names, column_widths, height):
 	for i in range(len(column_names)-1):
 		cols.append(letters[i])
 	
-	tree = ttk.Treeview(frame, selectmode="extended",columns=cols,height = height)
+	tree = ttk.Treeview(frame, selectmode="extended",columns=cols, height=height, bootstyle="secondary")
 	cols.insert(0, "#0")
 	cols = tuple(cols)
 

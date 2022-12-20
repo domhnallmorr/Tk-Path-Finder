@@ -9,6 +9,8 @@ from tkinter import messagebox
 from tkinter import simpledialog
 import win32api
 
+from ttkbootstrap.themes import standard
+
 from custom_widgets import autoscrollbar
 from view import treeview_functions
 
@@ -37,6 +39,7 @@ class SettingsWindow(ttk.Frame):
 		self.setup_text_editor()
 		self.setup_open_with()
 		self.setup_display()
+		self.update_tags()
 		
 		treeview_data = self.convert_open_with_apps_to_list()
 		treeview_functions.write_data_to_treeview_general(self.treeview, "replace", treeview_data)
@@ -118,8 +121,10 @@ class SettingsWindow(ttk.Frame):
 		height = 14
 
 		self.treeview = treeview_functions.create_treeview(self.open_with_frame, column_names, column_widths, height)
-		self.treeview.grid(row=4, column=0, columnspan=16, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
+		self.treeview.grid(row=4, column=0, columnspan=16, sticky='NSEW', padx=0, pady=self.view.default_pady)
 		self.treeview.bind("<Button-1>", self.on_left_click)
+		self.treeview.bind("<Motion>", self.highlight_row)
+		self.treeview.bind("<Leave>", self.leave_treeview)
 		
 		vsb = autoscrollbar.AutoScrollbar(self.open_with_frame, orient="vertical", command=self.treeview.yview)
 		vsb.grid(row=4, column=16, sticky='NSEW')
@@ -132,6 +137,19 @@ class SettingsWindow(ttk.Frame):
 		self.cancel_btn.grid(row=5, column=7, padx=5, pady=5, sticky='ne')
 		
 		self.top.grid_columnconfigure(5, weight=1)
+
+	def update_tags(self):
+		highlight_color = standard.STANDARD_THEMES[self.view.style_name]["colors"]["active"]
+		self.treeview.tag_configure('highlight', background=highlight_color)
+		
+	def highlight_row(self, event):
+		item = self.treeview.identify_row(event.y)
+		item = f'"{item}"'
+		self.treeview.tk.call(self.treeview, "tag", "remove", "highlight")
+		self.treeview.tk.call(self.treeview, "tag", "add", "highlight", item)
+
+	def leave_treeview(self, event):
+		self.treeview.tk.call(self.treeview, "tag", "remove", "highlight")
 		
 	def add(self):
 		file_extension = self.extension_entry.get()
