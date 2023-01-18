@@ -172,6 +172,7 @@ class View:
 				messagebox.showerror("Error", message=f"The following message occured {str(e)}")
 		
 		self.style.configure('Treeview', rowheight=17)
+		self.style.configure('Treeview.Heading', background=self.style.colors.secondary)
 		self.quick_access_tree.update_btn_bg()
 		
 		# Update hover color in treeviews
