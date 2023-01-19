@@ -27,6 +27,7 @@ class BranchTab(ttk.Frame):
 		self.setup_buttons()
 		self.setup_adress_bar()
 		self.setup_treeview()
+		self.setup_labels()
 
 	def setup_buttons(self):
 		tool_top_delay = 600
@@ -80,6 +81,10 @@ class BranchTab(ttk.Frame):
 		
 		# # tags
 		self.update_tags()
+		
+	def setup_labels(self):
+		self.items_label = Label(self, text="Items")
+		self.items_label.grid(row=2, column=0, columnspan=16, sticky='NSEW', padx=0, pady=(self.view.default_pady, 0), ipady=0)
 
 	def update_tags(self):
 		highlight_color = standard.STANDARD_THEMES[self.view.style_name]["colors"]["active"]
@@ -105,6 +110,9 @@ class BranchTab(ttk.Frame):
 			self.address_bar_entry.update_bar(data["current_directory"])
 			self.update_treeview(data["tabular_data"])
 			
+			# ------------- UPDATE ITEMS LABEL -------------
+			self.items_label.config(text=f"{len(data['tabular_data'])} Items")
+			
 			# ------------- ENABLE/DISABLE BUTTONS -------------
 			if data["no_previous_directories"] == 0:
 				self.back_button.config(state="disabled")
@@ -126,6 +134,8 @@ class BranchTab(ttk.Frame):
 			self.treeview.heading('#2', text='Type*')
 		else:
 			self.treeview.heading('#2', text='Type')
+			
+
 		
 	def update_treeview(self, tabular_data):
 		treeview_functions.write_data_to_treeview(self.view, self.treeview, "replace", tabular_data)
