@@ -27,7 +27,6 @@ def launch_diary(mainapp):
 		
 		mainapp.diary_open = False
 	else:
-		mainapp.diary_window.top.state('zoomed')
 		mainapp.diary_window.top.lift()
 		
 class DiaryWindow(ttk.Frame):
@@ -51,8 +50,8 @@ class DiaryWindow(ttk.Frame):
 		self.setup_text_widget()
 	
 		self.top.protocol("WM_DELETE_WINDOW", self.on_closing)
-
-		self.top.state('zoomed')
+		
+		self.top.geometry("800x650")
 		
 	def on_closing(self):
 		self.get_text_input()

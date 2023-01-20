@@ -49,7 +49,7 @@ class BranchTabModel:
 						file_data.append(file)		
 		else:
 			file_data = self.file_data
-
+		
 		return {"id": self.id_key, "current_directory": self.current_directory, "tabular_data": self.directory_data + file_data,
 				"text_locked": self.text_locked, "text": self.text, "len_filter": len(self.filter), "file_data": file_data,
 				"directory_data": self.directory_data, "lock_filter": self.lock_filter, "filter_text": self.filter_text,
@@ -180,6 +180,8 @@ class BranchTabModel:
 		self.filter = []
 		
 		if mode != "remove_filter":
+			self.filter_type = "extension"
+			
 			for file in self.file_data:
 				filename, file_extension = os.path.splitext(file[0])
 				
