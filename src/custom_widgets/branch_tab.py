@@ -73,6 +73,7 @@ class BranchTab(ttk.Frame):
 		self.treeview.bind("<Button-3>", self.right_click_treeview)
 		self.treeview.bind("<Motion>", self.highlight_row)
 		self.treeview.bind("<Leave>", self.leave_treeview)
+		self.treeview.bind("<<TreeviewSelect>>", self.update_items_label)
 		
 		# ------------------ ADD SCROLLBAR ------------------
 		vsb = autoscrollbar.AutoScrollbar(self, orient="vertical", command=self.treeview.yview)
@@ -136,7 +137,6 @@ class BranchTab(ttk.Frame):
 			self.treeview.heading('#2', text='Type')
 			
 
-		
 	def update_treeview(self, tabular_data):
 		treeview_functions.write_data_to_treeview(self.view, self.treeview, "replace", tabular_data)
 
@@ -152,12 +152,24 @@ class BranchTab(ttk.Frame):
 				self.view.controller.refresh_tab(self.branch_id, sort="size")
 			else:
 				self.view.controller.refresh_tab(self.branch_id)
-			
+		
 		# If no item selected, deselect any existing items
 		if not self.treeview.identify_row(event.y):
 			for item in self.treeview.selection():
 				self.treeview.selection_remove(item)
 
+
+	def update_items_label(self, event=None):
+		items = treeview_functions.get_all_treeview_items(self.treeview)
+		number_of_selected_items = len(self.treeview.selection())
+		
+		text = f"{len(items)} Items"
+		
+		if number_of_selected_items > 0:
+			text = text + f"\t\t{number_of_selected_items} Selected"
+		
+		self.items_label.config(text=text)
+		
 	def double_click_treeview(self, event):
 		current_selection = treeview_functions.get_current_selection(self.treeview)
 
