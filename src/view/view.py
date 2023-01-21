@@ -73,6 +73,8 @@ class View:
 			theme_type = standard.STANDARD_THEMES[theme]["type"].lower()
 			self.themes[theme_type].append(theme)
 		
+		self.tool_top_delay = 600
+		
 	def setup_main_frames(self):
 		self.rootpane = ttk.PanedWindow(self.parent, orient=tk.HORIZONTAL)
 		self.rootpane.pack(expand=True, fill=BOTH, side=LEFT)
@@ -173,7 +175,6 @@ class View:
 		
 		self.style.configure('Treeview', rowheight=17)
 		self.style.configure('Treeview.Heading', background=self.style.colors.secondary)
-		self.quick_access_tree.update_btn_bg()
 		
 		# Update hover color in treeviews
 		for tab in self.branch_tabs.keys():

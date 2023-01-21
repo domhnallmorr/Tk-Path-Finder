@@ -8,6 +8,8 @@ from tkinter import simpledialog
 from tkinter import messagebox
 
 from ttkbootstrap.themes import standard
+from ttkbootstrap.tooltip import ToolTip
+from ttkbootstrap.constants import *
 from view import link_window
 
 
@@ -22,20 +24,23 @@ class QuickAccessTreeview(ttk.Treeview):
 		self.bind("<Motion>", self.highlight_row)
 		self.bind("<Leave>", self.leave_treeview)
 
-		self.close_btn = tk.Button(view.sidebar_frame, image=self.view.close_icon2, background="white", relief=FLAT,
-				command= lambda action=False: self.open_close_all_nodes(action))
-		self.close_btn.grid(row=1, column=0, sticky="w", padx=0)
-		self.up_btn = tk.Button(view.sidebar_frame, image=self.view.up_icon2, background="white", relief=FLAT,
-				command=self.move_up)
-		self.up_btn.grid(row=1, column=1, sticky="w", padx=0)
-		self.down_btn = tk.Button(self.view.sidebar_frame, image=self.view.down_icon2, background="white", relief=FLAT,
-				command=self.move_down)
-		self.down_btn.grid(row=1, column=2, sticky="w", padx=0)
+		self.close_btn = Button(view.sidebar_frame, text=u"\u2716",
+				command= lambda action=False: self.open_close_all_nodes(action), bootstyle="danger.TButton")
+		self.close_btn.grid(row=1, column=0, sticky="w", padx=0, ipady=0)
+		ToolTip(self.close_btn, text="Close All Folders", bootstyle=(INFO, INVERSE), delay=self.view.tool_top_delay)
 		
-		self.update_btn_bg()
+		self.up_btn = Button(view.sidebar_frame, text=u"\u2191", command=self.move_up, style="primary.TButton")
+		self.up_btn.grid(row=1, column=1, sticky="w", padx=0)
+		ToolTip(self.up_btn, text="Move Selected Folder Up", bootstyle=(INFO, INVERSE), delay=self.view.tool_top_delay)
+		
+		self.down_btn = Button(self.view.sidebar_frame, text=u"\u2193", command=self.move_down, style="primary.TButton")
+		self.down_btn.grid(row=1, column=2, sticky="w", padx=0)
+		ToolTip(self.down_btn, text="Move Selected Folder Down", bootstyle=(INFO, INVERSE), delay=self.view.tool_top_delay)
+		
 		self.update_tags()
 		
 	def update_btn_bg(self):
+		# No Longer using the method from V0.47.3, leaving it here for reference
 		s = ttk.Style()
 		bg = s.lookup("TFrame", "background")
 	

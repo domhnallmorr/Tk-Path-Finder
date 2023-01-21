@@ -30,32 +30,31 @@ class BranchTab(ttk.Frame):
 		self.setup_labels()
 
 	def setup_buttons(self):
-		tool_top_delay = 600
 		#Up a level
 		self.back_button = ttk.Button(self, text=u"\u2190", command=lambda branch_id=self.branch_id: self.view.controller.back_one_level(branch_id), state="disabled", style="primary.TButton")
 		self.back_button.grid(row=0, column=0, padx=(self.view.default_padx, 0))
-		ToolTip(self.back_button, text="Back", bootstyle=(INFO, INVERSE), delay=tool_top_delay)
+		ToolTip(self.back_button, text="Back", bootstyle=(INFO, INVERSE), delay=self.view.tool_top_delay)
 		
 		self.forward_button = ttk.Button(self, text=u"\u2192", command=lambda branch_id=self.branch_id: self.view.controller.fwd_one_level(branch_id), state="disabled", style="primary.TButton")
 		self.forward_button.grid(row=0, column=1)
-		ToolTip(self.forward_button, text="Forward", bootstyle=(INFO, INVERSE), delay=tool_top_delay)
+		ToolTip(self.forward_button, text="Forward", bootstyle=(INFO, INVERSE), delay=self.view.tool_top_delay)
 		
 		self.dropdown_button = ttk.Button(self, text="v", state="disabled", style="primary.TButton")
 		self.dropdown_button.grid(row=0, column=2)
 		self.dropdown_button.bind("<Button-1>", self.dropdown_menu)
-		ToolTip(self.dropdown_button, text="Recent Locations", bootstyle=(INFO, INVERSE), delay=tool_top_delay)
+		ToolTip(self.dropdown_button, text="Recent Locations", bootstyle=(INFO, INVERSE), delay=self.view.tool_top_delay)
 		
 		b = ttk.Button(self, text=u"\u2191", command=lambda branch_id=self.branch_id: self.view.controller.up_one_level(branch_id), style="primary.TButton")
 		b.grid(row=0, column=3)
-		ToolTip(b, text="Up One Level", bootstyle=(INFO, INVERSE), delay=tool_top_delay)
+		ToolTip(b, text="Up One Level", bootstyle=(INFO, INVERSE), delay=self.view.tool_top_delay)
 
 		b = ttk.Button(self, command=lambda branch_id=self.branch_id: self.view.controller.search(branch_id), image=self.view.search_icon2, style="primary.Outline.TButton")
 		b.grid(row=0, column=4, padx=6)
-		ToolTip(b, text="Search", bootstyle=(INFO, INVERSE), delay=tool_top_delay)
+		ToolTip(b, text="Search", bootstyle=(INFO, INVERSE), delay=self.view.tool_top_delay)
 
 		b = ttk.Button(self, text=u"\u27F3", command=lambda branch_id=self.branch_id: self.view.controller.refresh_tab(self.branch_id), style="primary.TButton")
 		b.grid(row=0, column=15, padx=(0, self.view.default_padx))
-		ToolTip(b, text="Refresh", bootstyle=(INFO, INVERSE), delay=tool_top_delay)
+		ToolTip(b, text="Refresh", bootstyle=(INFO, INVERSE), delay=self.view.tool_top_delay)
 		
 	def setup_adress_bar(self):
 		self.address_bar_entry = address_bar.AddressBarEntry(self)
@@ -85,7 +84,7 @@ class BranchTab(ttk.Frame):
 		
 	def setup_labels(self):
 		self.items_label = Label(self, text="Items")
-		self.items_label.grid(row=2, column=0, columnspan=16, sticky='NSEW', padx=0, pady=(self.view.default_pady, 0), ipady=0)
+		self.items_label.grid(row=2, column=0, columnspan=16, sticky='NSEW', padx=0, pady=(1, 0), ipady=0)
 
 	def update_tags(self):
 		highlight_color = standard.STANDARD_THEMES[self.view.style_name]["colors"]["active"]
@@ -161,12 +160,28 @@ class BranchTab(ttk.Frame):
 
 	def update_items_label(self, event=None):
 		items = treeview_functions.get_all_treeview_items(self.treeview)
-		number_of_selected_items = len(self.treeview.selection())
+		selected_items = self.treeview.selection() # iids of selected items
+		number_of_selected_items = len(selected_items)
 		
 		text = f"{len(items)} Items"
+		folder_selected = False # if a folder is selected we don't display total size of selected items
 		
 		if number_of_selected_items > 0:
-			text = text + f"\t\t{number_of_selected_items} Selected"
+			text = text + f"\t\t{number_of_selected_items} Selected  "
+			total_size = 0
+			
+			# Get total size of selected items
+			for iid in selected_items:
+				item_size = self.treeview.item(iid, "values")[-1]
+				if item_size != "-":
+					total_size += int(item_size.replace(" KB", "").replace(",", ""))
+				else: # size = "-" indicates a folder was selected, therefore we won't show total size
+					folder_selected = True
+					break
+			
+			if folder_selected is False:
+				total_size = "{:,}".format(total_size) # add commas to total size number
+				text = text + f"({total_size} KB)"
 		
 		self.items_label.config(text=text)
 		
