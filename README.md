@@ -3,6 +3,11 @@
 ## Description
 A lightweight file explorer based on tabs within tabs written in python (Tkinter). Written primarily to assist working with text files and MS office files spread across many folders/servers.
 
+## Running the App
+To run, download the code, unzip the files and run the main.py file. You will need several python libraries installed which are listed further below.
+
+Note the app creates 2 files, "tk_path_finder_config.json" and "notes.db" (sqlite database). These will be created in the default working directory. The json file stores all links and tabs created by the user. Several backups are automatically generated for this file. The database contains any notes entered into the diary.
+
 ## Features
   - Quick Access Sidebar, links can be grouped into individual folders.
   - Tabs within tabs layout.

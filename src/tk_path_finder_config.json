@@ -1,8 +1,13 @@
 {
     "quick_access_tree": {
         "Py9ndoHN": {
-            "text": "1",
-            "links": {}
+            "text": "Default",
+            "links": {
+                "8GuOy6UX": {
+                    "text": "Desktop",
+                    "path": "C:\\Users\\domhn\\Desktop"
+                }
+            }
         },
         "QHFEkjyH": {
             "text": "3",
@@ -32,7 +37,16 @@
         },
         "reuFxtR3": {
             "text": "Python Links",
-            "links": {}
+            "links": {
+                "Jc4BIRby": {
+                    "text": "nastran_reader",
+                    "path": "C:\\Python39\\Lib\\site-packages\\nastran_reader"
+                },
+                "iSPhoL1r": {
+                    "text": "Tk Nastran",
+                    "path": "C:\\Users\\domhn\\Documents\\Python\\Tk Nastran\\code"
+                }
+            }
         }
     },
     "text_editor": "C:\\Program Files (x86)\\Notepad++\\notepad++.exe",
@@ -57,27 +71,35 @@
         ]
     ],
     "session_data": {
-        "HiW93ESX": {
-            "text": "Some Project",
+        "O2KcLLQi": {
+            "text": "0",
             "branch_tabs": {
-                "4DAClOta": {
-                    "text": "Folder 1",
-                    "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
+                "xGdy5FON": {
+                    "text": "Tk Nastran",
+                    "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Nastran\\code\\src\\view"
                 },
-                "eKHNgvNr": {
-                    "text": "Folder 2",
-                    "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
+                "Vxz3Uyqk": {
+                    "text": "nastran_reader",
+                    "directory": "C:\\Python39\\Lib\\site-packages\\nastran_reader"
                 },
-                "AuVQ0BWt": {
-                    "text": "Folder 3",
-                    "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src\\view"
+                "JzxU6ufs": {
+                    "text": "Test_Files",
+                    "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Nastran\\test_files"
+                },
+                "lrLEeJjJ": {
+                    "text": "Desktop",
+                    "directory": "C:\\Users\\domhn\\Desktop"
                 }
             }
         },
-        "iZKZSfHi": {
-            "text": "Another Project",
+        "diw60pT5": {
+            "text": "1",
             "branch_tabs": {
-                "wRv0RGQr": {
+                "bjRdN4Tj": {
+                    "text": "Downloads",
+                    "directory": "C:\\Users\\domhn\\Downloads"
+                },
+                "50L3HryO": {
                     "text": "src",
                     "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
                 }

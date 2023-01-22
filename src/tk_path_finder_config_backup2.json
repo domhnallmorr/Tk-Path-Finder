@@ -57,10 +57,27 @@
         ]
     ],
     "session_data": {
-        "ziPdUgwh": {
-            "text": "0",
+        "HiW93ESX": {
+            "text": "Some Project",
             "branch_tabs": {
-                "eib3YhrI": {
+                "4DAClOta": {
+                    "text": "Folder 1",
+                    "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
+                },
+                "eKHNgvNr": {
+                    "text": "Folder 2",
+                    "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
+                },
+                "AuVQ0BWt": {
+                    "text": "Folder 3",
+                    "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src\\view"
+                }
+            }
+        },
+        "iZKZSfHi": {
+            "text": "Another Project",
+            "branch_tabs": {
+                "wRv0RGQr": {
                     "text": "src",
                     "directory": "C:\\Users\\domhn\\Documents\\Python\\Tk Path Finder\\src"
                 }
