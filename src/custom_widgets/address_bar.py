@@ -11,6 +11,7 @@ class AddressBarEntry(ttk.Entry):
 		super(AddressBarEntry, self).__init__(branch_tab)
 		self.branch_tab = branch_tab
 		self.bind('<Return>', self.enter_event)
+		self.raw_path = False
 		
 		self.buttons = []
 		self.bind("<FocusIn>", self.on_focusin)
@@ -24,12 +25,21 @@ class AddressBarEntry(ttk.Entry):
 		for btn in self.buttons:
 			btn.grid_forget()
 			
-		folders = text.split(os.sep)
+		self.raw_path = False
+		if text.startswith("\\"):
+			self.raw_path = True
+			
+		if self.raw_path is False:
+			folders = text.split(os.sep)
+		else:
+			folders = text[2:].split(os.sep)
+			folders[0]
+		
 		self.buttons = []
+		
 		for idx, folder in enumerate(folders):
 			if idx == 0:
 				path = folder + os.sep
-				
 			else:
 				path = os.path.join(path, folder)
 			
@@ -45,8 +55,10 @@ class AddressBarEntry(ttk.Entry):
 		self.branch_tab.view.controller.update_branch_tab(self.branch_tab.branch_id, self.get().rstrip().lstrip())
 		
 	def button_clicked(self, event, path):
+		if self.raw_path == True:
+			path = r"\\" + path
+			
 		self.branch_tab.view.controller.update_branch_tab(self.branch_tab.branch_id, path)
-		
 		
 	def on_focusin(self, event):
 		for btn in self.buttons:
