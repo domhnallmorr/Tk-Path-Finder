@@ -32,23 +32,23 @@ class SearchWindow(ttk.Frame):
 		
 		# Widgets
 		
-		ttk.Label(self.options_frame, text='Search For:').grid(row=1, column=0, padx=5, pady=5)
+		ttk.Label(self.options_frame, text='Search For:').grid(row=1, column=0, padx=5, pady=5, sticky="E")
 		self.search_for_combo = ttk.Combobox(self.options_frame, width=30, values=['Files', 'Folders'], state='readonly')
 		self.search_for_combo.set('Files')
 		self.search_for_combo.grid(row=1, column=1, padx=5, pady=5, sticky='W')
 
-		ttk.Label(self.options_frame, text='Search Where:').grid(row=2, column=0, padx=5, pady=5)
+		ttk.Label(self.options_frame, text='Search Where:').grid(row=2, column=0, padx=5, pady=5, sticky="E")
 		self.search_where_combo = ttk.Combobox(self.options_frame, width=30, values=['Parent Directory', 'Parent and Sub Directories'], state='readonly')
 		self.search_where_combo.set('Parent Directory')
 		self.search_where_combo.grid(row=2, column=1, padx=5, pady=5, sticky='W')
 		
-		ttk.Label(self.options_frame, text='Text:').grid(row=3, column=0, padx=5, pady=5)
-		self.search_bar = ttk.Entry(self.options_frame, width=50)
+		ttk.Label(self.options_frame, text='Text:').grid(row=3, column=0, padx=5, pady=5, sticky="E")
+		self.search_bar = ttk.Entry(self.options_frame, width=60)
 		self.search_bar.grid(row=3, column=1, padx=5, pady=5)
 		self.search_bar.bind('<Return>', self.on_search)
 		
-		ttk.Label(self.options_frame, text='File Extension:').grid(row=4, column=0, padx=5, pady=5)
-		self.extension_extry = ttk.Entry(self.options_frame, width=50)
+		ttk.Label(self.options_frame, text='File Extension:').grid(row=4, column=0, padx=5, pady=5, sticky="E")
+		self.extension_extry = ttk.Entry(self.options_frame, width=60)
 		self.extension_extry.grid(row=4, column=1, padx=5, pady=5)
 		self.extension_extry.bind('<Return>', self.on_search)
 		
@@ -60,7 +60,7 @@ class SearchWindow(ttk.Frame):
 		b1.grid(row=6, column=1, sticky='e', padx=5, pady=5, ipadx=10)
 		
 		# Raw Text Widget
-		self.search_text = tk.Text(self.results_frame, width=110, height=20)
+		self.search_text = tk.Text(self.results_frame, width=130, height=20)
 		self.search_text.grid(row=1, column=0, columnspan=8, sticky='NSEW', padx=5, pady=5, ipadx=2, ipady=5)
 		
 		vsb = autoscrollbar.AutoScrollbar(self.results_frame, orient="vertical", command=self.search_text.yview)

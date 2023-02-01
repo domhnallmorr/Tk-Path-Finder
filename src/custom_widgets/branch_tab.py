@@ -78,7 +78,8 @@ class BranchTab(ttk.Frame):
 		vsb = autoscrollbar.AutoScrollbar(self, orient="vertical", command=self.treeview.yview)
 		vsb.grid(row=1, column=16, sticky='NSEW')
 		self.treeview.configure(yscrollcommand=vsb.set)
-		
+		self.treeview.bind('<Control-a>', lambda *args: self.treeview.selection_add(self.treeview.get_children()))
+
 		# # tags
 		self.update_tags()
 		
