@@ -59,6 +59,7 @@ class ToDoListWindow(ttk.Frame):
 		ttk.Label(self.todo_frame, text='Task:').grid(row=0, column=0, columnspan=1, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
 		self.task_entry = ttk.Entry(self.todo_frame)
 		self.task_entry.grid(row=0, column=1, columnspan=15, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
+		self.task_entry.bind('<Return>', self.enter_event)
 		
 		ttk.Label(self.todo_frame, text='Status:').grid(row=1, column=0, columnspan=1, sticky='NSEW', padx=self.view.default_padx, pady=self.view.default_pady)
 		self.status_combo = ttk.Combobox(self.todo_frame, values=["Open", "Closed"], state='readonly')
@@ -146,3 +147,6 @@ class ToDoListWindow(ttk.Frame):
 		if region == 'heading':
 			for item in self.treeview.selection():
 				self.treeview.selection_remove(item)
+				
+	def enter_event(self, event):
+		self.add()

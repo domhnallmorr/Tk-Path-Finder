@@ -16,8 +16,11 @@ class AddressBarEntry(ttk.Entry):
 		self.buttons = []
 		self.bind("<FocusIn>", self.on_focusin)
 		self.bind("<FocusOut>", self.on_focusout)
+		self.bind("<Escape>", self.on_escape)
+		self.text = None
 		
 	def update_bar(self, text):
+		self.text = text
 		self.delete(0, END) #deletes the current value
 		self.insert(0, text) #inserts new value assigned by 2nd parameter
 		
@@ -49,6 +52,7 @@ class AddressBarEntry(ttk.Entry):
 			btn.bindtags((btn, btn.winfo_class(), self, self.winfo_class(), "all"))
 			self.buttons.append(btn)
 
+		self.branch_tab.focus()
 		
 	def enter_event(self, event):
 		# -------------- CALL THE CONTROLLER METHOD TO UPDATE THE BRANCH TAB BASED ON DIRECTORY IN THE ADDRESS BAR -------------
@@ -67,4 +71,8 @@ class AddressBarEntry(ttk.Entry):
 	def on_focusout(self, event):
 		for btn in self.buttons:
 			btn.grid()
+			
+	def on_escape(self, event):
+		self.update_bar(self.text)
+		self.branch_tab.focus()
 	
