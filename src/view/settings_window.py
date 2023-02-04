@@ -182,8 +182,10 @@ class SettingsWindow(ttk.Frame):
 			self.config_data["open_with_apps"][self.extension_entry.get()].append(self.app_entry.get())
 			
 		else:
-			self.config_data["open_with_apps"][self.extension_entry.get()].replace(current_app, self.app_entry.get())
-		
+			for idx, app in enumerate(self.config_data["open_with_apps"][self.extension_entry.get()]):
+				if app == current_app:
+					self.config_data["open_with_apps"][self.extension_entry.get()][idx] = self.app_entry.get()
+
 		self.treeview.item(iid, text=self.extension_entry.get())
 		self.treeview.item(iid, values=[self.app_entry.get()])
 		

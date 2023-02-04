@@ -15,7 +15,7 @@ import pyperclip
 from ttkbootstrap import Style
 from ttkbootstrap.themes import standard
 
-from model import model
+from model import config_file_manager, model
 from view import view, diary_window, filter_windows, new_folders_window, pdf_tools_windows, rename_window, settings_window
 from view import link_window, search_window, todo_list
 
@@ -33,6 +33,8 @@ class Controller:
 		
 		self.file_to_cut = None
 		self.file_to_copy = None
+		
+		config_file_manager.write_config_file(self.model, startup=True)
 		
 	def add_root_tab(self, default_branch_tab=True, default_text=None):
 		root_id = self.model.add_root_tab(default_text)

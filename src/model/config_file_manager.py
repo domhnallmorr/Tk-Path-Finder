@@ -3,7 +3,7 @@ import json
 import os
 import shutil
 
-def write_config_file(model):
+def write_config_file(model, startup=False):
 	save_dict = {}
 	
 	# Get the Quick Access Links
@@ -19,9 +19,11 @@ def write_config_file(model):
 	save_dict["default_style"] = model.config_data["default_style"]
 
 	save_dict["to_do_list"] = model.config_data["to_do_list"]
-	save_dict["session_data"] = model.config_data["session_data"]
-	# save_dict['notes_categories'] = mainapp.notes_categories
-	# save_dict['last_session'] = mainapp.session
+	
+	if startup is False:
+		save_dict["session_data"] = model.config_data["session_data"]
+	else:
+		save_dict["session_data"] = model.last_session
 	
 	
 	with open("tk_path_finder_config.json", "w") as outfile:
@@ -36,6 +38,7 @@ def load_config_file(mainapp):
 		
 	with open("tk_path_finder_config.json") as f:
 		data = json.load(f)
+		
 	return data
 	
 def backup_config_file(mainapp):
