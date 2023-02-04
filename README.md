@@ -76,7 +76,7 @@ pip install PyPDF2
 
 ![alt text](https://i.imgur.com/AOYEmRY.png)
 
-![alt text](https://imgur.com/wvWuekP.png)
+![alt text](https://imgur.com/6sxzTjR.png)
 
 
 

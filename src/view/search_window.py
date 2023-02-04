@@ -41,23 +41,28 @@ class SearchWindow(ttk.Frame):
 		self.search_where_combo = ttk.Combobox(self.options_frame, width=30, values=['Parent Directory', 'Parent and Sub Directories'], state='readonly')
 		self.search_where_combo.set('Parent Directory')
 		self.search_where_combo.grid(row=2, column=1, padx=5, pady=5, sticky='W')
+
+		ttk.Label(self.options_frame, text='Output:').grid(row=3, column=0, padx=5, pady=5, sticky="E")
+		self.output_combo = ttk.Combobox(self.options_frame, width=30, values=['Full Path', 'Filename Only'], state='readonly')
+		self.output_combo.set('Full Path')
+		self.output_combo.grid(row=3, column=1, padx=5, pady=5, sticky='W')
 		
-		ttk.Label(self.options_frame, text='Text:').grid(row=3, column=0, padx=5, pady=5, sticky="E")
+		ttk.Label(self.options_frame, text='Text:').grid(row=4, column=0, padx=5, pady=5, sticky="E")
 		self.search_bar = ttk.Entry(self.options_frame, width=60)
-		self.search_bar.grid(row=3, column=1, padx=5, pady=5)
+		self.search_bar.grid(row=4, column=1, padx=5, pady=5)
 		self.search_bar.bind('<Return>', self.on_search)
 		
-		ttk.Label(self.options_frame, text='File Extension:').grid(row=4, column=0, padx=5, pady=5, sticky="E")
+		ttk.Label(self.options_frame, text='File Extension:').grid(row=5, column=0, padx=5, pady=5, sticky="E")
 		self.extension_extry = ttk.Entry(self.options_frame, width=60)
-		self.extension_extry.grid(row=4, column=1, padx=5, pady=5)
+		self.extension_extry.grid(row=5, column=1, padx=5, pady=5)
 		self.extension_extry.bind('<Return>', self.on_search)
 		
 		self.python_raw_string = IntVar()
-		ttk.Checkbutton(self.options_frame, text="Python Raw String List Output", variable=self.python_raw_string).grid(row=5, column=1, columnspan=1, sticky='w', padx=5, pady=5)
+		ttk.Checkbutton(self.options_frame, text="Python Raw String List Output", variable=self.python_raw_string).grid(row=6, column=1, columnspan=1, sticky='w', padx=5, pady=5)
 
 		b1 = ttk.Button(self.options_frame, text='Search', width=10,
 					command=self.on_search, style='primary.TButton')
-		b1.grid(row=6, column=1, sticky='e', padx=5, pady=5, ipadx=10)
+		b1.grid(row=7, column=1, sticky='e', padx=5, pady=5, ipadx=10)
 		
 		# Raw Text Widget
 		self.search_text = tk.Text(self.results_frame, width=130, height=20)
@@ -85,17 +90,6 @@ class SearchWindow(ttk.Frame):
 									
 							if process_file:
 								self.add_file_to_text(root, file)
-								
-								# if not filename.startswith('~$'): # avoid temporary files
-									# if self.python_raw_string.get() == 1:
-										# self.search_text.insert(END, 'r"')
-										
-									# self.search_text.insert(END, os.path.join(root, file))
-									 
-									# if self.python_raw_string.get() == 1:
-										# self.search_text.insert(END, '",')	
-
-									# self.search_text.insert(END, '\n')
 			
 				# SEARCH FOR FOLDERS #################################
 				else:
@@ -125,10 +119,14 @@ class SearchWindow(ttk.Frame):
 				
 	def add_file_to_text(self, directory, filename):
 		if not filename.startswith('~$'): # avoid temporary files
+			
 			if self.python_raw_string.get() == 1:
 				self.search_text.insert(END, 'r"')
-				
-			self.search_text.insert(END, os.path.join(directory, filename))
+			
+			if self.output_combo.get() == "Filename Only":
+				self.search_text.insert(END, filename)
+			else:
+				self.search_text.insert(END, os.path.join(directory, filename))
 			 
 			if self.python_raw_string.get() == 1:
 				self.search_text.insert(END, '",')	
