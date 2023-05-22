@@ -323,12 +323,17 @@ class Controller:
 				
 				if msg is None:
 					for folder in self.w.folders:
-						os.makedirs(os.path.join(current_directory, folder))
-						
-					# ------------- REFRESH THE VIEW -------------
-					self.update_branch_tab(branch_id, current_directory, mode="normal")
-					break
-				else:
+						try:
+							os.makedirs(os.path.join(current_directory, folder))
+						except Exception as e:
+							msg = str(e)
+
+					if msg is None:	
+						# ------------- REFRESH THE VIEW -------------
+						self.update_branch_tab(branch_id, current_directory, mode="normal")
+						break
+
+				if msg is not None:
 					self.view.show_error(msg)
 					initialvalue = "\n".join(self.w.folders)
 			
