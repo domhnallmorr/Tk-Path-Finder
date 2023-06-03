@@ -371,7 +371,7 @@ class Controller:
 			task = "copy"
 		
 		fo = pythoncom.CoCreateInstance(shell.CLSID_FileOperation, None, pythoncom.CLSCTX_INPROC_SERVER, shell.IID_IFileOperation)
-		print(dir(fo))
+		
 		for source in files_to_process:
 			src = shell.SHCreateItemFromParsingName(source, None, shell.IID_IShellItem)
 			dst = shell.SHCreateItemFromParsingName(current_directory, None, shell.IID_IShellItem)

@@ -17,6 +17,7 @@ class AddressBarEntry(ttk.Entry):
 		self.bind("<FocusIn>", self.on_focusin)
 		self.bind("<FocusOut>", self.on_focusout)
 		self.bind("<Escape>", self.on_escape)
+		self.bind("<Configure>", lambda event: self.truncate_breadcrumbs())
 		self.text = None
 		
 	def update_bar(self, text):
@@ -47,11 +48,12 @@ class AddressBarEntry(ttk.Entry):
 				path = os.path.join(path, folder)
 			
 			btn = Button(self, text=folder, bootstyle="secondary",)
-			btn.grid(row=0, column=idx)
+			# btn.grid(row=0, column=idx)
 			btn.bind("<Button-1>", lambda event=None, path=path: self.button_clicked(event, path))
 			btn.bindtags((btn, btn.winfo_class(), self, self.winfo_class(), "all"))
 			self.buttons.append(btn)
 
+		self.truncate_breadcrumbs()
 		self.branch_tab.focus()
 		
 	def enter_event(self, event):
@@ -76,3 +78,32 @@ class AddressBarEntry(ttk.Entry):
 		self.update_bar(self.text)
 		self.branch_tab.focus()
 	
+	def truncate_breadcrumbs(self, event=None):
+		available_width = self.winfo_width()
+
+		if available_width < 200: # DON'T ATTEMPT TO TRUNCATE IF AVAILABLE IS VERY SMALL
+			for idx, btn in enumerate(self.buttons):
+				btn.grid(row=0, column=idx)
+		else:
+			total_width = 0
+			col = len(self.buttons)
+			
+			for idx, btn in reversed(list(enumerate(self.buttons))):
+	
+				total_width += btn.winfo_reqwidth()
+				
+				if idx == 0:
+					btn.grid(row=0, column=col)
+				else:
+					if total_width < available_width:
+						btn.grid(row=0, column=col)
+						
+				col -= 1
+						
+				
+					
+		
+		
+		
+		
+		
