@@ -88,6 +88,7 @@ class Model:
 			".xls": "Excel Worksheet 97-2003",
 			".xlsm": "Marco Enabled Excel Worksheet",
 			".xlsx": "Excel Worksheet",
+			".xmcd": "Mathcad Worksheet",
 			".zip": "ZIP File",
 		}		
 		

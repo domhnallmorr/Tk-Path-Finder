@@ -60,6 +60,7 @@ class View:
 			".xls": self.excel_icon2,
 			".xlsm": self.excel_icon2,
 			".xlsx": self.excel_icon2,
+			".xmcd": self.mathcad_icon2,
 			".zip": self.zip_icon2,
 		}
 		
@@ -173,7 +174,7 @@ class View:
 			else:
 				messagebox.showerror("Error", message=f"The following message occured {str(e)}")
 		
-		self.style.configure('Treeview', rowheight=17)
+		self.style.configure('Treeview', rowheight=18)
 		self.style.configure('Treeview.Heading', background=self.style.colors.secondary)
 		
 		# Update hover color in treeviews
