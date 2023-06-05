@@ -19,11 +19,11 @@ class AddressBarEntry(ttk.Entry):
 		self.bind("<Escape>", self.on_escape)
 		self.bind("<Configure>", lambda event: self.truncate_breadcrumbs())
 		self.text = None
-		
+
 	def update_bar(self, text):
 		self.text = text
 		self.delete(0, END) #deletes the current value
-		self.insert(0, text) #inserts new value assigned by 2nd parameter
+		self.update()
 		
 		# Add buttons to address bar
 		for btn in self.buttons:
@@ -48,7 +48,7 @@ class AddressBarEntry(ttk.Entry):
 				path = os.path.join(path, folder)
 			
 			btn = Button(self, text=folder, bootstyle="secondary",)
-			# btn.grid(row=0, column=idx)
+			btn.grid(row=0, column=idx)
 			btn.bind("<Button-1>", lambda event=None, path=path: self.button_clicked(event, path))
 			btn.bindtags((btn, btn.winfo_class(), self, self.winfo_class(), "all"))
 			self.buttons.append(btn)
@@ -69,41 +69,32 @@ class AddressBarEntry(ttk.Entry):
 	def on_focusin(self, event):
 		for btn in self.buttons:
 			btn.grid_remove()
-	
+		self.delete(0, END)
+		self.insert(0, self.text)
+
+		self.select_range(0, "end")
+		self.icursor("end")
+
 	def on_focusout(self, event):
-		for btn in self.buttons:
-			btn.grid()
-			
+		self.update_bar(self.text)
+
 	def on_escape(self, event):
 		self.update_bar(self.text)
 		self.branch_tab.focus()
 	
 	def truncate_breadcrumbs(self, event=None):
-		available_width = self.winfo_width()
+		available_width = self.winfo_width()								
+		total_width = 0
+		widths = []
 
-		if available_width < 200: # DON'T ATTEMPT TO TRUNCATE IF AVAILABLE IS VERY SMALL
-			for idx, btn in enumerate(self.buttons):
-				btn.grid(row=0, column=idx)
-		else:
-			total_width = 0
-			col = len(self.buttons)
-			
-			for idx, btn in reversed(list(enumerate(self.buttons))):
-	
-				total_width += btn.winfo_reqwidth()
-				
-				if idx == 0:
-					btn.grid(row=0, column=col)
-				else:
-					if total_width < available_width:
-						btn.grid(row=0, column=col)
-						
-				col -= 1
-						
-				
-					
+		for idx, btn in enumerate(self.buttons):
+			total_width += btn.winfo_reqwidth()
+			widths.append(btn.winfo_reqwidth())
 		
-		
-		
-		
-		
+		if total_width > available_width:
+			for idx, btn in enumerate(self.buttons): # remove butons until total_width is less than available_width
+				btn.grid_forget()
+				total_width -= widths[idx]
+
+				if total_width < available_width:
+					break

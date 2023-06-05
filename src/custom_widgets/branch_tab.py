@@ -58,7 +58,7 @@ class BranchTab(ttk.Frame):
 		
 	def setup_adress_bar(self):
 		self.address_bar_entry = address_bar.AddressBarEntry(self)
-		self.address_bar_entry.grid(row=0, column=5, columnspan=10, padx=(6, 0), sticky="NSEW", pady=self.view.default_pady)
+		self.address_bar_entry.grid(row=0, column=5, columnspan=10, padx=(6, 0), sticky="EW", pady=self.view.default_pady)
 		
 	def setup_treeview(self):
 		column_names = ["   Filename", "Date Modified", "Type", "Size"]
