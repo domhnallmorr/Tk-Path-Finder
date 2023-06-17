@@ -83,18 +83,20 @@ class AddressBarEntry(ttk.Entry):
 		self.branch_tab.focus()
 	
 	def truncate_breadcrumbs(self, event=None):
-		available_width = self.winfo_width()								
-		total_width = 0
-		widths = []
+		available_width = self.winfo_width()	
+			
+		if available_width != 1:
+			total_width = 0
+			widths = []
 
-		for idx, btn in enumerate(self.buttons):
-			total_width += btn.winfo_reqwidth()
-			widths.append(btn.winfo_reqwidth())
-		
-		if total_width > available_width:
-			for idx, btn in enumerate(self.buttons): # remove butons until total_width is less than available_width
-				btn.grid_forget()
-				total_width -= widths[idx]
+			for idx, btn in enumerate(self.buttons):
+				total_width += btn.winfo_reqwidth()
+				widths.append(btn.winfo_reqwidth())
+			
+			if total_width > available_width:
+				for idx, btn in enumerate(self.buttons): # remove butons until total_width is less than available_width
+					btn.grid_forget()
+					total_width -= widths[idx]
 
-				if total_width < available_width:
-					break
+					if total_width < available_width:
+						break
