@@ -46,7 +46,7 @@ Note the app creates 2 files, "tk_path_finder_config.json" and "notes.db" (sqlit
 
 [ttkbootstrap](https://ttkbootstrap.readthedocs.io/en/latest/)
 
-[PyPDF2](https://pypi.org/project/PyPDF2/)
+[PyPDF2](https://pypi.org/project/PyPDF2/) (V3.0 or later required)
 
 pip install natsort
 

@@ -7,7 +7,7 @@ from tkinter import messagebox
 from tkinter import simpledialog
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 
-from PyPDF2 import PdfReader, PdfFileReader, PdfFileWriter, PdfFileMerger
+from PyPDF2 import PdfReader, PdfWriter, PdfMerger
 
 class PdfExtractorWindow(ttk.Frame):
 	def __init__(self, master, view):
@@ -81,14 +81,14 @@ class PdfExtractorWindow(ttk.Frame):
 			pdfs = {file: ({'start': start_page, 'end': end_page},)}  
 
 			for pdf, segments in pdfs.items():
-				pdf_reader = PdfFileReader(open(pdf, 'rb'))
+				pdf_reader = PdfReader(open(pdf, 'rb'))
 				#pdf_reader.decrypt('') #sometimes need to use this, sometimes not, don't know why
 				for segment in segments:
-					pdf_writer = PdfFileWriter()
+					pdf_writer = PdfWriter()
 					start_page = segment['start']
 					end_page = segment['end']
 					for page_num in range(start_page - 1, end_page):
-						pdf_writer.addPage(pdf_reader.getPage(page_num))
+						pdf_writer.add_page(pdf_reader.pages[page_num])
 					output_filename = f'{pdf}_{start_page}_page_{end_page}.pdf'
 					with open(output_filename,'wb') as out:
 						pdf_writer.write(out)
@@ -159,7 +159,7 @@ class PdfMergeWindow(ttk.Frame):
 		if msg is not None:
 			messagebox.showerror('Error', message=msg)
 		else:			
-			merger = PdfFileMerger()
+			merger = PdfMerger()
 			for pdf in self.files:
 				merger.append(open(pdf,'rb'))
 				
