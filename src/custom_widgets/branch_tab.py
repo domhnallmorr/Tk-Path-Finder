@@ -109,7 +109,7 @@ class BranchTab(ttk.Frame):
 				self.root_tab.notebook.tab(self, text=data["text"].ljust(20))
 
 			self.address_bar_entry.update_bar(data["current_directory"])
-			self.update_treeview(data["tabular_data"])
+			self.update_treeview(data["tabular_data"], data["default_folder_selected"])
 			
 			# ------------- UPDATE ITEMS LABEL -------------
 			self.items_label.config(text=f"{len(data['tabular_data'])} Items")
@@ -137,8 +137,18 @@ class BranchTab(ttk.Frame):
 			self.treeview.heading('#2', text='Type')
 			
 
-	def update_treeview(self, tabular_data):
+	def update_treeview(self, tabular_data, default_folder_selected=None):
 		treeview_functions.write_data_to_treeview(self.view, self.treeview, "replace", tabular_data)
+		
+		# HIGHLIGHT DEFAULT FOLDER SELECTED
+		if default_folder_selected is not None:
+			for item in self.treeview.get_children():
+				item_text = self.treeview.item(item)["text"]
+				if item_text == default_folder_selected:
+					self.treeview.selection_set(item)
+					self.treeview.focus(item)
+					self.treeview.see(item)
+					break
 
 	def left_click_treeview(self, event):
 		region = self.treeview.identify("region", event.x, event.y)

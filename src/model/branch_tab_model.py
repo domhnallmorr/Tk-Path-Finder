@@ -32,6 +32,8 @@ class BranchTabModel:
 		self.forward_directories = collections.deque(maxlen=10)
 		self.special_characters = ['\\', '/', ':', '*', '?', '"', '<', '>', '|']	
 		
+		self.default_folder_selected = None
+		
 	def assemble_view_data(self):
 		# Remove any filtered out extensions
 		if self.filter != []:
@@ -53,7 +55,8 @@ class BranchTabModel:
 		return {"id": self.id_key, "current_directory": self.current_directory, "tabular_data": self.directory_data + file_data,
 				"text_locked": self.text_locked, "text": self.text, "len_filter": len(self.filter), "file_data": file_data,
 				"directory_data": self.directory_data, "lock_filter": self.lock_filter, "filter_text": self.filter_text,
-				"no_previous_directories": len(self.previous_directories), "no_forward_directories": len(self.forward_directories)}
+				"no_previous_directories": len(self.previous_directories), "no_forward_directories": len(self.forward_directories),
+				"default_folder_selected": self.default_folder_selected}
 
 	def directory_changed(self, directory):
 		self.list_directory(directory=directory)
@@ -63,6 +66,8 @@ class BranchTabModel:
 		msg = None
 		directory_data = []
 		file_data = []
+		
+		self.default_folder_selected = None
 		
 		# RESET FILTER IF REQUIRED
 		if mode != "refresh":
@@ -109,7 +114,14 @@ class BranchTabModel:
 			elif mode == 'fwd':
 				self.forward_directories.popleft()
 				self.previous_directories.append(self.current_directory)
+		
 
+		# Determine what the default folder to be selected is (if the user clicks up button, in the treeview, select the folder they were in)
+		for new_dir in directory_data:
+			if os.path.normpath(f"{directory}\\{new_dir[0]}") == os.path.normpath(self.current_directory): # normpath handles for inconsistent use of slashes
+				self.default_folder_selected = new_dir[0]
+				break
+		
 		directory_data = natsorted(directory_data, alg=ns.IGNORECASE)
 		file_data = natsorted(file_data, alg=ns.IGNORECASE)
 		# Sorting
