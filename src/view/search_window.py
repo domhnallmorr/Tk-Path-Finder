@@ -1,4 +1,5 @@
 import os
+import subprocess
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
@@ -9,28 +10,44 @@ from tkinter import simpledialog
 from custom_widgets import autoscrollbar
 
 class SearchWindow(ttk.Frame):
-	def __init__(self, master, data):
+	def __init__(self, master, data, view):
 		super(SearchWindow, self).__init__()
 		top=self.top=Toplevel(master)
 		#top.grab_set()
 		self.data = data
+		self.view = view
 		self.directory = data["current_directory"]
 		self.top.title(f"Search: {self.directory}")
 
 		self.button = "cancel"
 		self.top.grid_rowconfigure(1, weight=1)
 		self.top.grid_columnconfigure(1, weight=1)
-		
+
+
+		# Notebook
+		self.notebook = ttk.Notebook(self.top)
+		self.notebook.grid(row=0, column=0, columnspan=2, padx=5, pady=5, sticky='EW')
+
+		self.search_files_tab = ttk.Frame(self.notebook)
+		self.search_text_tab = ttk.Frame(self.notebook)
+		self.notebook.add(self.search_files_tab, text="Search for Files")
+		self.notebook.add(self.search_text_tab, text="Search for Text")
+
+		self.search_files_tab.grid_columnconfigure(1, weight=1)
+
 		#Label_frames
-		self.options_frame = ttk.LabelFrame(self.top, text='Options:')
+		self.options_frame = ttk.LabelFrame(self.search_files_tab, text='Options:')
 		self.options_frame.grid(row=0, column=0, padx=5, pady=5, sticky='W')
+
+		self.text_search_options_frame = ttk.LabelFrame(self.search_text_tab, text='Options:')
+		self.text_search_options_frame.grid(row=0, column=0, padx=5, pady=5, sticky='W')
 
 		self.results_frame = ttk.LabelFrame(self.top, text='Search Results:')
 		self.results_frame.grid(row=1, column=0,  columnspan=2, padx=5, pady=5, sticky='NSEW')
 		self.results_frame.grid_rowconfigure(1, weight=1)
 		self.results_frame.grid_columnconfigure(0, weight=1)
 		
-		# Widgets
+		# WIDGETS SEARCH FOR FILES TAB
 		
 		ttk.Label(self.options_frame, text='Search For:').grid(row=1, column=0, padx=5, pady=5, sticky="E")
 		self.search_for_combo = ttk.Combobox(self.options_frame, width=30, values=['Files', 'Folders'], state='readonly')
@@ -63,7 +80,22 @@ class SearchWindow(ttk.Frame):
 		b1 = ttk.Button(self.options_frame, text='Search', width=10,
 					command=self.on_search, style='primary.TButton')
 		b1.grid(row=7, column=1, sticky='e', padx=5, pady=5, ipadx=10)
-		
+
+		# WIDGETS SEARCH FOR TEXT TAB
+		ttk.Label(self.text_search_options_frame, text='Text:').grid(row=4, column=0, padx=5, pady=5, sticky="E")
+		self.text_to_find_entry = ttk.Entry(self.text_search_options_frame, width=60)
+		self.text_to_find_entry.grid(row=4, column=1, padx=5, pady=5)
+		self.text_to_find_entry.bind('<Return>', self.on_search)
+
+		ttk.Label(self.text_search_options_frame, text='File Extension (format .xxx):').grid(row=5, column=0, padx=5, pady=5, sticky="E")
+		self.text_extension_entry = ttk.Entry(self.text_search_options_frame, width=60)
+		self.text_extension_entry.grid(row=5, column=1, padx=5, pady=5)
+		self.text_extension_entry.bind('<Return>', self.on_search)
+
+		b2 = ttk.Button(self.text_search_options_frame, text="Search", width=10,
+					command=self.on_search_text, style="primary.TButton")
+		b2.grid(row=7, column=1, sticky='e', padx=5, pady=5, ipadx=10)
+
 		# Raw Text Widget
 		self.search_text = tk.Text(self.results_frame, width=130, height=20)
 		self.search_text.grid(row=1, column=0, columnspan=8, sticky='NSEW', padx=5, pady=5, ipadx=2, ipady=5)
@@ -116,7 +148,21 @@ class SearchWindow(ttk.Frame):
 					if self.search_bar.get().lower() in d[0].lower():
 						self.search_text.insert(END, os.path.join(self.directory, d[0])	)
 						self.search_text.insert(END, '\n')	
-				
+
+
+	def on_search_text(self, event=None):
+		self.search_text.delete('1.0', END)
+
+		text_to_find = self.text_to_find_entry.get()
+		extensions_to_check = self.text_extension_entry.get()
+
+		command = ['findstr', text_to_find, f"*{extensions_to_check}"]
+		try:
+			result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True).stdout
+			self.search_text.insert(END, result)
+		except Exception as e:
+			self.view.show_error(str(e))
+
 	def add_file_to_text(self, directory, filename):
 		if not filename.startswith('~$'): # avoid temporary files
 			
