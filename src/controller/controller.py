@@ -33,6 +33,8 @@ class Controller:
 		
 		self.file_to_cut = None
 		self.file_to_copy = None
+
+		self.diary_open = False
 		
 		config_file_manager.write_config_file(self.model, startup=True)
 		
@@ -420,8 +422,14 @@ class Controller:
 			
 			
 	def launch_diary(self):
-		self.diary_window = diary_window.DiaryWindow(self.mainapp.master, self.view)
-		self.mainapp.master.wait_window(self.diary_window.top)
+		if self.diary_open is False:
+			self.diary_window = diary_window.DiaryWindow(self.mainapp.master, self.view)
+			self.diary_open = True # prevent diary being opened twice
+			self.mainapp.master.wait_window(self.diary_window.top)
+
+			self.diary_open = False
+		else:
+			self.view.show_error("Diary Already Open")
 		
 	def read_date_from_database(self, date):
 		return self.model.diary_model.read_date_from_database(date)
