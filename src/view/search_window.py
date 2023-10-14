@@ -157,7 +157,7 @@ class SearchWindow(ttk.Frame):
 		extensions_to_check = self.text_extension_entry.get()
 
 		command = ['findstr', f'{text_to_find}', f'{self.directory}\\*{extensions_to_check}']
-		print(command)
+
 		try:
 			result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True).stdout
 			self.search_text.insert(END, result)
