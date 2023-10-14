@@ -14,13 +14,15 @@ Note the app creates 2 files, "tk_path_finder_config.json" and "notes.db" (sqlit
   - Tabs can be reordered.
   - Load Last Session.
   - Search functionality.
+  - Search for text with a given file extension.
   - Sort by date/file type
   - Filter by file extension.
   - Filter files containing string.
   - Rename files and folders.
   - Cut/Copy Files using the default windows dialog.
-  - Create multiple folders at once (hit cntrl-d in the craete folder window to duplicate line).
+  - Create multiple folders at once (hit cntrl-d in the create folder window to duplicate line).
   - "Open with" functionality.
+  - Open folder in explorer or command prompt.
   - Compatible with MS Teams folders.
   - To Do List.
   - Diary.
