@@ -129,6 +129,7 @@ class ToDoListWindow(ttk.Frame):
 			
 	def on_left_click(self, event):
 		region = self.treeview.identify("region", event.x, event.y)
+
 		if region == 'heading':
 			for item in self.treeview.selection():
 				self.treeview.selection_remove(item)
@@ -138,13 +139,15 @@ class ToDoListWindow(ttk.Frame):
 				self.task_entry.delete(0, "end")
 				self.task_entry.insert(0, self.treeview.item(self.treeview.selection(), "values")[-1])
 				self.status_combo.set(self.treeview.item(self.treeview.selection(), "values")[0])	
+				
+
 		
 	def header_click(self, event):
 		'''
 			When we click header, unselect everything in the treeview (so tag colors can be seen clearly)
 		'''
 		region = self.treeview.identify("region", event.x, event.y)
-		if region == 'heading':
+		if region == 'heading' or not self.treeview.identify_row(event.y):
 			for item in self.treeview.selection():
 				self.treeview.selection_remove(item)
 				

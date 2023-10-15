@@ -60,8 +60,8 @@ class Controller:
 		self.view.update_branch_tab(copy.deepcopy(self.model.branch_tabs[id_key].assemble_view_data()))
 		self.update_branch_tab(id_key, default_directory)
 	
-	def update_branch_tab(self, branch_id, directory, mode="normal", sort=None):
-		msg = self.model.branch_tabs[branch_id].list_directory(directory=directory, mode=mode, sort=sort)
+	def update_branch_tab(self, branch_id, directory, mode="normal", sort=None, default_folder_selected=None):
+		msg = self.model.branch_tabs[branch_id].list_directory(directory=directory, mode=mode, sort=sort, default_folder_selected=default_folder_selected)
 		
 		if msg is None:
 			# ------------------ IF NO ERROR OCCURRED UPDATE THE TAB -----------------
@@ -332,7 +332,8 @@ class Controller:
 
 					if msg is None:	
 						# ------------- REFRESH THE VIEW -------------
-						self.update_branch_tab(branch_id, current_directory, mode="normal")
+						default_folder_selected = self.w.folders[0]
+						self.update_branch_tab(branch_id, current_directory, mode="normal", default_folder_selected=default_folder_selected)
 						break
 
 				if msg is not None:

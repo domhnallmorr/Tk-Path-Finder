@@ -61,13 +61,13 @@ class BranchTabModel:
 	def directory_changed(self, directory):
 		self.list_directory(directory=directory)
 	
-	def list_directory(self, directory=None, mode="normal", sort=None):
+	def list_directory(self, directory=None, mode="normal", sort=None, default_folder_selected=None):
 		file_data = ""
 		msg = None
 		directory_data = []
 		file_data = []
 		
-		self.default_folder_selected = None
+		self.default_folder_selected = default_folder_selected # the default folder to be selected in treeview, None means no folder selected
 		
 		# RESET FILTER IF REQUIRED
 		if mode != "refresh":
