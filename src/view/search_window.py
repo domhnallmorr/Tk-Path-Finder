@@ -60,7 +60,7 @@ class SearchWindow(ttk.Frame):
 		self.search_where_combo.grid(row=2, column=1, padx=5, pady=5, sticky='W')
 
 		ttk.Label(self.options_frame, text='Output:').grid(row=3, column=0, padx=5, pady=5, sticky="E")
-		self.output_combo = ttk.Combobox(self.options_frame, width=30, values=['Full Path', 'Filename Only'], state='readonly')
+		self.output_combo = ttk.Combobox(self.options_frame, width=30, values=["Full Path", "Name Only"], state="readonly")
 		self.output_combo.set('Full Path')
 		self.output_combo.grid(row=3, column=1, padx=5, pady=5, sticky='W')
 		
@@ -127,12 +127,20 @@ class SearchWindow(ttk.Frame):
 				else:
 					for d in dirs:
 						if self.search_bar.get().lower() in d.lower():
-							self.search_text.insert(END, d)	
+							if self.python_raw_string.get() == 1:
+								self.search_text.insert(END, 'r"')
+
+							if self.output_combo.get() == "Name Only":
+								self.search_text.insert(END, d)	
+							else:
+								self.search_text.insert(END, os.path.join(root, d))
+
+							if self.python_raw_string.get() == 1:
+								self.search_text.insert(END, '",')
 							self.search_text.insert(END, '\n')						
 
 		else: # Parent directory only
 			if self.search_for_combo.get() == "Files":
-				# for file in self.branch_tab.explorer.file_data:
 				for file in self.data["file_data"]:
 					if self.search_bar.get().lower() in file[0].lower():
 						process_file = True
@@ -143,10 +151,19 @@ class SearchWindow(ttk.Frame):
 						
 						if process_file:
 							self.add_file_to_text(self.directory, file[0])
-			else:
+			else: # search for folders
 				for d in self.data["directory_data"]:
 					if self.search_bar.get().lower() in d[0].lower():
-						self.search_text.insert(END, os.path.join(self.directory, d[0])	)
+						if self.python_raw_string.get() == 1:
+							self.search_text.insert(END, 'r"')
+
+						if self.output_combo.get() == "Name Only":
+							self.search_text.insert(END, d[0])
+						else:
+							self.search_text.insert(END, os.path.join(self.directory, d[0]))
+
+						if self.python_raw_string.get() == 1:
+							self.search_text.insert(END, '",')
 						self.search_text.insert(END, '\n')	
 
 
@@ -170,7 +187,7 @@ class SearchWindow(ttk.Frame):
 			if self.python_raw_string.get() == 1:
 				self.search_text.insert(END, 'r"')
 			
-			if self.output_combo.get() == "Filename Only":
+			if self.output_combo.get() == "Name Only":
 				self.search_text.insert(END, filename)
 			else:
 				self.search_text.insert(END, os.path.join(directory, filename))

@@ -18,11 +18,13 @@ class BranchTab(ttk.Frame):
 		self.branch_id = branch_id
 		self.root_tab = root_tab
 		
+		self.total_size_selected = "(0 KB)"
+
 		# ----------------- GRID -----------------
 		self.tree_colspan = 16
 		self.grid_columnconfigure(14, weight=1)
 		self.grid_rowconfigure(1, weight=1)
-		
+
 		# ----------------- SETUP WIDGETS -----------------
 		self.setup_buttons()
 		self.setup_adress_bar()
@@ -66,7 +68,7 @@ class BranchTab(ttk.Frame):
 		height = 20
 
 		self.treeview = treeview_functions.create_treeview(self, column_names, column_widths, height)
-		self.treeview.grid(row=1, column=0, columnspan=16, sticky='NSEW', padx=0, pady=(self.view.default_pady, 0))
+		self.treeview.grid(row=1, column=0, columnspan=16, sticky='NSEW', padx=0, pady=(0, 0))
 		self.treeview.bind("<Double-1>", self.double_click_treeview)
 		self.treeview.bind("<Button-1>", self.left_click_treeview)
 		self.treeview.bind("<Button-3>", self.right_click_treeview)
@@ -76,7 +78,7 @@ class BranchTab(ttk.Frame):
 		
 		# ------------------ ADD SCROLLBAR ------------------
 		vsb = autoscrollbar.AutoScrollbar(self, orient="vertical", command=self.treeview.yview)
-		vsb.grid(row=1, column=16, sticky='NSEW')
+		vsb.grid(row=1, column=16, sticky='NSEW', pady=(0, 0))
 		self.treeview.configure(yscrollcommand=vsb.set)
 		self.treeview.bind('<Control-a>', lambda *args: self.treeview.selection_add(self.treeview.get_children()))
 
@@ -84,8 +86,16 @@ class BranchTab(ttk.Frame):
 		self.update_tags()
 		
 	def setup_labels(self):
-		self.items_label = Label(self, text="Items")
-		self.items_label.grid(row=2, column=0, columnspan=16, sticky='NSEW', padx=0, pady=(1, 0), ipady=0)
+		self.bottom_frame = Frame(self)
+		self.bottom_frame.grid(row=2, column=0, columnspan=16, sticky='NSEW', padx=0, pady=(1, 0), ipady=0)
+		
+		self.items_label = Label(self.bottom_frame, text="Items")
+		self.items_label.grid(row=2, column=0, columnspan=8, sticky='NSEW', padx=0, pady=(1, 0), ipady=0)
+
+		self.clipboard_label = Label(self.bottom_frame, text=self.view.clipboard_label_text)
+		self.clipboard_label.grid(row=2, column=8, columnspan=8, sticky='E', padx=0, pady=(1, 0), ipady=0)
+
+		self.bottom_frame.grid_columnconfigure(8, weight=1)
 
 	def update_tags(self):
 		highlight_color = standard.STANDARD_THEMES[self.view.style_name]["colors"]["active"]
@@ -191,8 +201,17 @@ class BranchTab(ttk.Frame):
 					break
 			
 			if folder_selected is False:
-				total_size = "{:,}".format(total_size) # add commas to total size number
-				text = text + f"({total_size} KB)"
+				if total_size > 1_000_000:
+					self.total_size_selected = f"({round(total_size/1_000_000, 2)} GB)"
+				elif total_size > 1_000:
+					self.total_size_selected = f"({round(total_size/1_000, 2)} MB)"
+				else:
+					self.total_size_selected = f"({total_size} KB)"
+				
+				text=text + self.total_size_selected
+			else:
+				self.total_size_selected = None
+				
 		
 		self.items_label.config(text=text)
 		
@@ -292,7 +311,7 @@ class BranchTab(ttk.Frame):
 					selection.append(self.treeview.item(file_iid, 'text'))
 				
 				popup_menu.add_command(label="Cut", command=lambda files=selection, branch_id=self.branch_id, mode="cut": self.view.controller.copy_cut_file_folder(files, branch_id, mode), image=self.view.cut_icon2, compound="left")
-				popup_menu.add_command(label="Copy", command=lambda files=selection, branch_id=self.branch_id, mode="copy": self.view.controller.copy_cut_file_folder(files, branch_id, mode), image=self.view.copy_icon2, compound="left")
+				popup_menu.add_command(label="Copy", command=lambda files=selection, branch_id=self.branch_id, mode="copy", total_size_selected=self.total_size_selected: self.view.controller.copy_cut_file_folder(files, branch_id, mode, total_size_selected), image=self.view.copy_icon2, compound="left")
 				
 			if self.view.controller.file_to_copy != None or self.view.controller.file_to_cut != None:
 				popup_menu.add_command(label="Paste", command=lambda branch_id=self.branch_id: self.view.controller.paste_file_folder(branch_id), image=self.view.paste_icon2, compound="left")		

@@ -75,6 +75,7 @@ class View:
 			self.themes[theme_type].append(theme)
 		
 		self.tool_top_delay = 600
+		self.clipboard_label_text = "Clipboard: 0 Selected"
 		
 	def setup_main_frames(self):
 		self.rootpane = ttk.PanedWindow(self.parent, orient=tk.HORIZONTAL)
@@ -217,3 +218,12 @@ class View:
 		self.root_tabs = reordered_dict
 		self.controller.update_root_tabs_order(root_tabs_order)
 		
+	def update_clipboard_labels(self, number_of_items, total_size_selected):
+		
+		for branch_id in self.branch_tabs.keys():
+			if total_size_selected is None:
+				self.clipboard_label_text = f"Clipboard: {number_of_items} Selected"
+			else:
+				self.clipboard_label_text = f"Clipboard: {number_of_items} Selected {total_size_selected}"
+
+			self.branch_tabs[branch_id].clipboard_label.config(text=self.clipboard_label_text)

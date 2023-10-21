@@ -351,7 +351,7 @@ class Controller:
 		elif mode == "explorer":
 			subprocess.Popen(f'explorer "{current_directory}"')
 		
-	def copy_cut_file_folder(self, files, branch_id, mode):
+	def copy_cut_file_folder(self, files, branch_id, mode, total_size_selected=None):
 		current_directory = self.model.branch_tabs[branch_id].current_directory
 		files = [os.path.join(current_directory, f) for f in files]
 		
@@ -361,7 +361,8 @@ class Controller:
 			
 		elif mode == "copy":
 			self.file_to_cut = None
-			self.file_to_copy = copy.deepcopy(files)			
+			self.file_to_copy = copy.deepcopy(files)	
+			self.view.update_clipboard_labels(len(files), total_size_selected)	
 		
 	def paste_file_folder(self, branch_id):
 		current_directory = self.model.branch_tabs[branch_id].current_directory
