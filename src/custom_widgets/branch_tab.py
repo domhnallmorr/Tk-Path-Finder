@@ -55,7 +55,7 @@ class BranchTab(ttk.Frame):
 		ToolTip(b, text="Search", bootstyle=(INFO, INVERSE), delay=self.view.tool_top_delay)
 
 		b = ttk.Button(self, text=u"\u27F3", command=lambda branch_id=self.branch_id: self.view.controller.refresh_tab(self.branch_id), style="primary.TButton")
-		b.grid(row=0, column=15, padx=(0, self.view.default_padx))
+		b.grid(row=0, column=15, columnspan=2, sticky="E", padx=(0, self.view.default_padx))
 		ToolTip(b, text="Refresh", bootstyle=(INFO, INVERSE), delay=self.view.tool_top_delay)
 		
 	def setup_adress_bar(self):
@@ -275,6 +275,9 @@ class BranchTab(ttk.Frame):
 						
 					popup_menu.add_command(label="Rename", command=lambda mode=mode, initialvalue=file_name, branch_id=self.branch_id: self.view.controller.new_edit_file_folder(mode, initialvalue, branch_id), image=self.view.rename_icon2, compound="left")
 					
+					if file_extension.lower() == ".zip":
+						popup_menu.add_command(label="Unzip", command=lambda file_name=file_name, file_extension=file_extension, branch_id=self.branch_id: self.view.controller.unzip_file(file_name, branch_id), image=self.view.zip_icon2, compound="left")
+
 					popup_menu.add_separator()
 					
 					popup_menu.add_command(label="Copy Full Path to Clipboard", command= lambda file_name=file_name, branch_id=self.branch_id, mode="full":self.view.controller.copy_to_clipboard(file_name, branch_id, mode))
@@ -310,8 +313,12 @@ class BranchTab(ttk.Frame):
 				for file_iid in self.treeview.selection():
 					selection.append(self.treeview.item(file_iid, 'text'))
 				
-				popup_menu.add_command(label="Cut", command=lambda files=selection, branch_id=self.branch_id, mode="cut": self.view.controller.copy_cut_file_folder(files, branch_id, mode), image=self.view.cut_icon2, compound="left")
-				popup_menu.add_command(label="Copy", command=lambda files=selection, branch_id=self.branch_id, mode="copy", total_size_selected=self.total_size_selected: self.view.controller.copy_cut_file_folder(files, branch_id, mode, total_size_selected), image=self.view.copy_icon2, compound="left")
+				popup_menu.add_command(label="Cut",
+						   	command=lambda files=selection, branch_id=self.branch_id, mode="cut", total_size_selected=self.total_size_selected:
+							self.view.controller.copy_cut_file_folder(files, branch_id, mode, total_size_selected), image=self.view.cut_icon2, compound="left")
+				popup_menu.add_command(label="Copy",
+						   command=lambda files=selection, branch_id=self.branch_id, mode="copy", total_size_selected=self.total_size_selected:
+						   self.view.controller.copy_cut_file_folder(files, branch_id, mode, total_size_selected), image=self.view.copy_icon2, compound="left")
 				
 			if self.view.controller.file_to_copy != None or self.view.controller.file_to_cut != None:
 				popup_menu.add_command(label="Paste", command=lambda branch_id=self.branch_id: self.view.controller.paste_file_folder(branch_id), image=self.view.paste_icon2, compound="left")		

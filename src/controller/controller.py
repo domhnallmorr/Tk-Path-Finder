@@ -8,6 +8,7 @@ from win32com.shell import shell
 import subprocess
 from subprocess import DEVNULL
 import threading
+import zipfile
 
 from docx import Document
 from openpyxl import Workbook
@@ -362,7 +363,8 @@ class Controller:
 		elif mode == "copy":
 			self.file_to_cut = None
 			self.file_to_copy = copy.deepcopy(files)	
-			self.view.update_clipboard_labels(len(files), total_size_selected)	
+		
+		self.view.update_clipboard_labels(len(files), total_size_selected, mode)	
 		
 	def paste_file_folder(self, branch_id):
 		current_directory = self.model.branch_tabs[branch_id].current_directory
@@ -635,3 +637,22 @@ class Controller:
 		return self.model.branch_tabs[branch_id].get_forward_and_previous_current_directories()
 		
 		#return fwd_directories, previous_directories, current_directory
+
+	def unzip_file(self, file_name, branch_id):
+		file_name_wo_extension, file_extension = os.path.splitext(file_name)
+
+		current_directory = self.model.branch_tabs[branch_id].current_directory
+		source = os.path.join(current_directory, file_name)
+		destination = os.path.join(current_directory, file_name_wo_extension)
+
+		if os.path.isdir(destination):
+			self.view.show_error(f"Cannot Extract as the Destination Folder Already Exists\n{destination}")
+		else:
+			try:
+				with zipfile.ZipFile(source, 'r') as zip_ref:
+					# Extract all the contents to the specified directory
+					zip_ref.extractall(destination)
+				self.refresh_tab(branch_id)
+				self.view.show_success("Successfully Extracted")
+			except Exception as e:
+				self.view.show_error(f"The Following Error Occured\n{str(e)}")

@@ -23,6 +23,7 @@ Note the app creates 2 files, "tk_path_finder_config.json" and "notes.db" (sqlit
   - Create multiple folders at once (hit cntrl-d in the create folder window to duplicate line).
   - "Open with" functionality.
   - Open folder in explorer or command prompt.
+  - Unzip .zip files
   - Compatible with MS Teams folders.
   - To Do List.
   - Diary.
@@ -66,7 +67,7 @@ pip install PyPDF2
 ## Preview
 ![Main](images/main_image.PNG)
 
-![alt text](https://imgur.com/trjQ4QE.png)
+![Right_Click](images/right_click_menu_image.png)
 
 ![alt text](https://imgur.com/haNY5f5.png)
 

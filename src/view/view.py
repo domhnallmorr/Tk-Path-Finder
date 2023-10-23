@@ -147,8 +147,11 @@ class View:
 		self.branch_tabs[branch_id].destroy()
 		
 	def show_error(self, msg):
-		messagebox.showerror('Error', message=msg)
-		
+		messagebox.showerror("Error", message=msg)
+
+	def show_success(self, msg):
+		messagebox.showinfo("Success", message=msg)
+
 	def right_click_root(self, event):
 		tab_object = event.widget.nametowidget(event.widget.select())
 		root_id = tab_object.root_id
@@ -218,12 +221,12 @@ class View:
 		self.root_tabs = reordered_dict
 		self.controller.update_root_tabs_order(root_tabs_order)
 		
-	def update_clipboard_labels(self, number_of_items, total_size_selected):
+	def update_clipboard_labels(self, number_of_items, total_size_selected, mode):
 		
 		for branch_id in self.branch_tabs.keys():
 			if total_size_selected is None:
-				self.clipboard_label_text = f"Clipboard: {number_of_items} Selected"
+				self.clipboard_label_text = f"Clipboard: {number_of_items} Selected to {mode.capitalize()}"
 			else:
-				self.clipboard_label_text = f"Clipboard: {number_of_items} Selected {total_size_selected}"
+				self.clipboard_label_text = f"Clipboard: {number_of_items} Selected to {mode.capitalize()} {total_size_selected}"
 
 			self.branch_tabs[branch_id].clipboard_label.config(text=self.clipboard_label_text)
