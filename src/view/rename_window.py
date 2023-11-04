@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
+from tkinter import messagebox
 
 class RenameWindow(ttk.Frame):
 	def __init__(self, master, view, initialvalue, component_type, mode="Rename"):
@@ -42,6 +43,8 @@ class RenameWindow(ttk.Frame):
 		self.name_entry.bind('<Return>', lambda event, button="ok": self.cleanup(button, event))
 		self.top.grid_columnconfigure(0, weight=1)
 		
+		self.name_entry.icursor(0)
+
 		if component_type == "branch_tab":
 			self.lock = IntVar(value=1)
 			ttk.Checkbutton(self.top, text="Lock Name", variable=self.lock).grid(row=2, column=2, sticky='w', padx=self.view.default_padx, pady=self.view.default_pady)

@@ -166,6 +166,10 @@ class SearchWindow(ttk.Frame):
 							self.search_text.insert(END, '",')
 						self.search_text.insert(END, '\n')	
 
+		# If text widget is empty, add text saying nothing found
+		text_content = self.search_text.get("1.0", "end-1c").strip()
+		if text_content == "":
+			self.search_text.insert(END, "No items match your search")
 
 	def on_search_text(self, event=None):
 		self.search_text.delete('1.0', END)

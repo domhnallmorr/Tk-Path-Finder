@@ -42,6 +42,7 @@ class FilterExtensionWindow(ttk.Frame):
 		self.cancel_btn = ttk.Button(self.top, text="Cancel", width=10, style="danger.TButton", command=lambda button="cancel": self.cleanup(button))
 		self.cancel_btn.grid(row=row+2, column=3, padx=5, pady=10, sticky="nw")		
 		
+		
 	def select_all_file(self):
 		for file_extension in self.file_types.keys():
 			self.file_types[file_extension]["var"].set(self.all_files.get())
@@ -88,8 +89,9 @@ class FilterNameWindow(ttk.Frame):
 		self.cancel_btn.grid(row=1, column=3, padx=5, pady=10, sticky="nw")	
 		
 		self.top.grid_columnconfigure(1, weight=1)
+		self.text_entry.bind('<Return>', lambda event, button="ok": self.cleanup(button, event))
 		
-	def cleanup(self, button):
+	def cleanup(self, button, event=None):
 		if button == "ok":
 			self.text = self.text_entry.get()
 			if self.text.strip() == "":

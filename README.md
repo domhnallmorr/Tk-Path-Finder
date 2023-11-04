@@ -1,10 +1,16 @@
 # Tk-Path-Finder ![python](https://img.shields.io/badge/python-3.6+-blue)
 
 ## Description
-A lightweight file explorer based on tabs within tabs written in python (Tkinter). Written primarily to assist working with text files and MS office files spread across many folders/servers.
+A lightweight file explorer based on tabs within tabs written in python (Tkinter). 
+
+It is intended to be a clean, simple interface that facilitates jumping back and forth between different folders on a given project. The tabs within tabs layout is intended to help with working on different projects. The app is focused primarily on text files and MS Office files. Images are not well handled and probably never will be. Finally, the quick access tree is setup so links can be grouped under a given folder, typically I create a folder for each project I am working on.
+
+The app is largely complete and does what I set out to achieve. I am continuing to add minor improvements.
+
+Comments, feedback and questions are welcome.
 
 ## Running the App
-To run, download the code, unzip the files and run the main.py file. You will need several python libraries installed which are listed further below.
+To run, download the code, unzip the files and run the main.py file. You will need several python libraries installed which are listed below.
 
 Note the app creates 2 files, "tk_path_finder_config.json" and "notes.db" (sqlite database). These will be created in the default working directory. The json file stores all links and tabs created by the user. Several backups are automatically generated for this file. The database contains any notes entered into the diary.
 
@@ -33,9 +39,10 @@ Note the app creates 2 files, "tk_path_finder_config.json" and "notes.db" (sqlit
   - Dark and Light themes.
 
 ## Limitations
-  - Only tested on windows 10.
-  - No delete functionality.
+  - Only tested on Windows 10.
+  - No delete functionality. This is deliberate and not a feature I intend to add.
   - Search is very slow on sub-directories with many files.
+  - Does not automatically refresh if any changes occur (outside of the app) in a directory. I may add this at some point but it is not a priority for me.
 
 ## Prerequisites
 
@@ -77,7 +84,7 @@ pip install PyPDF2
 )
 ![alt text](https://i.imgur.com/C4p6s9J.png)
 
-![alt text](https://i.imgur.com/AOYEmRY.png)
+![Light_Theme](images/main_image_light_theme.PNG)
 
 ![alt text](https://imgur.com/6sxzTjR.png)
 

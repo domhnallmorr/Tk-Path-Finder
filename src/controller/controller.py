@@ -292,8 +292,10 @@ class Controller:
 		if mode == "full":
 			current_directory = self.model.branch_tabs[branch_id].current_directory
 			pyperclip.copy(os.path.join(current_directory, file_name))
+			self.view.update_clipboard_labels(0, 0, "filepath")
 		elif mode == "file_name_only":
 			pyperclip.copy(file_name)
+			self.view.update_clipboard_labels(0, 0, "filename")
 					
 	def new_folders(self, branch_id):
 		initialvalue = None
@@ -551,7 +553,7 @@ class Controller:
 			for link_id in self.model.config_data["quick_access_tree"][folder_id]["links"].keys():
 				text = self.model.config_data["quick_access_tree"][folder_id]["links"][link_id]["text"]
 				path = self.model.config_data["quick_access_tree"][folder_id]["links"][link_id]["path"]
-				self.add_new_link(folder_id, "new", text=text, path=path, link_id=link_id, update_config_data=False)
+				self.add_new_link(folder_id, "new", text=text, path=path, link_id=link_id, update_config_data=False, open_folder=False)
 		
 
 	def delete_quick_access_folder(self, folder_id, update_config_data=True):
@@ -564,13 +566,13 @@ class Controller:
 			if update_config_data is True:
 				self.model.update_quick_access_tree_config_file()
 				
-	def add_new_link(self, folder_id, mode, text=None, path=None, link_id=None, update_config_data=True):
+	def add_new_link(self, folder_id, mode, text=None, path=None, link_id=None, update_config_data=True, open_folder=True):
 		if text is None:
 			text, path = self.view.quick_access_tree.launch_new_link_window(self.mainapp.master, mode)
 		
 		if text is not None:		
 			link_id = self.model.quick_access_tree_model.add_new_link(folder_id, link_id, text, path)
-			self.view.quick_access_tree.insert_new_link(folder_id, link_id, text)
+			self.view.quick_access_tree.insert_new_link(folder_id, link_id, text, open_folder)
 			
 			if update_config_data is True:
 				self.model.update_quick_access_tree_config_file()

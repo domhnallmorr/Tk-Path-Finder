@@ -117,8 +117,14 @@ class QuickAccessTreeview(ttk.Treeview):
 			
 		return text, path
 	
-	def insert_new_link(self, folder_id, link_id, text):
+	def insert_new_link(self, folder_id, link_id, text, open_folder=True):
 		self.insert(folder_id, "end", iid=link_id, text=text)
+		
+		if open_folder is True:
+			self.item(folder_id, open=True)
+			
+		self.selection_set(link_id)
+		self.focus(link_id)
 		
 	def update_link(self, link_id, text):
 		self.item(link_id, text=text)

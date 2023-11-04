@@ -223,10 +223,17 @@ class View:
 		
 	def update_clipboard_labels(self, number_of_items, total_size_selected, mode):
 		
+		assert mode in ["cut", "copy", "filename", "filepath"]
+
 		for branch_id in self.branch_tabs.keys():
-			if total_size_selected is None:
-				self.clipboard_label_text = f"Clipboard: {number_of_items} Selected to {mode.capitalize()}"
-			else:
-				self.clipboard_label_text = f"Clipboard: {number_of_items} Selected to {mode.capitalize()} {total_size_selected}"
+
+			if mode in ["filename", "filepath"]:
+				self.clipboard_label_text = f"Clipboard: Selected {mode.capitalize()} to Copy"
+
+			else: # selected files/folder
+				if total_size_selected is None:
+					self.clipboard_label_text = f"Clipboard: {number_of_items} Selected to {mode.capitalize()}"
+				else:
+					self.clipboard_label_text = f"Clipboard: {number_of_items} Selected to {mode.capitalize()} {total_size_selected}"
 
 			self.branch_tabs[branch_id].clipboard_label.config(text=self.clipboard_label_text)

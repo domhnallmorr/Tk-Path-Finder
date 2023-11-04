@@ -345,7 +345,9 @@ class BranchTab(ttk.Frame):
 			popup_menu = tk.Menu(event.widget, tearoff=0)
 			popup_menu.add_command(label="Filter by File Type", command=lambda branch_id=self.branch_id, mode="select_file_types": self.view.controller.filter_files(branch_id, mode))
 			popup_menu.add_command(label="Filter by File Name", command=lambda branch_id=self.branch_id, mode="select_file_names": self.view.controller.filter_files(branch_id, mode))
-
+			popup_menu.add_separator()
+			popup_menu.add_command(label="Remove Filter", command=lambda branch_id=self.branch_id, mode="remove_filter", file_extension=None: self.view.controller.filter_files(branch_id, mode, file_extension))
+			
 			try:
 				popup_menu.tk_popup(event.x_root, event.y_root, 0)
 			finally:
