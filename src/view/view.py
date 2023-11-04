@@ -142,9 +142,11 @@ class View:
 
 	def delete_root_tab(self, root_id):
 		self.root_tabs[root_id].destroy()
+		del self.root_tabs[root_id]
 		
 	def delete_branch_tab(self, branch_id):
 		self.branch_tabs[branch_id].destroy()
+		del self.branch_tabs[branch_id]
 		
 	def show_error(self, msg):
 		messagebox.showerror("Error", message=msg)
