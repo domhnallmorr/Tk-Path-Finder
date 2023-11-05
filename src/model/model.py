@@ -132,13 +132,13 @@ class Model:
 	def get_root_tab_text(self, root_id):
 		return self.root_tabs[root_id]["text"]
 		
-	def add_branch_tab(self, root_id, default_text=None, default_directory=None):
+	def add_branch_tab(self, root_id, default_text=None, default_directory=None, default_icon=None):
 		branch_id = self.gen_id()
 		
 		if default_directory is None:
 			default_directory = os.getcwd()
 		#self.branch_tabs[id] = {"id": id, "text": "branch", "current_directory": os.getcwd()}
-		self.branch_tabs[branch_id] = branch_tab_model.BranchTabModel(self, branch_id, default_directory, root_id, default_text)
+		self.branch_tabs[branch_id] = branch_tab_model.BranchTabModel(self, branch_id, default_directory, root_id, default_text, default_icon)
 		self.root_tabs[root_id]["branch_tabs"].append(branch_id)
 		
 		self.update_branch_tab_session_data(branch_id)
@@ -195,7 +195,7 @@ class Model:
 
 	def update_branch_tab_session_data(self, branch_id):
 		root_id = self.branch_tabs[branch_id].root_id
-		self.config_data["session_data"][root_id]["branch_tabs"][branch_id] = {"text": self.branch_tabs[branch_id].text, "directory": self.branch_tabs[branch_id].current_directory}
+		self.config_data["session_data"][root_id]["branch_tabs"][branch_id] = {"text": self.branch_tabs[branch_id].text, "directory": self.branch_tabs[branch_id].current_directory, "icon": self.branch_tabs[branch_id].icon_extension}
 		
 		config_file_manager.write_config_file(self)
 		

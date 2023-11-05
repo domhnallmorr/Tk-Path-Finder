@@ -7,15 +7,17 @@ import re
 from natsort import natsorted, ns, os_sorted
 
 class BranchTabModel:
-	def __init__(self, model, id_key, current_directory, root_id, default_text):
+	def __init__(self, model, id_key, current_directory, root_id, default_text, default_icon):
 		self.model = model
 		self.id_key = id_key
 		self.root_id = root_id
 		self.text = default_text
+		self.icon_extension = default_icon # for which icon is displayed on tab
 		self.setup_variables()
 		self.current_directory = current_directory
 		
 		self.list_directory(self.current_directory)
+
 	
 	def setup_variables(self):
 		if self.text is None:

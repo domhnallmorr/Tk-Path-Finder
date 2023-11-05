@@ -27,7 +27,11 @@ class View:
 		
 		menubar.setup_menubar(self)
 		
-		self.switch_style(self.style_name)
+		if self.style_name in self.themes["light"]:
+			style_type = "light"
+		else:
+			style_type = "dark"
+		self.switch_style(self.style_name, style_type)
 
 	def setup_variables(self):
 		self.known_file_types = {
@@ -62,6 +66,7 @@ class View:
 			".xlsx": self.excel_icon2,
 			".xmcd": self.mathcad_icon2,
 			".zip": self.zip_icon2,
+			".xxx": self.branch_icon2, # dummy extension, just intended to get the branch icon in this dict for change icon window
 		}
 		
 		self.root_tabs = {}
@@ -113,13 +118,16 @@ class View:
 
 		self.root_tabs[id] = tab
 		
-	def add_branch_tab(self, id, text, root_id):
+	def add_branch_tab(self, branch_id, text, root_id, default_icon):
 		root_tab = self.root_tabs[root_id]
 		
-		tab = branch_tab.BranchTab(self, id, root_tab)
+		tab = branch_tab.BranchTab(self, branch_id, root_tab)
 		root_tab.add_branch_tab(tab, text)
 		
-		self.branch_tabs[id] = tab
+		self.branch_tabs[branch_id] = tab
+
+		if default_icon is not None:
+			self.branch_tabs[branch_id].update_icon(default_icon)
 		
 	def setup_default_settings(self, config_data):
 		# --------------- PADX AND PADY ---------------
@@ -168,8 +176,9 @@ class View:
 		finally:
 			popup_menu.grab_release()
 
-	def switch_style(self, style):
+	def switch_style(self, style, style_type):
 		self.style_name = style
+		self.style_type = style_type
 		
 		try:
 			self.style = Style(style)
@@ -181,7 +190,8 @@ class View:
 				messagebox.showerror("Error", message=f"The following message occured {str(e)}")
 		
 		self.style.configure('Treeview', rowheight=18)
-		self.style.configure('Treeview.Heading', background=self.style.colors.secondary)
+		if style_type == "dark":
+			self.style.configure('Treeview.Heading', background=self.style.colors.secondary)
 		
 		# Update hover color in treeviews
 		for tab in self.branch_tabs.keys():
@@ -195,7 +205,8 @@ class View:
 		return answer
 		
 	def delete_all_tabs(self):
-		for root_id in self.root_tabs:
+		root_ids = list(self.root_tabs.keys())
+		for root_id in root_ids:
 			self.delete_root_tab(root_id)
 		self.root_tabs = {}
 		self.branch_tabs = {}	

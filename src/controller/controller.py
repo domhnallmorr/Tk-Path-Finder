@@ -18,7 +18,7 @@ from ttkbootstrap.themes import standard
 
 from model import config_file_manager, model
 from view import view, diary_window, filter_windows, new_folders_window, pdf_tools_windows, rename_window, settings_window
-from view import link_window, search_window, todo_list
+from view import link_window, search_window, todo_list, icon_window
 
 class Controller:
 	def __init__(self, root, parent, mainapp):
@@ -48,14 +48,14 @@ class Controller:
 			
 		return root_id
 			
-	def add_branch_tab(self, root_id, default_text=None, default_directory=None):
+	def add_branch_tab(self, root_id, default_text=None, default_directory=None, default_icon=None):
 		if default_directory is None:
 			default_directory = os.getcwd()
 			
 		# ----------------- ADD A SINGLE DEFAULT BRANCH TAB -----------------
-		id_key = self.model.add_branch_tab(root_id, default_text, default_directory)
+		id_key = self.model.add_branch_tab(root_id, default_text, default_directory, default_icon)
 		
-		self.view.add_branch_tab(id_key, self.model.get_branch_tab_text(id_key), root_id)
+		self.view.add_branch_tab(id_key, self.model.get_branch_tab_text(id_key), root_id, default_icon)
 		
 		# ----------------- UPDATE BRANCH TAB VIEW -----------------
 		self.view.update_branch_tab(copy.deepcopy(self.model.branch_tabs[id_key].assemble_view_data()))
@@ -489,11 +489,16 @@ class Controller:
 						for branch_id in session_data[root_id]["branch_tabs"].keys():
 							default_text = session_data[root_id]["branch_tabs"][branch_id]["text"]
 							default_directory = session_data[root_id]["branch_tabs"][branch_id]["directory"]
+
+							if "icon" in session_data[root_id]["branch_tabs"][branch_id].keys():
+								default_icon = session_data[root_id]["branch_tabs"][branch_id]["icon"]
+							else:
+								default_icon = None
 							
 							if default_directory in missing_directories:
 								default_directory = None
 								
-							self.add_branch_tab(new_root_id, default_text, default_directory)
+							self.add_branch_tab(new_root_id, default_text, default_directory, default_icon)
 	
 	def check_load_last_session_folders_exist(self, session_data):
 		missing_directories = []
@@ -610,8 +615,8 @@ class Controller:
 	def update_branch_tabs_order(self, root_id, branch_tabs_order):
 		self.model.update_branch_tabs_order(root_id, branch_tabs_order)
 	
-	def update_style(self, style):
-		self.view.switch_style(style)
+	def update_style(self, style, style_type):
+		self.view.switch_style(style, style_type)
 		self.model.style_updated(style)
 		
 	def duplicate_files(self, files, branch_id):
@@ -658,3 +663,13 @@ class Controller:
 				self.view.show_success("Successfully Extracted")
 			except Exception as e:
 				self.view.show_error(f"The Following Error Occured\n{str(e)}")
+
+	def change_tab_icon(self, root_id, branch_id):
+		icon_window.launch_icon_window(self)
+
+		if self.w.button == "ok":
+			branch_tab = self.view.branch_tabs[branch_id]
+			branch_tab.update_icon(self.w.extension)
+
+			self.model.branch_tabs[branch_id].icon_extension = self.w.extension
+			self.model.update_branch_tab_session_data(branch_id)

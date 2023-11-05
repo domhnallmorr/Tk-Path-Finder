@@ -29,10 +29,10 @@ def setup_menubar(view):
 	style_menu.add_cascade(label="Dark", menu=dark_style_menu)
 	
 	for s in view.themes["light"]:
-		light_style_menu.add_command(label=s, command=lambda style=s: view.controller.update_style(style))
+		light_style_menu.add_command(label=s, command=lambda style=s, style_type="light": view.controller.update_style(style, style_type))
 
 	for s in view.themes["dark"]:
-		dark_style_menu.add_command(label=s, command=lambda style=s: view.controller.update_style(style))
+		dark_style_menu.add_command(label=s, command=lambda style=s, style_type="dark": view.controller.update_style(style, style_type))
 
 	# ________ TOOLS ________
 	tools_menu = tk.Menu(menu, tearoff=0)

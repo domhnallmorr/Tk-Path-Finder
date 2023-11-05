@@ -27,10 +27,13 @@ class RootTab(ttk.Frame):
 		branch_id = tab_object.branch_id
 		
 		popup_menu = tk.Menu(event.widget, tearoff=0)
-		popup_menu.add_command(label="Add Branch Tab", command=lambda root_id=self.root_id: self.view.controller.add_branch_tab(root_id), image=self.view.branch_icon2, compound='left')
-		popup_menu.add_command(label="Rename Branch Tab", command=lambda branch_id=branch_id: self.view.controller.rename_branch_tab(branch_id), image=self.view.edit_icon2, compound='left')
-		popup_menu.add_command(label="Delete Branch Tab", command=lambda root_id=self.root_id, branch_id=branch_id: self.view.controller.delete_branch_tab(root_id, branch_id), image=self.view.delete_icon2, compound='left')
-		popup_menu.add_command(label="Duplicate Branch Tab", command=lambda root_id=self.root_id, branch_id=branch_id: self.view.controller.duplicate_branch_tab(root_id, branch_id), image=self.view.duplicate_icon2, compound='left')
+		popup_menu.add_command(label="Add Branch Tab", command=lambda root_id=self.root_id: self.view.controller.add_branch_tab(root_id), image=self.view.branch_icon2, compound="left")
+		popup_menu.add_command(label="Rename Branch Tab", command=lambda branch_id=branch_id: self.view.controller.rename_branch_tab(branch_id), image=self.view.edit_icon2, compound="left")
+		popup_menu.add_command(label="Delete Branch Tab", command=lambda root_id=self.root_id, branch_id=branch_id: self.view.controller.delete_branch_tab(root_id, branch_id), image=self.view.delete_icon2, compound="left")
+		popup_menu.add_command(label="Duplicate Branch Tab", command=lambda root_id=self.root_id, branch_id=branch_id: self.view.controller.duplicate_branch_tab(root_id, branch_id), image=self.view.duplicate_icon2, compound="left")
+
+		popup_menu.add_separator()
+		popup_menu.add_command(label="Change Icon", command=lambda root_id=self.root_id, branch_id=branch_id: self.view.controller.change_tab_icon(root_id, branch_id))
 
 		try:
 			popup_menu.tk_popup(event.x_root, event.y_root, 0)

@@ -375,3 +375,8 @@ class BranchTab(ttk.Frame):
 				popup_menu.tk_popup(event.x_root + 100, event.y_root + 25, 0)
 			finally:
 				popup_menu.grab_release()
+
+	def update_icon(self, extension):
+		icon = self.view.known_file_types[extension]
+		self.root_tab.notebook.tab(self, image=icon)
+

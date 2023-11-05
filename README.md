@@ -9,6 +9,8 @@ The app is largely complete and does what I set out to achieve. I am continuing 
 
 Comments, feedback and questions are welcome.
 
+Icons taken from https://icons8.com/icons/set/gui
+
 ## Running the App
 To run, download the code, unzip the files and run the main.py file. You will need several python libraries installed which are listed below.
 
@@ -86,7 +88,8 @@ pip install PyPDF2
 
 ![Light_Theme](images/main_image_light_theme.PNG)
 
-![alt text](https://imgur.com/6sxzTjR.png)
+![Search](images/search_image.PNG)
+
 
 
 
