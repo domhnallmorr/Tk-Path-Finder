@@ -62,6 +62,7 @@ class Model:
 			".csv": "CSV File",
 			".das": "Das file",
 			".dat": "Dat file",
+			".db": "Database",
 			".doc": "Word 97-2003 Document",
 			".docx": "Word Document",
 			".exe": "application",

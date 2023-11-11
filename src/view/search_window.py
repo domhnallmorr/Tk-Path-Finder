@@ -10,7 +10,7 @@ from tkinter import simpledialog
 from custom_widgets import autoscrollbar
 
 class SearchWindow(ttk.Frame):
-	def __init__(self, master, data, view):
+	def __init__(self, master, data, view, file_extensions):
 		super(SearchWindow, self).__init__()
 		top=self.top=Toplevel(master)
 		#top.grab_set()
@@ -18,6 +18,7 @@ class SearchWindow(ttk.Frame):
 		self.view = view
 		self.directory = data["current_directory"]
 		self.top.title(f"Search: {self.directory}")
+		self.file_extensions = file_extensions
 
 		self.button = "cancel"
 		self.top.grid_rowconfigure(1, weight=1)
@@ -87,11 +88,15 @@ class SearchWindow(ttk.Frame):
 		self.text_to_find_entry.grid(row=4, column=1, padx=5, pady=5)
 		self.text_to_find_entry.bind('<Return>', self.on_search)
 
-		ttk.Label(self.text_search_options_frame, text='File Extension (format .xxx):').grid(row=5, column=0, padx=5, pady=5, sticky="E")
-		self.text_extension_entry = ttk.Entry(self.text_search_options_frame, width=60)
-		self.text_extension_entry.grid(row=5, column=1, padx=5, pady=5)
-		self.text_extension_entry.bind('<Return>', self.on_search)
+		ttk.Label(self.text_search_options_frame, text="File Extension:").grid(row=5, column=0, padx=5, pady=5, sticky="E")
+		self.text_extension_combo = ttk.Combobox(self.text_search_options_frame, values=self.file_extensions)
+		self.text_extension_combo.set(self.file_extensions[0])
+		self.text_extension_combo.config(state="readonly")
+		self.text_extension_combo.grid(row=5, column=1, padx=5, pady=5, sticky="W")
 
+		self.case_insensitive = IntVar(value=0)
+		ttk.Checkbutton(self.text_search_options_frame, text="Case Insensitive", variable=self.case_insensitive).grid(row=6, column=0, padx=5, pady=5, sticky="E")
+		
 		b2 = ttk.Button(self.text_search_options_frame, text="Search", width=10,
 					command=self.on_search_text, style="primary.TButton")
 		b2.grid(row=7, column=1, sticky='e', padx=5, pady=5, ipadx=10)
@@ -175,15 +180,21 @@ class SearchWindow(ttk.Frame):
 		self.search_text.delete('1.0', END)
 
 		text_to_find = self.text_to_find_entry.get()
-		extensions_to_check = self.text_extension_entry.get()
+		extensions_to_check = self.text_extension_combo.get()
 
-		command = ['findstr', f'{text_to_find}', f'{self.directory}\\*{extensions_to_check}']
+		if self.case_insensitive.get() == 1:
+			command = ['findstr', "/I", f'{text_to_find}', f'{self.directory}\\*{extensions_to_check}']
+		else:
+			command = ['findstr', f'{text_to_find}', f'{self.directory}\\*{extensions_to_check}']
 
 		try:
 			result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True).stdout
 			self.search_text.insert(END, result)
 		except Exception as e:
-			self.view.show_error(str(e))
+			if "non-zero" in str(e):
+				self.search_text.insert(END, "Failed to Find Matching Text")
+			else:
+				self.view.show_error(str(e))
 
 	def add_file_to_text(self, directory, filename):
 		if not filename.startswith('~$'): # avoid temporary files

@@ -513,8 +513,10 @@ class Controller:
 		return set(missing_directories)
 		
 	def search(self, branch_id):
+		file_extensions = self.model.branch_tabs[branch_id].get_file_extensions()
+		file_extensions = sorted(list(file_extensions.keys()))
 		data = self.model.branch_tabs[branch_id].assemble_view_data()
-		self.w = search_window.SearchWindow(self.mainapp.master, data, self.view)
+		self.w = search_window.SearchWindow(self.mainapp.master, data, self.view, file_extensions)
 		self.mainapp.master.wait_window(self.w.top)	
 		
 	def add_new_quick_access_folder(self, text=None, folder_id=None, update_config_data=True, idx=0):

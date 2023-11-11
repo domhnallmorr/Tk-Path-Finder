@@ -39,6 +39,7 @@ class SettingsWindow(ttk.Frame):
 		self.setup_text_editor()
 		self.setup_open_with()
 		self.setup_display()
+		# self.setup_python()
 		self.update_tags()
 		
 		treeview_data = self.convert_open_with_apps_to_list()
@@ -50,8 +51,10 @@ class SettingsWindow(ttk.Frame):
 		self.notebook.grid(row=4, column=0, columnspan=8, padx=5, pady=5, sticky='nsew')
 		self.app_tab = ttk.Frame(self.notebook)
 		self.display_tab = ttk.Frame(self.notebook)
+		# self.python_tab = ttk.Frame(self.notebook)
 		self.notebook.add(self.app_tab, text="Apps")
 		self.notebook.add(self.display_tab, text="Display")
+		# self.notebook.add(self.python_tab, text="Python")
 	
 	def setup_label_frames(self):
 		self.text_editor_frame = LabelFrame(self.app_tab, text="Text Editor:")
@@ -62,6 +65,9 @@ class SettingsWindow(ttk.Frame):
 
 		self.display_frame = LabelFrame(self.display_tab, text="Display Settings:")
 		self.display_frame.grid(row=2, column=0, columnspan=8, rowspan=2, sticky='NSEW',padx=5, pady=5, ipadx=2, ipady=5)
+
+		# self.python_frame = LabelFrame(self.python_tab, text="Add Python Versions:")
+		# self.python_frame.grid(row=2, column=0, columnspan=8, rowspan=2, sticky='NSEW',padx=5, pady=5, ipadx=2, ipady=5)
 
 	def setup_display(self):		
 		ttk.Label(self.display_frame, text="Filename Column Width:").grid(row=1, column=0, columnspan=1, sticky="NSEW", padx=self.view.default_padx, pady=self.view.default_pady)
@@ -107,16 +113,16 @@ class SettingsWindow(ttk.Frame):
 		self.open_with_frame.grid_columnconfigure(15, weight=1)
 		
 		# submit button
-		self.submit = ttk.Button(self.open_with_frame, text='Add', style='success.TButton', command=self.add, width=13)
-		self.submit.grid(row=3, column=0, sticky='ew', pady=10, padx=(self.view.default_padx, 10))
+		self.submit = ttk.Button(self.open_with_frame, text="Add", style="success.TButton", command=self.add, width=13)
+		self.submit.grid(row=3, column=0, sticky="ew", pady=10, padx=(self.view.default_padx, 10))
 		
-		self.edit = ttk.Button(self.open_with_frame, text='Edit Selected', style='info.TButton', command=self.edit_row, width=13)
-		self.edit.grid(row=3, column=1, sticky='ew', pady=10, padx=(self.view.default_padx, 10))
+		self.edit = ttk.Button(self.open_with_frame, text="Edit Selected", style="info.TButton", command=self.edit_row, width=13)
+		self.edit.grid(row=3, column=1, sticky="ew", pady=10, padx=(self.view.default_padx, 10))
 
-		self.delete_btn = ttk.Button(self.open_with_frame, text='Delete Selected', style='danger.TButton', command=self.delete_row, width=14)
-		self.delete_btn.grid(row=3, column=2, sticky='ew', pady=10, padx=(self.view.default_padx, 10))
+		self.delete_btn = ttk.Button(self.open_with_frame, text="Delete Selected", style="danger.TButton", command=self.delete_row, width=14)
+		self.delete_btn.grid(row=3, column=2, sticky="ew", pady=10, padx=(self.view.default_padx, 10))
 		
-		column_names = ['File Extension', 'App']
+		column_names = ["File Extension", "App"]
 		column_widths = [200, 600]
 		height = 14
 
@@ -130,11 +136,39 @@ class SettingsWindow(ttk.Frame):
 		vsb.grid(row=4, column=16, sticky='NSEW')
 		self.treeview.configure(yscrollcommand=vsb.set)
 
+	def setup_python(self):
+		ttk.Label(self.python_frame, text="Title:").grid(row=0, column=0, columnspan=1, sticky="NSEW", padx=self.view.default_padx, pady=self.view.default_pady)
+		self.python_title_entry = ttk.Entry(self.python_frame)
+		self.python_title_entry.grid(row=0, column=1, columnspan=15, sticky="NSEW", padx=self.view.default_padx, pady=self.view.default_pady)
+		
+		ttk.Label(self.python_frame, text="Path:").grid(row=1, column=0, columnspan=1, sticky="NSEW", padx=self.view.default_padx, pady=self.view.default_pady)
+		self.python_path_entry = ttk.Entry(self.python_frame)
+		self.python_path_entry.grid(row=1, column=1, columnspan=15, sticky="NSEW", padx=self.view.default_padx, pady=self.view.default_pady)
+
+		self.python_frame.grid_columnconfigure(15, weight=1)		
+
+		# buttons
+		self.python_submit_btn = ttk.Button(self.python_frame, text="Add", style="success.TButton", command=self.add_python, width=13)
+		self.python_submit_btn.grid(row=3, column=0, sticky="ew", pady=10, padx=(self.view.default_padx, 10))
+		
+		self.python_edit_btn = ttk.Button(self.python_frame, text="Edit Selected", style="info.TButton", command=self.edit_row, width=13)
+		self.python_edit_btn.grid(row=3, column=1, sticky="ew", pady=10, padx=(self.view.default_padx, 10))
+
+		self.python_delete_btn = ttk.Button(self.python_frame, text="Delete Selected", style="danger.TButton", command=self.python_delete_row, width=14)
+		self.python_delete_btn.grid(row=3, column=2, sticky="ew", pady=10, padx=(self.view.default_padx, 10))
+
+		column_names = ["Title", "Path"]
+		column_widths = [200, 600]
+		height = 6
+
+		self.python_treeview = treeview_functions.create_treeview(self.python_frame, column_names, column_widths, height)
+		self.python_treeview.grid(row=4, column=0, columnspan=16, sticky='NSEW', padx=0, pady=self.view.default_pady)
+
 	def setup_buttons(self):
-		self.ok_btn = ttk.Button(self.top, text='OK', width=10, style='success.TButton', command=lambda button='ok': self.cleanup(button))
-		self.ok_btn.grid(row=5, column=6, padx=5, pady=5, sticky='ne')
-		self.cancel_btn = ttk.Button(self.top, text='Cancel', width=10, style='danger.TButton', command=lambda button='cancel': self.cleanup(button))
-		self.cancel_btn.grid(row=5, column=7, padx=5, pady=5, sticky='ne')
+		self.ok_btn = ttk.Button(self.top, text="OK", width=10, style="success.TButton", command=lambda button="ok": self.cleanup(button))
+		self.ok_btn.grid(row=5, column=6, padx=5, pady=5, sticky="ne")
+		self.cancel_btn = ttk.Button(self.top, text="Cancel", width=10, style="danger.TButton", command=lambda button="cancel": self.cleanup(button))
+		self.cancel_btn.grid(row=5, column=7, padx=5, pady=5, sticky="ne")
 		
 		self.top.grid_columnconfigure(5, weight=1)
 
@@ -190,17 +224,36 @@ class SettingsWindow(ttk.Frame):
 		self.treeview.item(iid, values=[self.app_entry.get()])
 		
 	def delete_row(self):
-		iid = self.treeview.selection()[0]
-		current_extension = self.treeview.item(iid, 'text')
-		current_app = self.treeview.item(iid, 'values')[0]
-		
-		msg = messagebox.askyesno(title="Delete App", message="Delete This App? This Cannot be Undone.")
-		if msg:
-			self.treeview.delete(iid)
-			self.config_data["open_with_apps"][current_extension].remove(current_app)
+		if not self.treeview.selection():
+			self.view.show_error("No App Selected")
+		else:
+			iid = self.treeview.selection()[0]
+			current_extension = self.treeview.item(iid, 'text')
+			current_app = self.treeview.item(iid, 'values')[0]
 			
-			if len(self.config_data["open_with_apps"][current_extension]) == 0:
-				del self.config_data["open_with_apps"][current_extension]
+			msg = messagebox.askyesno(title="Delete App", message="Delete This App? This Cannot be Undone.")
+			if msg:
+				self.treeview.delete(iid)
+				self.config_data["open_with_apps"][current_extension].remove(current_app)
+				
+				if len(self.config_data["open_with_apps"][current_extension]) == 0:
+					del self.config_data["open_with_apps"][current_extension]
+
+	def python_delete_row(self):
+		pass
+
+	def add_python(self):
+		title = self.python_title_entry.get()
+		path = self.python_path_entry.get()
+		
+		# if file_extension in self.config_data["open_with_apps"].keys():
+		# 	self.config_data["open_with_apps"][file_extension].append(app_path)
+		# else:
+		# 	self.config_data["open_with_apps"][file_extension] = [app_path]
+		
+		treeview_data = treeview_functions.get_all_treeview_items(self.python_treeview)
+		treeview_data.append([title, path])
+		treeview_functions.write_data_to_treeview_general(self.python_treeview, "replace", treeview_data)		
 
 	def convert_open_with_apps_to_list(self):
 		extensions = sorted(list(self.config_data["open_with_apps"].keys()))
