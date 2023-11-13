@@ -90,12 +90,15 @@ class SearchWindow(ttk.Frame):
 
 		ttk.Label(self.text_search_options_frame, text="File Extension:").grid(row=5, column=0, padx=5, pady=5, sticky="E")
 		self.text_extension_combo = ttk.Combobox(self.text_search_options_frame, values=self.file_extensions)
-		self.text_extension_combo.set(self.file_extensions[0])
-		self.text_extension_combo.config(state="readonly")
+		if len(self.file_extensions) > 0:
+			self.text_extension_combo.set(self.file_extensions[0])
+			self.text_extension_combo.config(state="readonly")
+		else:
+			self.text_extension_combo.config(state="disabled")
 		self.text_extension_combo.grid(row=5, column=1, padx=5, pady=5, sticky="W")
 
 		self.case_insensitive = IntVar(value=0)
-		ttk.Checkbutton(self.text_search_options_frame, text="Case Insensitive", variable=self.case_insensitive).grid(row=6, column=0, padx=5, pady=5, sticky="E")
+		ttk.Checkbutton(self.text_search_options_frame, text="Case Insensitive", variable=self.case_insensitive).grid(row=6, column=1, padx=5, pady=5, sticky="W")
 		
 		b2 = ttk.Button(self.text_search_options_frame, text="Search", width=10,
 					command=self.on_search_text, style="primary.TButton")
@@ -179,22 +182,25 @@ class SearchWindow(ttk.Frame):
 	def on_search_text(self, event=None):
 		self.search_text.delete('1.0', END)
 
-		text_to_find = self.text_to_find_entry.get()
-		extensions_to_check = self.text_extension_combo.get()
+		if len(self.file_extensions):
+			text_to_find = self.text_to_find_entry.get()
+			extensions_to_check = self.text_extension_combo.get()
 
-		if self.case_insensitive.get() == 1:
-			command = ['findstr', "/I", f'{text_to_find}', f'{self.directory}\\*{extensions_to_check}']
-		else:
-			command = ['findstr', f'{text_to_find}', f'{self.directory}\\*{extensions_to_check}']
-
-		try:
-			result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True).stdout
-			self.search_text.insert(END, result)
-		except Exception as e:
-			if "non-zero" in str(e):
-				self.search_text.insert(END, "Failed to Find Matching Text")
+			if self.case_insensitive.get() == 1:
+				command = ['findstr', "/I", f'{text_to_find}', f'{self.directory}\\*{extensions_to_check}']
 			else:
-				self.view.show_error(str(e))
+				command = ['findstr', f'{text_to_find}', f'{self.directory}\\*{extensions_to_check}']
+
+			try:
+				result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True).stdout
+				self.search_text.insert(END, result)
+			except Exception as e:
+				if "non-zero" in str(e):
+					self.search_text.insert(END, "Failed to Find Matching Text")
+				else:
+					self.view.show_error(str(e))
+		else:
+			self.search_text.insert(END, "No Files in Directory")
 
 	def add_file_to_text(self, directory, filename):
 		if not filename.startswith('~$'): # avoid temporary files
