@@ -10,7 +10,8 @@ class AddressBarEntry(ttk.Entry):
 	def __init__(self, branch_tab):
 		super(AddressBarEntry, self).__init__(branch_tab)
 		self.branch_tab = branch_tab
-		self.bind('<Return>', self.enter_event)
+		self.bind("<Return>", self.enter_event)
+		self.bind("<Control-c>", self.copy_event)
 		self.raw_path = False
 		
 		self.buttons = []
@@ -19,6 +20,14 @@ class AddressBarEntry(ttk.Entry):
 		self.bind("<Escape>", self.on_escape)
 		self.bind("<Configure>", lambda event: self.truncate_breadcrumbs())
 		self.text = None
+
+	@property
+	def controller(self):
+		return self.branch_tab.view.controller
+	
+	@property
+	def branch_id(self):
+		return self.branch_tab.branch_id
 
 	def update_bar(self, text):
 		self.text = text
@@ -59,7 +68,13 @@ class AddressBarEntry(ttk.Entry):
 	def enter_event(self, event):
 		# -------------- CALL THE CONTROLLER METHOD TO UPDATE THE BRANCH TAB BASED ON DIRECTORY IN THE ADDRESS BAR -------------
 		self.branch_tab.view.controller.update_branch_tab(self.branch_tab.branch_id, self.get().rstrip().lstrip())
-		
+
+	def copy_event(self, event):
+		selected_text = self.selection_get()
+
+		self.controller.copy_to_clipboard(selected_text, self.branch_id, "address_bar")
+
+
 	def button_clicked(self, event, path):
 		if self.raw_path == True:
 			path = r"\\" + path

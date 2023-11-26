@@ -296,7 +296,10 @@ class Controller:
 		elif mode == "file_name_only":
 			pyperclip.copy(file_name)
 			self.view.update_clipboard_labels(0, 0, "filename")
-					
+		elif mode == "address_bar":
+			pyperclip.copy(file_name)
+			self.view.update_clipboard_labels(0, 0, "address_bar")
+
 	def new_folders(self, branch_id):
 		initialvalue = None
 		
