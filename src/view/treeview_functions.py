@@ -66,8 +66,8 @@ def write_data_to_treeview(view, treeview, mode, data, image=None):
 			# if file_extension in branch_tab.filter:
 			# 	filtered = True
 			if not filtered:
-				if file_extension in view.known_file_types.keys():
-					image = view.known_file_types[file_extension]
+				if file_extension.lower() in view.known_file_types.keys():
+					image = view.known_file_types[file_extension.lower()]
 		
 		if not filtered:
 			if len(d) > 1:
