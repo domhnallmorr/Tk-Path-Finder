@@ -161,7 +161,7 @@ def decode_base64_image(size, data):
 	buf = io.BytesIO(msg)
 	
 	i = Image.open(buf)
-	i.thumbnail(size, Image.ANTIALIAS)
+	i.thumbnail(size, Image.Resampling.LANCZOS)
 	
 	# adding transparent padding before text
 	new_image = Image.new('RGBA', (size[0]+5, size[1]), (0, 0, 0, 0))

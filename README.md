@@ -60,6 +60,8 @@ Note the app creates 2 files, "tk_path_finder_config.json" and "notes.db" (sqlit
 
 [PyPDF2](https://pypi.org/project/PyPDF2/) (V3.0 or later required)
 
+[Pillow] (V10.0.0 or later required)
+
 pip install natsort
 
 pip install openpyxl
@@ -71,6 +73,8 @@ pip install python-docx
 pip install ttkbootstrap
 
 pip install PyPDF2
+
+pip install pillow
 
 
 ## Preview
