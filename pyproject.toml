@@ -1,0 +1,21 @@
+[project]
+name = "tk-path-finder"
+version = "0.0.0"
+description = "Windows File Explorer/Manager with Tabs. Tkinter + ttkbootstrap."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "natsort",
+  "openpyxl",
+  "pyperclip",
+  "python-docx",
+  "ttkbootstrap",
+  "PyPDF2>=3.0",
+  "pillow>=10.0",
+  "pywin32>=311",
+  "pandas>=2.3.2",
+]
+
+[tool.uv]
+# keeps the venv in .venv/ at repo root
+
