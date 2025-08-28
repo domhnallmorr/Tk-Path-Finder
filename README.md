@@ -51,8 +51,11 @@ Note the app creates 2 files, "tk_path_finder_config.json" and "notes.db" (sqlit
 This project uses [uv](https://docs.astral.sh/uv/) for dependency management and virtual environments.
 
 git clone https://github.com/domhnallmorr/Tk-Path-Finder.git
+
 cd Tk-Path-Finder
+
 uv sync
+
 uv run python src/main.py
 
 ## Preview
