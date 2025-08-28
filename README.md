@@ -12,7 +12,7 @@ Comments, feedback and questions are welcome.
 Icons taken from https://icons8.com/icons/set/gui
 
 ## Running the App
-To run, download the code, unzip the files and run the main.py file. You will need several python libraries installed which are listed below.
+See below for instructions on setting the app up to run using UV which will manage the required dependencies.
 
 Note the app creates 2 files, "tk_path_finder_config.json" and "notes.db" (sqlite database). These will be created in the default working directory. The json file stores all links and tabs created by the user. Several backups are automatically generated for this file. The database contains any notes entered into the diary.
 
