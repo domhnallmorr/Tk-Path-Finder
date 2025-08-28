@@ -48,34 +48,12 @@ Note the app creates 2 files, "tk_path_finder_config.json" and "notes.db" (sqlit
 
 ## Prerequisites
 
-[natsort](https://natsort.readthedocs.io/en/master/)
+This project uses [uv](https://docs.astral.sh/uv/) for dependency management and virtual environments.
 
-[openpycl](https://openpyxl.readthedocs.io/en/stable/)
-
-[pyperclip](https://pypi.org/project/pyperclip/)
-
-[python-docx](https://python-docx.readthedocs.io/en/latest/)
-
-[ttkbootstrap](https://ttkbootstrap.readthedocs.io/en/latest/)
-
-[PyPDF2](https://pypi.org/project/PyPDF2/) (V3.0 or later required)
-
-[Pillow] (V10.0.0 or later required)
-
-pip install natsort
-
-pip install openpyxl
-
-pip install pyperclip
-
-pip install python-docx
-
-pip install ttkbootstrap
-
-pip install PyPDF2
-
-pip install pillow
-
+git clone https://github.com/domhnallmorr/Tk-Path-Finder.git
+cd Tk-Path-Finder
+uv sync
+uv run python src/main.py
 
 ## Preview
 ![Main](images/main_image.PNG)
