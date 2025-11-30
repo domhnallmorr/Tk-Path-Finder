@@ -94,7 +94,7 @@ class BranchTabModel:
 					if d[-1].strip() != '.' and d[-1].strip() != '..':
 						directory_data.append([d[-1].strip(), '-', 'Folder', '-'])
 				else:
-					d = re.split("(?<!\s) ", d)
+					d = re.split(r"(?<!\s) ", d)
 					filename = ' '.join(d[3:])
 					try:
 						size = int(int(d[2].replace(',', ''))*0.001)

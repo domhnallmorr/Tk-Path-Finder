@@ -1,9 +1,9 @@
 [project]
 name = "tk-path-finder"
-version = "0.0.0"
+version = "1.0.0"
 description = "Windows File Explorer/Manager with Tabs. Tkinter + ttkbootstrap."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = "==3.13.9"
 dependencies = [
   "natsort",
   "openpyxl",
@@ -11,7 +11,7 @@ dependencies = [
   "python-docx",
   "ttkbootstrap",
   "PyPDF2>=3.0",
-  "pillow>=10.0",
+  "pillow>=12.0.0",
   "pywin32>=311",
   "pandas>=2.3.2",
 ]
