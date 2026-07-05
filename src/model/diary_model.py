@@ -32,12 +32,12 @@ class DiaryModel:
 	def write_diary_text_to_database(self, date, data):
 		txt = json.dumps(data)
 		
-		data = self.cursor.execute(f"SELECT * FROM diary WHERE datestamp = '{date}'").fetchall()
+		data = self.cursor.execute("SELECT * FROM diary WHERE datestamp = ?", (str(date),)).fetchall()
 
 		if len(data) == 0:
-			self.cursor.execute("INSERT INTO diary VALUES(?, '', ?)", (date, txt))
+			self.cursor.execute("INSERT INTO diary VALUES(?, '', ?)", (str(date), txt))
 		else:
-			self.cursor.execute(f"UPDATE diary SET text = ? WHERE datestamp = ?", (txt, date))
+			self.cursor.execute("UPDATE diary SET text = ? WHERE datestamp = ?", (txt, str(date)))
 			
 		self.conn.commit()		
 	
@@ -50,9 +50,12 @@ class DiaryModel:
 			
 			
 	def read_date_from_database(self, date):
-		data = self.cursor.execute(f"SELECT * FROM diary WHERE datestamp = '{date}'").fetchall()
+		data = self.cursor.execute("SELECT * FROM diary WHERE datestamp = ?", (str(date),)).fetchall()
 		if len(data) > 0:
-			txt = ast.literal_eval(data[0][-1])
+			try:
+				txt = json.loads(data[0][-1])
+			except json.JSONDecodeError:
+				txt = ast.literal_eval(data[0][-1])
 		else:
 			txt = {"General": ""}
 			

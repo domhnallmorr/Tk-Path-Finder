@@ -86,7 +86,7 @@ class QuickAccessFolder:
 			for link_id in links:
 				new_links[link_id] = copy.deepcopy(self.links[link_id]) 
 			
-		except Expection as e:
+		except Exception as e:
 			msg = str(e)
 		
 		if msg is None:

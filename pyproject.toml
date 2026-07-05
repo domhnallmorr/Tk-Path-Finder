@@ -16,6 +16,15 @@ dependencies = [
   "pandas>=2.3.2",
 ]
 
+[dependency-groups]
+dev = [
+  "pytest>=8.0",
+]
+
 [tool.uv]
 # keeps the venv in .venv/ at repo root
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
 
